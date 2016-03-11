@@ -41,7 +41,7 @@ First: I'm not a professional C++ or Arduino programmer and actually this is my 
 ###Wifi
 I decided to not to update or reflash the ESP-01 AT firmware even though there are alot of posts on forums about how bad its stock firmwares. The only thing I did is changing its baudrate to 9600 as it had 115200 and as I read on some forums SoftwareSerial is not really good with big speeds. The command I used for this is: 
 `AT+CIOBAUD=9600`
-All other commands you can find in AT Commands document in info folder.
+All other commands you can find in [AT Commands document](info/at-commands.md) in info folder.
 
 ##Thanks to
 * Guys from Thingiverse community for their designs. [MakersBox](http://www.thingiverse.com/MakersBox/about) and [FavioR](http://www.thingiverse.com/FavioR/about)
