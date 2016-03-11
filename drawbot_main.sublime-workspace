@@ -1,0 +1,1785 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"clie",
+				"clientId"
+			],
+			[
+				"cli",
+				"clientId"
+			],
+			[
+				"fun",
+				"function (?)"
+			],
+			[
+				"user",
+				"user_id"
+			],
+			[
+				"uploa",
+				"upload_time"
+			],
+			[
+				"cass",
+				"cassyClient (?)"
+			],
+			[
+				"itm",
+				"_items"
+			],
+			[
+				"inse",
+				"insertLog (fn/4)"
+			],
+			[
+				"promise",
+				"Promise"
+			],
+			[
+				"sess",
+				"sessionsMap (obj)"
+			],
+			[
+				"se",
+				"sessions ([])"
+			],
+			[
+				"ind",
+				"indxStart (?)"
+			],
+			[
+				"un",
+				"uniqs (obj)"
+			],
+			[
+				"_da",
+				"_dateTill (obj)"
+			],
+			[
+				"page",
+				"pageSize (num)"
+			],
+			[
+				"date",
+				"dateTill (obj)"
+			],
+			[
+				"lo",
+				"log"
+			],
+			[
+				"count",
+				"countsMap ([])"
+			],
+			[
+				"da",
+				"dateTill (obj)"
+			],
+			[
+				"dt",
+				"dateFrom (obj)"
+			],
+			[
+				"ter",
+				"true"
+			],
+			[
+				"sor",
+				"sortByLogins"
+			],
+			[
+				"uplo",
+				"upload_time"
+			],
+			[
+				"session",
+				"session_id"
+			],
+			[
+				"ro",
+				"rows"
+			],
+			[
+				"th",
+				"throw (?)"
+			],
+			[
+				"max",
+				"maxSessionLength"
+			],
+			[
+				"ba",
+				"background-size"
+			],
+			[
+				"hide",
+				"hideDataLoader"
+			],
+			[
+				"upda",
+				"updatePeriodDates"
+			],
+			[
+				"up",
+				"updatePeriodDates (fn/0)"
+			],
+			[
+				"per",
+				"periodFrom (str)"
+			],
+			[
+				"dateTi",
+				"dateTill (?)"
+			],
+			[
+				"dateT",
+				"dateTill (?)"
+			],
+			[
+				"ondr",
+				"ondragover	Attr"
+			],
+			[
+				"gl",
+				"globalConfig"
+			],
+			[
+				"get",
+				"getTime (fn/0)"
+			],
+			[
+				"pre",
+				"pre-wrap"
+			],
+			[
+				"pro",
+				"property"
+			],
+			[
+				"enc",
+				"encoded (?)"
+			],
+			[
+				"pm",
+				"pmCreate (fn/1)"
+			],
+			[
+				"new",
+				"newlevels (obj)"
+			],
+			[
+				"con",
+				"config (?)"
+			],
+			[
+				"confi",
+				"configManager (obj)"
+			],
+			[
+				"ex",
+				"expectedEnd (?)"
+			],
+			[
+				"d",
+				"dStart (obj)"
+			],
+			[
+				"exp",
+				"expectedStart (?)"
+			],
+			[
+				"e",
+				"equal"
+			],
+			[
+				"u",
+				"utils.js"
+			],
+			[
+				"dis",
+				"display_name"
+			],
+			[
+				"ca",
+				"cassyClient (?)"
+			],
+			[
+				"mi",
+				"minlength	Attr"
+			],
+			[
+				"loa",
+				"load (fn/1)"
+			],
+			[
+				"pa",
+				"pageSize (num)"
+			],
+			[
+				"re",
+				"res (?)"
+			],
+			[
+				"insi",
+				"incidents"
+			],
+			[
+				"fee",
+				"FeedbackType"
+			],
+			[
+				"s",
+				"spanStr (?)"
+			],
+			[
+				"time",
+				"timeSpanParser (?)"
+			],
+			[
+				"test",
+				"testHash (fn/4)"
+			],
+			[
+				"for",
+				"forEach (fn/1)"
+			],
+			[
+				"le",
+				"level"
+			],
+			[
+				"cu",
+				"curLevels (obj)"
+			],
+			[
+				"defa",
+				"defaultLevels (obj)"
+			],
+			[
+				"soc",
+				"socketqueue ([])"
+			],
+			[
+				"fn",
+				"fns ([])"
+			],
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"Ma",
+				"max"
+			],
+			[
+				"r",
+				"riskauth.js"
+			],
+			[
+				"pi",
+				"piechart.html"
+			],
+			[
+				"are",
+				"areachart.html"
+			],
+			[
+				"mar",
+				"margin"
+			],
+			[
+				"margin-",
+				"margin-bottom"
+			],
+			[
+				"font-",
+				"font-size"
+			],
+			[
+				"toLo",
+				"toLowerCase (fn/0)"
+			],
+			[
+				"hash",
+				"hashPwd"
+			],
+			[
+				"$loca",
+				"$location (?)"
+			],
+			[
+				"coo",
+				"cookieParser"
+			],
+			[
+				"res",
+				"result (?)"
+			],
+			[
+				"enco",
+				"encodeURIComponent (fn/1)"
+			],
+			[
+				"q",
+				"query (str)"
+			],
+			[
+				"fo",
+				"Fontawesome"
+			],
+			[
+				"conf",
+				"config"
+			],
+			[
+				"getU",
+				"getUTCMonth (fn/0)"
+			],
+			[
+				"req",
+				"require"
+			],
+			[
+				"setUTCMo",
+				"setUTCMonth (fn/0)"
+			],
+			[
+				"sta",
+				"startDate"
+			],
+			[
+				"getL",
+				"getListCount (fn/1)"
+			],
+			[
+				"getUTC",
+				"getUTCMonth (fn/0)"
+			],
+			[
+				"ma",
+				"margin-bottom"
+			],
+			[
+				"p",
+				"pckg"
+			],
+			[
+				"js",
+				"package.json"
+			],
+			[
+				"fil",
+				"files"
+			],
+			[
+				"grunt",
+				"gruntCfg"
+			],
+			[
+				"in",
+				"index"
+			],
+			[
+				"box",
+				"box-shadow"
+			],
+			[
+				"mar-",
+				"margin-right"
+			],
+			[
+				"padd",
+				"padding-top"
+			],
+			[
+				"no",
+				"nowrap"
+			],
+			[
+				"bor",
+				"border-left"
+			],
+			[
+				"min",
+				"mixins.less"
+			],
+			[
+				"bl",
+				"blocks/"
+			],
+			[
+				"to",
+				"toISOString (fn/0)"
+			],
+			[
+				"inline",
+				"inline-block"
+			],
+			[
+				"text-",
+				"text-decoration"
+			],
+			[
+				"text",
+				"text-transform"
+			],
+			[
+				"font",
+				"font-weight"
+			],
+			[
+				"font-s",
+				"font-style"
+			],
+			[
+				"i",
+				"italic"
+			],
+			[
+				"paddig-",
+				"padding-top"
+			],
+			[
+				"ta",
+				"tasksCfg"
+			],
+			[
+				"html",
+				"html5	Simple HTML5 Boilerplate"
+			],
+			[
+				"m",
+				"module"
+			],
+			[
+				"stat",
+				"stats〔argument〕"
+			],
+			[
+				"Ra",
+				"RabbitMq"
+			],
+			[
+				"bs",
+				"bsalert.html"
+			],
+			[
+				"ty",
+				"type"
+			],
+			[
+				"_",
+				"_namesMap"
+			],
+			[
+				"type",
+				"types"
+			],
+			[
+				"cat",
+				"categs"
+			],
+			[
+				"b",
+				"browser"
+			],
+			[
+				"data",
+				"dataChartType"
+			],
+			[
+				"roo",
+				"rootScope"
+			],
+			[
+				"cha",
+				"chartsService〔argument〕"
+			],
+			[
+				"strin",
+				"stringify"
+			],
+			[
+				"module",
+				"modules"
+			],
+			[
+				"exportI",
+				"exportId"
+			],
+			[
+				"err",
+				"error"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 354.0,
+		"last_filter": "comm",
+		"selected_items":
+		[
+			[
+				"comm",
+				"Git: Commit"
+			],
+			[
+				"add",
+				"Git: Add..."
+			],
+			[
+				"disc",
+				"Package Control: Discover Packages"
+			],
+			[
+				"user",
+				"Preferences: Settings - User"
+			],
+			[
+				"chena",
+				"Git: Change Branch"
+			],
+			[
+				"Commit",
+				"Git: Commit"
+			],
+			[
+				"commit",
+				"Git: Commit"
+			],
+			[
+				"a",
+				"Git: Add..."
+			],
+			[
+				"Add",
+				"Git: Add..."
+			],
+			[
+				"push",
+				"Git: Push"
+			],
+			[
+				"amme",
+				"Git: Amend Commit"
+			],
+			[
+				"chan",
+				"Git: Change Branch"
+			],
+			[
+				"cha",
+				"Git: Change Branch"
+			],
+			[
+				"bra",
+				"Git: Change Branch"
+			],
+			[
+				"commi",
+				"Git: Commit"
+			],
+			[
+				"Ad",
+				"Git: Add..."
+			],
+			[
+				"JS",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"reinde",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"comi",
+				"Git: Commit"
+			],
+			[
+				"stat",
+				"Git: Status"
+			],
+			[
+				"fet",
+				"Git: Fetch"
+			],
+			[
+				"sett",
+				"Preferences: Settings - User"
+			],
+			[
+				"git add",
+				"Git: Add..."
+			],
+			[
+				"git igno",
+				"Git: Update Project Ignored Files"
+			],
+			[
+				"doc",
+				"DocBlockr: Decorate line comment"
+			],
+			[
+				"list",
+				"Package Control: List Packages"
+			],
+			[
+				"add cu",
+				"Git: Add Current File"
+			],
+			[
+				"git a",
+				"Git: Add Selected Hunk"
+			],
+			[
+				"git stat",
+				"Git: Status"
+			],
+			[
+				"ch",
+				"Git: Change Branch"
+			],
+			[
+				"dele",
+				"Git: Delete Branch"
+			],
+			[
+				"git gr",
+				"Git: Graph All"
+			],
+			[
+				"git lo",
+				"Git: Log All"
+			],
+			[
+				"res",
+				"Git: Reset (hard) HEAD"
+			],
+			[
+				"git cha",
+				"Git: Change Branch"
+			],
+			[
+				"git che",
+				"Git: Change Branch"
+			],
+			[
+				"git con",
+				"Git: Log Current File"
+			],
+			[
+				"discover",
+				"Package Control: Discover Packages"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"lo",
+				"LoremIpsum: (15) some"
+			],
+			[
+				"l",
+				"LoremIpsum: (15) some"
+			],
+			[
+				"comme",
+				"Toggle Block Comment"
+			],
+			[
+				"rein",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"lipsu",
+				"LoremIpsum: (15) some"
+			],
+			[
+				"lin",
+				"SublimeLinter: Show All Errors"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"defaul",
+				"Preferences: Settings - Default"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"brow",
+				"Preferences: Browse Packages"
+			],
+			[
+				"dis",
+				"Package Control: Discover Packages"
+			],
+			[
+				"json",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"function",
+				"Snippet: Function"
+			],
+			[
+				"js",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"Browse",
+				"Preferences: Browse Packages"
+			],
+			[
+				"disco",
+				"Package Control: Discover Packages"
+			],
+			[
+				"sho",
+				"SublimeLinter: Show All Errors"
+			],
+			[
+				"show",
+				"SublimeLinter: Show All Errors"
+			],
+			[
+				"lint",
+				"SublimeLinter: Lint This View"
+			],
+			[
+				"nexr",
+				"SublimeLinter: Next Error"
+			],
+			[
+				"Lin",
+				"SublimeLinter: Lint This View"
+			],
+			[
+				"remov",
+				"Package Control: Remove Package"
+			],
+			[
+				"Lint",
+				"SublimeLinter: Lint This View"
+			],
+			[
+				"set syntax javas",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"Linter sho",
+				"SublimeLinter: Show All Errors"
+			],
+			[
+				"Linter",
+				"SublimeLinter: Previous Error"
+			],
+			[
+				"List",
+				"Package Control: List Packages"
+			],
+			[
+				"JSON",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"pre",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"Pretty",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"JSO",
+				"Set Syntax: JSON"
+			],
+			[
+				"prett",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"jso",
+				"Set Syntax: JSON"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"todo",
+				"TodoReview: Project Files"
+			],
+			[
+				"tod",
+				"TodoReview: Project Files"
+			],
+			[
+				"discove",
+				"Package Control: Discover Packages"
+			],
+			[
+				"lis",
+				"Package Control: List Packages"
+			],
+			[
+				"bea",
+				"Javascript Beautify"
+			],
+			[
+				"pack",
+				"Preferences: Browse Packages"
+			],
+			[
+				"bro",
+				"Preferences: Browse Packages"
+			],
+			[
+				"setting",
+				"Preferences: Package Control Settings – User"
+			],
+			[
+				"packa",
+				"Preferences: Package Control Settings – User"
+			],
+			[
+				"intsa",
+				"Package Control: Install Package"
+			],
+			[
+				"settin",
+				"Preferences: Settings - User"
+			]
+		],
+		"width": 398.0
+	},
+	"console":
+	{
+		"height": 338.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2deb499853c4371624f5a07e27c334aa' + 'bf8c4e67d14fb0525ba4f89698a6d7e1'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"cls",
+			"clear",
+			"import urllib.request,os,hashlib; h = '2deb499853c4371624f5a07e27c334aa' + 'bf8c4e67d14fb0525ba4f89698a6d7e1'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"import urllib.request,os; pr='Preferences.sublime-settings'; ip='ignored_packages'; n='Package Control'; s=sublime.load_settings(pr); ig=s.get(ip); ig.append(n); s.set(ip,ig); sublime.save_settings('Preferences.sublime-settings'); pf=n+'.sublime-package'; urllib.request.install_opener(urllib.request.build_opener(urllib.request.ProxyHandler())); by=urllib.request.urlopen('https://packagecontrol.io/'+pf.replace(' ','%20')).read(); open(os.path.join(sublime.installed_packages_path(),pf),'wb').write(by); ig.remove(n); s.set(ip,ig); sublime.save_settings(pr); print('Package Control: 3.0.0 upgrade successful!')"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/D/Projects/ArduinoWifiDrawbot"
+	],
+	"file_history":
+	[
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/js/modules/api.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/test/filldb.js",
+		"/C/Users/bogomolov/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/csql/main.cql",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/resources/resources.ru-ru.json",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/resources/resources.json",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/js/controllers/incidents.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/controllers/localization.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/Gruntfile.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/utils/parsedatekey.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/test/utils.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/controllers/incidents.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/api.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/controllers/reportedincidents.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/package.json",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/modules/rabbit.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/views/incidents/layout.html",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/views/reports/layout.html",
+		"/D/Projects/AntiFraud/kfp/infrastructure/ansible/cassandra.yml",
+		"/D/Projects/AntiFraud/kfp/infrastructure/ansible/roles/cassandra_dmz/templates/keyspace_deploy.cql.j2",
+		"/D/Projects/AntiFraud/kfp/infrastructure/.git/config",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/.git/config",
+		"/C/Users/bogomolov/.gitconfig",
+		"/C/Program Files (x86)/Git/etc/gitconfig",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/controllers/auth.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/enums/feedbackstatuses.json",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/modules/db.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/run.bat",
+		"/C/Users/bogomolov/Desktop/1.csv",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/frontend/KLJS/handlers/tcs_loginhandler.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/controllers/context.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/js/controllers/reports.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/test/incidents.js",
+		"/D/sessions.txt",
+		"/D/1.txt",
+		"/C/Users/bogomolov/AppData/Local/Microsoft/Windows/INetCache/Content.Outlook/Y82BIQ7G/Getting_Things_Done_-_The_Art_Of_Stress-Free_Productivity - Copy pdf.txt",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/frontend/KLJS/core/helpers/string.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/frontend/KLJS/handlers/loginhandler.js",
+		"/C/Users/bogomolov/Desktop/1.txt",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/views/auth/layout.html",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/less/blocks/loginpage.less",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/less/blocks/layout.less",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/less/blocks/header.less",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/less/site.less",
+		"/D/tmp/kljs",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/views/common/header.html",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/js/controllers/main.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/bower.json",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/index.html",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/dist/client/index.html",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/js/utils/datehelper.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/utils/datehelper.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/less/blocks/types.less",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/test/modules/protomessages.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/test/index.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/controllers/clientadministration.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/modules/websockets.js",
+		"/D/kfp-dev1.avp.ru.txt",
+		"/D/Install/CardAccStatment.txt",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/build.sh",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/test/modules/logger.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/test/modules.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/test/utils/datehelper.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/modules/logger.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/config.json",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/test/db.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/node_modules/mocha/mocha.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/test/modules/configmanager.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/modules/configmanager.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/js/controllers/bankadmin.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/views/bank/layout.html",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/js/app.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/js/enums/incidentstatuses.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/enums/incidentsstatuses.json",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/js/enums/feedbackstatuses.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/views/templates.html",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/views/common/grid-toolbar.html",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/utils/makedatekey.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/utils/timespanparser.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/.gitignore",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/modules/protomessages.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/proto/Feedback.proto",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/proto/FeedbackInfo.proto",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/dist/server/proto/Feedback.proto",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/proto/Verdict.proto",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/proto/markmsg.proto",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/js/modules/auth.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/client/js/directives/areachart.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/utils/hashpwd.js",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/.git/rebase-apply/0001",
+		"/D/v1_uuids.txt",
+		"/D/v1_uuids (2).txt",
+		"/D/v1_uuids (1).txt",
+		"/D/Projects/AntiFraud/kfp/KFP_CE/ato/console/src/server/controllers/websockets.js",
+		"/D/Projects/AntiFraud/atoconsole/test/filldb.js",
+		"/D/Projects/AntiFraud/atoconsole/src/client/js/modules/auth.js",
+		"/D/Projects/AntiFraud/atoconsole/src/client/views/auth/layout.html",
+		"/D/Projects/AntiFraud/atoconsole/src/client/js/utils/stringhelper.js",
+		"/D/Projects/AntiFraud/atoconsole/package.json",
+		"/D/Projects/AntiFraud/atoconsole/src/resources/resources.json",
+		"/D/Projects/AntiFraud/atoconsole/src/resources/resources.ru-ru.json",
+		"/D/Projects/AntiFraud/atoconsole/src/client/js/controllers/loginpage.js",
+		"/D/Projects/AntiFraud/atoconsole/src/server/controllers/auth.js",
+		"/D/Projects/AntiFraud/atoconsole/src/server/controllers/incidents.js",
+		"/D/Projects/AntiFraud/atoconsole/src/client/views/incidents/layout.html",
+		"/D/Projects/AntiFraud/atoconsole/src/client/views/riskauth/layout.html",
+		"/D/Projects/AntiFraud/atoconsole/src/client/views/common/areachart.html",
+		"/D/Projects/AntiFraud/atoconsole/src/client/views/common/piechart.html",
+		"/D/Projects/AntiFraud/atoconsole/src/client/js/directives/piechart.js",
+		"/D/Projects/AntiFraud/atoconsole/src/client/less/blocks/charts.less",
+		"/D/Projects/AntiFraud/atoconsole/src/client/js/directives/areachart.js",
+		"/D/Projects/AntiFraud/atoconsole/src/client/views/common/datepicker.html",
+		"/D/Projects/AntiFraud/atoconsole/src/client/js/controllers/incidents.js",
+		"/D/Projects/AntiFraud/atoconsole/src/client/views/common/pagination.html",
+		"/D/Projects/AntiFraud/atoconsole/src/client/views/reports/layout.html",
+		"/D/Projects/AntiFraud/atoconsole/src/client/js/controllers/reports.js",
+		"/D/Projects/AntiFraud/atoconsole/src/client/js/app.js",
+		"/D/Projects/AntiFraud/atoconsole/src/client/less/blocks/loader.less",
+		"/D/Projects/AntiFraud/atoconsole/src/client/less/site.less",
+		"/D/Projects/AntiFraud/atoconsole/src/client/js/controllers/riskauth.js",
+		"/D/Projects/AntiFraud/atoconsole/src/client/js/directives/pagination.js",
+		"/D/Projects/AntiFraud/atoconsole/src/client/js/directives/datepicker.js",
+		"/D/Projects/AntiFraud/atoconsole/src/client/js/modules/api.js",
+		"/D/Projects/AntiFraud/atoconsole/src/server/controllers/riskauth.js",
+		"/D/Projects/AntiFraud/atoconsole/src/client/views/templates.html",
+		"/D/Projects/AntiFraud/atoconsole/src/client/views/common/header.html",
+		"/D/Projects/AntiFraud/atoconsole/src/server/api.js"
+	],
+	"find":
+	{
+		"height": 70.0
+	},
+	"find_in_files":
+	{
+		"height": 158.0,
+		"where_history":
+		[
+			"D:\\Projects\\AntiFraud\\kfp\\KFP_CE\\ato\\console\\src",
+			"",
+			"strs",
+			"",
+			"D:\\Projects\\AntiFraud\\EMC\\Development\\Source\\Console2\\",
+			"D:\\Projects\\AntiFraud\\EMC\\Development\\Source\\Console2\\webconsole",
+			"D:\\Projects\\AntiFraud\\EMC\\Development\\Source\\Console2\\emcconsole\\src\\api",
+			"D:\\Projects\\AntiFraud\\EMC\\Development\\Source\\Console2\\emcconsole",
+			"",
+			"*.sql",
+			"",
+			"<open files>",
+			"*.less",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"readRows",
+			"getList",
+			"incidentsStatuses",
+			"datekey",
+			"startGetCount",
+			"getList",
+			"ReportFraudStatus",
+			"getFeedbacksCount",
+			"feedbackstatuses",
+			"console",
+			"new cassandra.Client(",
+			"getIncidentsCount",
+			"maxSessionLength",
+			"this.incidentsList = ",
+			"clearMessages",
+			"uploadPeriodDates",
+			"clearmessages",
+			"btn",
+			"successMessage",
+			"clearMessages",
+			"$scope.postSessions",
+			".page-content",
+			".login-page",
+			"alert",
+			"uploadErrorMessage",
+			"successMessage",
+			"hideBoundsLoader",
+			"showDatepickerLoader",
+			"hideDataLoader",
+			"buildUrl",
+			"reportfraud_",
+			"incidents_",
+			"$scope.page",
+			"Статус",
+			"Error",
+			"error",
+			"HHmm",
+			"$timeout",
+			"filterStringParams",
+			"ErrorAddReportedIncidentList",
+			"session.user.id",
+			"wssserver",
+			"intervalId",
+			"console",
+			"protoBuf",
+			"consol",
+			"ale",
+			"consol",
+			"consologger",
+			"boundsLoading",
+			"feedbacks",
+			"reportedincidents",
+			"\n					",
+			"path",
+			"got user profile",
+			"cistomSalt",
+			"passwdSalt",
+			"hashPwd",
+			"err",
+			"transi",
+			"fa-spinner",
+			"$location",
+			"total",
+			"loadBounds",
+			"aler",
+			"LoginsController",
+			"totalcount",
+			"pagesCount",
+			"pages",
+			"RTL",
+			"pagesize",
+			"pages",
+			"shim",
+			"drag-over",
+			"ng-repeat=\"item in items\"",
+			"getSession",
+			"KLKFPATOSID",
+			"$http",
+			"/mds/",
+			"/mds",
+			"$location",
+			"currPage",
+			"getDateFromUtc",
+			"weekStart",
+			"dateHelper",
+			"searchStr",
+			"endDate",
+			"load",
+			"(\\d{4})(\\d{2})(\\d{2})",
+			"start",
+			"startDate",
+			"selectingPeriod",
+			"periodMap",
+			"makeUserInfo",
+			" !",
+			"makeUserInfo",
+			"VM448:2 ",
+			"hover-row-bgcolor",
+			"datepicker-placer",
+			"concat",
+			"htmldev",
+			"htmls",
+			"localeResouces",
+			"userlogout",
+			"alert(0)",
+			"g4624",
+			"defs8302",
+			"context",
+			"ngSanitize",
+			"navbar",
+			"border-radius-base",
+			"button",
+			"PluralRule",
+			"Common.",
+			"appContext",
+			"ligh",
+			"border-radius-base",
+			"@kl-gray",
+			"button",
+			"webfonts",
+			"tooltip",
+			"1152",
+			"currentViewStr",
+			".checkbox",
+			"isie",
+			"shi",
+			".btn",
+			"phishing"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"cassandra.connect(",
+			"incidents_",
+			"reportfraud_",
+			"customSalt",
+			"",
+			"/kfp/",
+			"",
+			"strs",
+			"",
+			"../fonts",
+			"\"loader\" visible",
+			"//logger.",
+			"",
+			"$locale",
+			".event.",
+			"<!-- \\1 -->",
+			"16",
+			"8",
+			", evt.",
+			"@",
+			"<!-- @*$1*@ -->",
+			"17",
+			"7",
+			"\\t\"$1\": $2$3",
+			":",
+			"17",
+			"7",
+			"\", \"",
+			"\\t\"$1\": \"$2\",",
+			"\", \"",
+			"antifraud",
+			"\"antifraud.",
+			"<",
+			"\"mds/antifraud",
+			"mds/",
+			"\", \"",
+			" <script type=\"text/ng-template\" id=\"mds/anitfraud/$1\">\\n@@include(\"antifraud/$1\")\\n</script>",
+			" \"$1\"",
+			"",
+			"\", \"",
+			",\\n",
+			";\\n"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 63.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": false,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 132.0
+	},
+	"pinned_build_system": "build modules",
+	"project": "drawbot_main.sublime-project",
+	"replace":
+	{
+		"height": 114.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"cq",
+				"src\\csql\\main.cql"
+			],
+			[
+				"test/filldb.js",
+				"test\\filldb.js"
+			],
+			[
+				"res",
+				"src\\resources\\resources.json"
+			],
+			[
+				"server/controllers/incidents.js",
+				"src\\server\\controllers\\incidents.js"
+			],
+			[
+				"src/csql/main.cql",
+				"src\\csql\\main.cql"
+			],
+			[
+				"server/controllers/reportedincidents.js",
+				"src\\server\\controllers\\reportedincidents.js"
+			],
+			[
+				"controllers/reportedincidents.js",
+				"src\\server\\controllers\\reportedincidents.js"
+			],
+			[
+				"erver/controllers/incidents.js",
+				"src\\server\\controllers\\incidents.js"
+			],
+			[
+				"csql/main.cql",
+				"src\\csql\\main.cql"
+			],
+			[
+				"server/modules/rabbit.js",
+				"src\\server\\modules\\rabbit.js"
+			],
+			[
+				"erver/controllers/reportedincidents.js",
+				"src\\server\\controllers\\reportedincidents.js"
+			],
+			[
+				"/csql/main.cql",
+				"src\\csql\\main.cql"
+			],
+			[
+				"/server/controllers/reportedincidents.js",
+				"src\\server\\controllers\\reportedincidents.js"
+			],
+			[
+				"resou",
+				"src\\resources\\resources.json"
+			],
+			[
+				"report",
+				"src\\client\\js\\controllers\\reports.js"
+			],
+			[
+				"cont/inci",
+				"src\\client\\js\\controllers\\incidents.js"
+			],
+			[
+				"inci",
+				"test\\incidents.js"
+			],
+			[
+				".cql",
+				"src\\csql\\main.cql"
+			],
+			[
+				"cql",
+				"src\\csql\\main.cql"
+			],
+			[
+				"con",
+				"src\\config.json"
+			],
+			[
+				"package.json",
+				"package.json"
+			],
+			[
+				"src/server/controllers/auth.js",
+				"src\\server\\controllers\\auth.js"
+			],
+			[
+				"src/server/api.js",
+				"src\\server\\api.js"
+			],
+			[
+				"server.js",
+				"src\\server.js"
+			],
+			[
+				"views/reports/layout.html",
+				"src\\client\\views\\reports\\layout.html"
+			],
+			[
+				"/modules/auth.js",
+				"src\\client\\js\\modules\\auth.js"
+			],
+			[
+				"modules/api.js",
+				"src\\client\\js\\modules\\api.js"
+			],
+			[
+				"areachart",
+				"src\\client\\js\\directives\\areachart.js"
+			],
+			[
+				"directives/areachart.js",
+				"src\\client\\js\\directives\\areachart.js"
+			],
+			[
+				"controllers/reports.js",
+				"src\\client\\js\\controllers\\reports.js"
+			],
+			[
+				"js/controllers/incidents.js",
+				"src\\client\\js\\controllers\\incidents.js"
+			],
+			[
+				"packa",
+				"package.json"
+			],
+			[
+				"/utils/hashpwd.js",
+				"src\\server\\utils\\hashpwd.js"
+			],
+			[
+				"/controllers/auth.js",
+				"src\\server\\controllers\\auth.js"
+			],
+			[
+				"main",
+				"src\\csql\\main.cql"
+			],
+			[
+				"config.",
+				"src\\config.json"
+			],
+			[
+				"auth.js",
+				"src\\server\\controllers\\auth.js"
+			],
+			[
+				"fill",
+				"test\\filldb.js"
+			],
+			[
+				"datehe",
+				"src\\client\\js\\utils\\datehelper.js"
+			],
+			[
+				"main.js",
+				"src\\client\\js\\controllers\\main.js"
+			],
+			[
+				"side",
+				"src\\client\\views\\common\\sidebar.html"
+			],
+			[
+				"lay",
+				"src\\client\\views\\common\\layout.html"
+			],
+			[
+				"header.le",
+				"src\\client\\less\\blocks\\header.less"
+			],
+			[
+				"vars",
+				"src\\client\\less\\blocks\\vars.less"
+			],
+			[
+				"grun",
+				"Gruntfile.js"
+			],
+			[
+				"va",
+				"Console2\\emcconsole\\src\\js\\directives\\validation.js"
+			],
+			[
+				"monitoring/inde",
+				"Console2\\emcconsole\\src\\views\\monitoring\\index.html"
+			],
+			[
+				"sys",
+				"Console2\\emcconsole\\src\\api\\repositories\\syshealthrepository.js"
+			],
+			[
+				"monitoring/in",
+				"Console2\\emcconsole\\src\\views\\monitoring\\index.html"
+			],
+			[
+				"date",
+				"Console2\\emcconsole\\src\\api\\utils\\datehelper.js"
+			],
+			[
+				"server",
+				"Console2\\webconsole\\server.js"
+			],
+			[
+				"stats.",
+				"Console2\\emcconsole\\src\\api\\handlers\\statistics.js"
+			],
+			[
+				"stats",
+				"Console2\\emcconsole\\src\\js\\controllers\\monitoring\\statscontroller.js"
+			],
+			[
+				"dash",
+				"Console2\\emcconsole\\src\\resources\\dashboard.json"
+			],
+			[
+				"user",
+				"Console2\\emcconsole\\bower_components\\jquery\\src\\data\\var\\data_user.js"
+			],
+			[
+				"mai",
+				"Console2\\consolecommon\\src\\js\\app\\controllers\\maincontroller.js"
+			],
+			[
+				"uis",
+				"Console2\\consolecommon\\src\\js\\app\\services\\uiservice.js"
+			],
+			[
+				"inline",
+				"Console2\\consolecommon\\src\\views\\common\\inlinehelp.html"
+			],
+			[
+				"help.js",
+				"Console2\\consolecommon\\src\\js\\app\\directives\\inlinehelp.js"
+			],
+			[
+				"help",
+				"Console2\\consolecommon\\src\\less\\blocks\\inlinehelp.less"
+			],
+			[
+				"browserstypes",
+				"Console2\\emcconsole\\src\\api\\enums\\browserstypes.json"
+			],
+			[
+				"function",
+				"Database\\Database_Functions.sql"
+			],
+			[
+				"gra",
+				"Console2\\emcconsole\\src\\js\\directives\\monitoring\\graphdetails.js"
+			],
+			[
+				"219",
+				"Console2\\consolecommon\\bower_components\\jquery\\test\\data\\jquery-1.9.1.ajax_xhr.min.js"
+			],
+			[
+				"stat",
+				"Console2\\emcconsole\\src\\api\\repositories\\statsrepository.js"
+			],
+			[
+				"graph",
+				"Console2\\emcconsole\\src\\views\\monitoring\\graphdetails.html"
+			],
+			[
+				"emcgri",
+				"Console2\\emcconsole\\src\\less\\blocks\\grid.less"
+			],
+			[
+				"emccon",
+				"Console2\\emcconsole\\src\\config.json"
+			],
+			[
+				"mvremo",
+				"Console2\\emcconsole\\src\\api\\enums\\mvremovalresults.json"
+			],
+			[
+				"func",
+				"Database\\Database_Functions.sql"
+			],
+			[
+				"loa",
+				"Console2\\consolecommon\\src\\js\\app\\directives\\loader.js"
+			],
+			[
+				"icon",
+				"Console2\\emcconsole\\src\\less\\blocks\\icons.less"
+			],
+			[
+				"endpointsourcetypes",
+				"Console2\\emcconsole\\src\\api\\enums\\endpointsourcetypes.json"
+			],
+			[
+				"endpointtypes",
+				"Console2\\emcconsole\\src\\js\\enums\\endpointtypes.js"
+			],
+			[
+				"categorylevels",
+				"Console2\\emcconsole\\src\\api\\enums\\categorylevels.json"
+			],
+			[
+				"barcha",
+				"Console2\\emcconsole\\src\\js\\directives\\monitoring\\barchart.js"
+			],
+			[
+				"cha",
+				"Console2\\emcconsole\\src\\views\\monitoring\\chartsview.html"
+			],
+			[
+				"funct",
+				"Database\\Database_Functions.sql"
+			],
+			[
+				"chart",
+				"Console2\\emcconsole\\src\\js\\directives\\monitoring\\barchart.js"
+			],
+			[
+				"sta",
+				"Console2\\emcconsole\\src\\api\\handlers\\statistics.js"
+			],
+			[
+				"charts",
+				"Console2\\emcconsole\\src\\views\\monitoring\\chartsview.html"
+			],
+			[
+				"da",
+				"Console2\\emcconsole\\src\\js\\controllers\\monitoring\\dashboardcontroller.js"
+			],
+			[
+				"formatdate",
+				"Console2\\emcconsole\\src\\api\\utils\\formatdate.js"
+			],
+			[
+				"bs",
+				"Console2\\consolecommon\\src\\js\\app\\services\\bspopover.js"
+			],
+			[
+				"db.",
+				"Console2\\common_modules\\distributed.db\\db.js"
+			],
+			[
+				"csv",
+				"Console2\\emcconsole\\src\\api\\csvrenderers\\csvrenderer.js"
+			],
+			[
+				"endpoints",
+				"Console2\\emcconsole\\src\\api\\enums\\endpointsourcetypes.json"
+			],
+			[
+				"endpoin",
+				"Console2\\emcconsole\\src\\js\\enums\\endpointtypes.js"
+			],
+			[
+				"source",
+				"Console2\\emcconsole\\src\\api\\enums\\sourcestypes.json"
+			],
+			[
+				"remova",
+				"Console2\\emcconsole\\src\\api\\enums\\mvremovalresults.json"
+			],
+			[
+				"config",
+				"Console2\\emcconsole\\src\\config.json"
+			],
+			[
+				"fun",
+				"Database\\Database_Functions.sql"
+			],
+			[
+				"tip",
+				"Console2\\consolecommon\\src\\js\\libs\\d3.tip.js"
+			],
+			[
+				"emoveresult",
+				"Console2\\emcconsole\\src\\api\\enums\\mvremovalresults.json"
+			],
+			[
+				"dashbo",
+				"Console2\\emcconsole\\src\\resources\\dashboard.ru-ru.json"
+			],
+			[
+				"dashboardviewmodes",
+				"Console2\\emcconsole\\src\\js\\enums\\dashboardviewmodes.js"
+			],
+			[
+				"endpointsourcetypes.json",
+				"Console2\\emcconsole\\src\\api\\enums\\endpointsourcetypes.json"
+			],
+			[
+				"vulnerabilitiestypes",
+				"Console2\\emcconsole\\src\\api\\enums\\vulnerabilitiestypes.json"
+			],
+			[
+				"productusagetypes",
+				"Console2\\emcconsole\\src\\api\\enums\\productusagetypes.json"
+			],
+			[
+				"productusagetypes.json",
+				"Console2\\emcconsole\\src\\api\\enums\\productusagetypes.json"
+			],
+			[
+				"run",
+				"Console2\\run.bat"
+			],
+			[
+				"end",
+				"Console2\\emcconsole\\src\\api\\repositories\\endpointrepository.js"
+			],
+			[
+				"certificateinvalidityreason.json",
+				"Console2\\emcconsole\\src\\api\\enums\\certificateinvalidityreason.json"
+			],
+			[
+				"cert",
+				"Console2\\emcconsole\\src\\api\\csvrenderers\\certs.js"
+			],
+			[
+				"agg",
+				"Console2\\emcconsole\\src\\api\\enums\\aggtypes.json"
+			],
+			[
+				"ba",
+				"Console2\\emcconsole\\src\\js\\directives\\monitoring\\barchart.js"
+			],
+			[
+				"wor",
+				"mdsconsole\\src\\js\\services\\workflowservice.js"
+			],
+			[
+				"endpo",
+				"emcconsole\\src\\api\\repositories\\endpointrepository.js"
+			],
+			[
+				"ost",
+				"EMConsole\\js\\enums\\ostypes.js"
+			],
+			[
+				"browse",
+				"EMConsole\\js\\enums\\browserstypes.js"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 289.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
