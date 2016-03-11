@@ -9,12 +9,12 @@
 | `AT+CWJAP="SSID","Password"` | Join Access Point | OK |
 | `AT+CWQAP` | Quit Access Point | OK |
 | `AT+CIFSR` | Get IP Address | AT+CIFSR 192.168.0.105\nOK |
-| `AT+ CWSAP=<ssid>,<pwd>,<chl>, <ecn>` | Set Parameters of Access Point | OK |
+| `AT+ CWSAP=\<ssid\>,\<pwd\>,\<chl\>,\<ecn\>` | Set Parameters of Access Point | OK |
 | `AT+CWMODE=1` | WiFi Mode STA | OK |
 | `AT+CWMODE=2` | WiFi Mode AP  | OK |
 | `AT+CWMODE=3` | WiFi Mode BOTH | OK |
 | `AT+CIPSTART=TCP,ip,port` | Set up single TCP connection | OK |
-| `AT+CIPSTART=<cnnid>TCP,ip,port` | Set up multiple TCP connections | OK |
+| `AT+CIPSTART=\<cnnid\>TCP,ip,port` | Set up multiple TCP connections | OK |
 | `AT+CIPSTART=UDP,ip,port` | Set up single UDP connection | OK |
 | `AT+CIPSTART=<cnnid>UDP,ip,port` | Set up multiple UDP connections | OK |
 | `AT+ CIPMUX=0` | TCP/UDP sigle connection mode | OK |
