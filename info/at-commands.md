@@ -1,10 +1,10 @@
 #AT Commands
-| AT Command | Function          | Response                                                 |
----------------------------------------------------------------------------------------------
-| `AT`         | Working           | OK                                                       |
-| `AT+RST`     | Restart           | OK [System Ready, Vendor:www.ai-thinker.com]             |
-| `AT+GMR`     | Firmware version  | 0018000902 OK                                            |
-| `AT+CWLAP`   | List Access Points| +CWLAP:(4,"AP_SSID",- 38,"##:##:##:##:##:##",#)\nOK      |
+| AT Command | Function | Response |
+| --- | --- | --- |
+| `AT` | Working | OK |
+| `AT+RST` | Restart           | OK [System Ready, Vendor:www.ai-thinker.com]             |
+| `AT+GMR` | Firmware version  | 0018000902 OK                                            |
+| `AT+CWLAP` | List Access Points| +CWLAP:(4,"AP_SSID",- 38,"##:##:##:##:##:##",#)\nOK      |
 | `AT+CWJAP?`  | Check if joined to access aoint | +CWJAP:"AP_SSID" OK |
 | `AT+CWJAP="SSID","Password"` | Join Access Point | OK |
 | `AT+CWQAP` | Quit Access Point | OK |
