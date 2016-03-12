@@ -1,0 +1,56 @@
+//SoftwareSerial mySerial(4,3);/* RX:D4, TX:D3 */
+//bool wifiOK = true;
+#include "wifi1.h";
+#if defined(WIFI)
+Wifi::Wifi(){
+}
+
+void Wifi::init( ){
+	//_serial.begin( WIFI_DATASPEED );
+  if (_wifi.joinAP(WIFI_SSID, WIFI_PASSWORD)) {
+      Serial.print("Join AP success\r\n");
+      Serial.print("IP: ");
+      Serial.println(_wifi.getLocalIP().c_str());       
+  } else {
+      Serial.print("Join AP failure\r\n");
+  }
+  
+  if (_wifi.enableMUX()) {
+      Serial.print("multiple ok\r\n");
+  } else {
+      Serial.print("multiple err\r\n");
+  }
+  
+  if (_wifi.startServer(WIFI_SERVER_PORT)) {
+      Serial.print("start tcp server ok\r\n");
+  } else {
+      Serial.print("start tcp server err\r\n");
+  }
+
+  /*if (_wifi.setTCPServerTimeout(60)) { 
+      Serial.print("set tcp server timout 60 seconds\r\n");
+  } else {
+      Serial.print("set tcp server timout err\r\n");
+  }*/
+	inited = true;
+}
+
+bool Wifi::onConnected(){
+	String oldStatus = status;
+	status = _wifi.getIPStatus();
+	return status != oldStatus && status == "STATUS:3";
+}
+
+uint32_t Wifi::read( char *buff ){
+  //Serial.println("reading " + _wifi.getIPStatus());
+  return _wifi.recv(&mux_id, (uint8_t*)buff, DATA_BUF_SIZE, 100);
+}
+
+void Wifi::write(char *msg){
+    if (_wifi.send(mux_id, (const uint8_t*)msg, strlen(msg))) {
+        Serial.println("send ok");
+    } else {
+        Serial.println("send err");
+    }
+}
+#endif

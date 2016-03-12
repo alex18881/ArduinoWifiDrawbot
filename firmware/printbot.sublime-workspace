@@ -1,0 +1,615 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"en",
+				"enWords"
+			],
+			[
+				"ma",
+				"margin-bottom"
+			],
+			[
+				"le",
+				"length-1"
+			],
+			[
+				"wo",
+				"words"
+			],
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"inlni",
+				"inline-block"
+			],
+			[
+				"font",
+				"font-variant"
+			],
+			[
+				"tests",
+				"testsListController"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "printbot.ino",
+			"settings":
+			{
+				"buffer_size": 3727,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/Users/alexey/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+			"settings":
+			{
+				"buffer_size": 869,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Configuration.h",
+			"settings":
+			{
+				"buffer_size": 1608,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#include \"Configuration.h\"\n\n#if defined(WIFI)\n#include \"wifi.h\"\n#endif\n\n#if defined(SERVO)\n#include <Servo.h>\n#endif\n\n#include <SoftwareSerial.h>\n#include <AccelStepper.h>\n\n#define PRINTPEN              'P'\n#define LEFTWHEEL             'L'\n#define RIGHTWHEEL            'R'\n#define BOTHWHEELS            'W'\n\nchar commandType = 0;\nfloat value = 0.0;\nString svalue = \"\";\nbool executeCommand = false;\nbool settingSpeed = false;\n\n#if defined(WHEELS)\nfloat wheelspeed = WHEELS_SPEED;\nString swheelspeed = \"\";\n#endif\n\n\nstatic uint8_t mux_id = 0;\n\n#if defined(SERVO)\nServo pen;\n#endif\n\n#if defined(LEFT_WHEEL)\nAccelStepper leftWheel( HALFSTEP, LEFT_WHEEL_PIN1, LEFT_WHEEL_PIN3, LEFT_WHEEL_PIN2, LEFT_WHEEL_PIN4 );\n#endif\n\n#if defined(RIGHT_WHEEL)\nAccelStepper rightWheel( HALFSTEP, RIGHT_WHEEL_PIN1, RIGHT_WHEEL_PIN3, RIGHT_WHEEL_PIN2, RIGHT_WHEEL_PIN4 );\n#endif\n\nvoid setup() {\n    // initialize serial:\n    Serial.begin(DATASPEED);\n    while (!Serial) {\n      ; // wait for serial port to connect. Needed for native USB port only\n  }\n  #if defined(WIFI)\n    //mySerial.begin(WIFI_DATASPEED, SERIAL_8N2);\n    #endif\n\n    #if defined(SERVO)\n    pen.attach(SERVOPORT);\n    #endif\n\n    #ifdef LEFT_WHEEL\n    leftWheel.setMaxSpeed(WHEELS_MAX_SPEED);\n    leftWheel.setAcceleration(WHEELS_ACCELERATION);\n    #endif\n\n    #ifdef RIGHT_WHEEL\n    rightWheel.setMaxSpeed(WHEELS_MAX_SPEED);\n    rightWheel.setAcceleration(WHEELS_ACCELERATION);\n    #endif\n\n    #if defined(WIFI)\n    sendWifiCommand( \"AT\" );\n    sendWifiCommand( \"AT+CWMODE=1\" );\n    if(getWifiCommandResponse( \"AT+CWJAP?\" ).indexOf((String)WIFI_SSID) < 0 ){\n    	sendWifiCommand( (String)\"AT+CWJAP=\" + (String)WIFI_SSID + \",\" + (String)WIFI_PASSWORD );\n    }\n    sendWifiCommand( \"AT+CIPMUX=1\" );\n    sendWifiCommand( \"AT+CIPSERVER=1,1336\" );\n    #endif\n}\n\n#if defined(WIFI)\nString readWifi(){\n	String out = \"\";\n	while (mySerial.available()) {\n		delayMicroseconds(10000);\n		String _str = mySerial.readString();\n		Serial.println( \"*\" + _str );\n		out += _str;\n	}\n	return out;\n}\n\nbool sendWifiCommand( String cmd ){\n	int result = getWifiCommandResponse( cmd ).indexOf( \"OK\" );\n	Serial.println( \"*>>\" + (String) result );\n	return result >= 0;\n}\n\nString getWifiCommandResponse( String cmd ){\n	mySerial.print(cmd + \"\\r\\n\");\n	String s = \"\";\n	while(s == \"\"){\n		s = readWifi();\n	}\n  //Serial.println(s);\n  return s;\n}\n#endif\n\nvoid loop() {\n\n	#if defined(WIFI)\n	String wifiR = readWifi();\n	if(wifiR != \"\" ){\n		Serial.println(wifiR);\n	}\n	#endif\n\n	bool wheelRun = false;\n	\n	if (leftWheel.distanceToGo() != 0){\n		leftWheel.run();\n		wheelRun = true;\n	}\n	if (rightWheel.distanceToGo() != 0){\n		rightWheel.run();\n		wheelRun = true;\n	}\n\n	if(!wheelRun){\n		if (commandType != 0 && value != 0 && executeCommand) {\n			Serial.println( \"Executing command \" + (String)commandType );\n			\n			switch( commandType ){\n				case PRINTPEN:\n				execPen( value );\n				break;\n				case LEFTWHEEL:\n				Serial.println( \"Executing left wheel command\" );\n				execWheel( leftWheel, value );\n				break;\n				case RIGHTWHEEL:\n				Serial.println( \"Executing right wheel command\" );\n				execWheel( rightWheel, value );\n				break;\n				case BOTHWHEELS:\n				Serial.println( \"Executing both wheels command\" );\n				execBothWheels( value );\n				break;\n				default:\n				Serial.println( \"OOPS!!!\" );\n			}\n     // Serial.println(commandType.toInt()); \n      // clear the string:\n      }else{\n      	disableWheels();\n      }\n  }\n\n}\n\nvoid serialEvent() {\n	while (Serial.available()) {\n    // get the new byte:\n    char inChar = (char)Serial.read(); \n\n    if(inChar == ';'){\n    	value = 0.0;\n    	value = svalue.toFloat();\n    	#if defined(WHEELS)\n    	wheelspeed = 1;\n    	if(swheelspeed != \"\")\n    	wheelspeed = swheelspeed.toFloat();\n    	if(wheelspeed > WHEELS_MAX_SPEED)\n    	wheelspeed = WHEELS_MAX_SPEED;\n    	#endif\n    	swheelspeed = \"\";\n    	svalue = \"\";\n    	settingSpeed = false;\n    	if(value != 0){\n    		Serial.println( \"Setting value for command \" + (String)commandType + \" to \" + (String)value + \" with speed \" + (String)wheelspeed );\n    		executeCommand = true;\n    		}else{\n    			resetCommand();\n    		}\n    		}else if(commandType == 0){\n    			if( inChar == PRINTPEN || inChar == LEFTWHEEL || inChar == RIGHTWHEEL || inChar == BOTHWHEELS ){\n    				commandType = inChar;\n    				Serial.println( \"Selecting command \" + (String)inChar );\n    			}\n    			#if defined(WHEELS)\n    			wheelspeed = WHEELS_SPEED;\n    			#endif\n    			value = 0;\n    }else if( inChar == 'S' ){ // Setting speed\n    	settingSpeed = true;\n    	}else if(settingSpeed){\n    		swheelspeed += (String)inChar;\n    		}else{\n    			settingSpeed = false;\n    			svalue += (String)inChar;\n    		}\n    	}\n    }\n//*/\nvoid resetCommand(){\n	commandType = 0;\n	value = 0.0;\n	#if defined(WHEELS)\n	wheelspeed = WHEELS_SPEED;\n	#endif\n	svalue = \"\";\n	swheelspeed = \"\";\n	executeCommand = false;\n}\n\n#if defined(SERVO)\nvoid execPen(float val){\n	Serial.println( \"Executing pen command\" );\n	if(pen.attached()){\n		if( val > 0 ){\n			Serial.println( \"Start drawing\" );\n			pen.write(DRAW_ON_SERVOANGLE);\n			} else{\n				Serial.println( \"End drawing\" );\n				pen.write(DRAW_OFF_SERVOANGLE);\n			}\n		}\n		resetCommand(); \n	}\n	#endif\n\n	#if defined(WHEELS)\n	void disableWheels(){\n		\n	}\n\n	void execWheel(AccelStepper wheel, float val){\n		Serial.println( \"Turning \" + (String)commandType + \" wheel by \" + (String)val );  \n\n		wheel.setSpeed( wheelspeed );\n		wheel.moveTo(val);\n\n // resetCommand();\n}\n\nvoid execBothWheels(float val){\n	Serial.println( \"Turning both wheels by \" + (String)val );\n	int v=abs(value);\n	\n	rightWheel.setSpeed( wheelspeed );\n	leftWheel.setSpeed( wheelspeed );\n	rightWheel.moveTo(val);\n	leftWheel.moveTo(val);\n  //resetCommand();\n}\n#endif\n",
+			"file": "old.ino.cpp",
+			"file_size": 5967,
+			"file_write_time": 131016394766177476,
+			"settings":
+			{
+				"buffer_size": 5711,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Package Control Messages\n========================\n\nMaterial Theme\n--------------\n\n  Material Theme for Sublime Text 3\n  https://github.com/equinusocio/material-theme\n  \n  👉 Version 2.0.9 👈\n  ********************************************************************************\n  \n  🏮 UI THEME\n  \n    ➼ Removed Langs folder with extensions overwrite (This should fix the issue with the less syntax)\n",
+			"settings":
+			{
+				"buffer_size": 393,
+				"line_ending": "Windows",
+				"name": "Package Control Messages",
+				"read_only": true,
+				"scratch": true
+			}
+		},
+		{
+			"file": "/E/g-code/output_0003.ngc",
+			"settings":
+			{
+				"buffer_size": 893,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "gcode.h",
+			"settings":
+			{
+				"buffer_size": 28,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "dis",
+		"selected_items":
+		[
+			[
+				"dis",
+				"Package Control: Discover Packages"
+			],
+			[
+				"user",
+				"Preferences: Settings - User"
+			],
+			[
+				"use",
+				"Preferences: Settings - User"
+			],
+			[
+				"rein",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"us",
+				"Preferences: Settings - User"
+			],
+			[
+				"in",
+				"Package Control: Install Package"
+			],
+			[
+				"disco",
+				"Package Control: Discover Packages"
+			],
+			[
+				"def",
+				"Preferences: Settings - Default"
+			],
+			[
+				"re",
+				"Package Control: Remove Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"list",
+				"Package Control: List Packages"
+			],
+			[
+				"base",
+				"Base Encoding: Base64 Decode Selection(s)"
+			],
+			[
+				"bas",
+				"Base Encoding: Base64 Decode Selection(s)"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 381.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/alexey/Dropbox/PrintBot/printbot"
+	],
+	"file_history":
+	[
+		"/C/Users/alexey/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/alexey/Documents/Arduino/Marlin-RC/Marlin/Configuration.h",
+		"/C/Users/alexey/Documents/Arduino/Marlin-RC-old/Marlin/Configuration.h",
+		"/C/Users/alexey/Documents/Arduino/Marlin-RC-old/Marlin/Configuration_adv.h",
+		"/C/Users/alexey/Documents/Arduino/Marlin/Configuration.h",
+		"/C/Users/alexey/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/C/Program Files (x86)/Arduino/libraries/Stepper/examples/stepper_oneStepAtATime/stepper_oneStepAtATime.ino",
+		"//BOOGYMANNAS/Public/chrome.sh",
+		"/C/Users/alexey/AppData/Local/Temp/scp18959/home/alex/pocketmine/server.properties",
+		"/C/Users/alexey/AppData/Local/Temp/scp56753/home/alex/pocketmine/plugins/SignWarp/config.yml",
+		"/C/Users/alexey/AppData/Local/Temp/scp41654/home/radiomr7/public_html/mosvertu.ru/wp-content/themes/Mosvertu/header.php",
+		"/C/Users/alexey/AppData/Local/Temp/scp22288/home/radiomr7/public_html/vertu/wp-content/themes/Vertucom/header.php",
+		"/C/Users/alexey/AppData/Local/Temp/scp20645/home/radiomr7/public_html/wp-content/themes/radiom/header.php",
+		"/C/Users/alexey/Downloads/dms.dmslog",
+		"/D/SafeInCloud_2015-02-15.xml",
+		"/C/Program Files (x86)/Minecraft/banned-ips.json",
+		"/C/Program Files (x86)/Minecraft/usercache.json",
+		"/C/Program Files (x86)/Minecraft/whitelist.json",
+		"/C/Program Files (x86)/Minecraft/server.properties",
+		"/C/Program Files (x86)/Minecraft/ops.json",
+		"/C/Program Files (x86)/Minecraft/banned-players.json",
+		"//BOOGYMANNAS/Public/Школа/nums.html",
+		"//BOOGYMANNAS/Public/Школа/words3-4grade.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp48335/home/radiomr7/public_html/vertu/templates/directives/hotspotedimage.html",
+		"/D/lines.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp54208/home/radiomr7/public_html/vertu/templates/remontvertu/constellationv-info.php",
+		"/C/Users/alexey/AppData/Local/Temp/scp48165/home/radiomr7/public_html/vertu/data/constellationv-hotspots.js",
+		"/C/Users/alexey/AppData/Local/Temp/scp40634/home/radiomr7/public_html/vertu/index.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp13327/home/radiomr7/public_html/vertu/theme/css/combined.css",
+		"/C/Users/alexey/AppData/Local/Temp/scp13823/home/radiomr7/public_html/vertu/theme/js/app/app.js",
+		"/C/Program Files (x86)/Minecraft/eula.txt",
+		"/C/Users/alexey/AppData/Local/Temp/scp14507/home/radiomr7/public_html/vertu/session.php",
+		"/C/Users/alexey/Documents/My Games/Terraria/Worlds/PaPaWorld1.wld.bak",
+		"/C/Users/alexey/AppData/Local/FBE/Words.xml",
+		"/C/Users/alexey/AppData/Local/Temp/scp38098/home/radiomr7/public_html/vertu/templates/remontvertu/constellationv/speaker.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp35082/home/radiomr7/public_html/vertu/data/Rococo-Sapphire2.gif",
+		"/C/Users/alexey/AppData/Local/Temp/scp34043/home/radiomr7/public_html/vertu/data/vertuti-hotspots.js",
+		"/C/Users/alexey/AppData/Local/Temp/scp22713/home/radiomr7/public_html/vertu/templates/remontvertu/remont-vertu-ti.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp38475/home/radiomr7/public_html/vertu/data/navigation.js",
+		"/D/angular-1.3.0.zip",
+		"/C/Users/alexey/AppData/Local/Temp/scp40555/home/radiomr7/public_html/vertu/index.txt",
+		"/C/Users/alexey/AppData/Local/Temp/scp21620/home/radiomr7/public_html/vertu/templates/katalogtelefonov/katalog-vertu-ti.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp21212/home/radiomr7/public_html/vertu/templates/katalogtelefonov/katalog-vertu-signature-touch.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp20046/home/radiomr7/public_html/vertu/templates/remontvertu/remont-vertu.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp14651/home/radiomr7/public_html/vertu/templates/remontvertu/remont-vertu-ascent-ti.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp18000/home/radiomr7/public_html/vertu/templates/remontvertu/remont-vertu-ascent-x.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp20526/home/radiomr7/public_html/vertu/templates/remontvertu/remont-vertu-constellation.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp16361/home/radiomr7/public_html/vertu/templates/remontvertu/remont-vertu-constellation-ayxta.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp18413/home/radiomr7/public_html/vertu/templates/remontvertu/remont-vertu-constellation-quest.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp19311/home/radiomr7/public_html/vertu/templates/remontvertu/remont-vertu-constellation-touch.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp20524/home/radiomr7/public_html/vertu/templates/remontvertu/remont-vertu-constellation-v.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp15406/home/radiomr7/public_html/vertu/templates/remontvertu/remont-vertu-signature-s.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp19152/home/radiomr7/public_html/vertu/templates/remontvertu/remont-vertu-signature-touch.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp10546/home/radiomr7/public_html/vertu/templates/directives/hotspotedimage.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp11071/home/radiomr7/public_html/vertu/data/constellation-hotspots.js",
+		"/C/Users/alexey/AppData/Local/Temp/scp03381/home/radiomr7/public_html/vertu/theme/js/app/app.js",
+		"/C/Users/alexey/AppData/Local/Temp/scp09153/home/radiomr7/public_html/vertu/templates/remontvertu/remont-vertu-constellation.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp08855/home/radiomr7/public_html/vertu/templates/index.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp03777/home/radiomr7/public_html/vertu/data/vertuti-hotspots.js",
+		"/C/Users/alexey/AppData/Local/Temp/scp03729/home/radiomr7/public_html/vertu/data/ascentti-hotspots.js",
+		"/C/Users/alexey/AppData/Local/Temp/scp57347/home/radiomr7/public_html/vertu/index.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp56272/home/radiomr7/public_html/vertu/theme/css/combined.css",
+		"/C/Users/alexey/AppData/Local/Temp/scp03826/home/radiomr7/public_html/vertu/templates/directives/ascenttihotspotedimage.html",
+		"/C/Users/alexey/AppData/Local/Temp/scp57858/home/radiomr7/public_html/vertu/index.txt",
+		"//BOOGYMANNAS/web/tests/scripts/app/controller/testcontroller.js",
+		"//BOOGYMANNAS/web/tests/scripts/app/controller/maincontroller.js",
+		"//BOOGYMANNAS/web/tests/scripts/app/controller/testslistcontroller.js",
+		"//BOOGYMANNAS/web/tests/templates/main.html",
+		"//BOOGYMANNAS/web/tests/index.php",
+		"//BOOGYMANNAS/web/tests/scripts/app/app.js",
+		"//BOOGYMANNAS/web/tests/templates/tests-list.html",
+		"//BOOGYMANNAS/web/tests/templates/test.html",
+		"/C/Users/alexey/AppData/Roaming/.minecraft/versions/1.7.10_Moded/1.7.10_Moded.json",
+		"//BOOGYMANNAS/web/tests/1.html",
+		"/C/Program Files/Sublime Text 3/changelog.txt"
+	],
+	"find":
+	{
+		"height": 70.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"executeCommand",
+			"SERVO_ENDSTOPS",
+			"^(.*)<br>\\n",
+			"^(.*)<br>$",
+			"$",
+			"html",
+			">\",",
+			"hotspot",
+			"html"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			",\"$1\"",
+			"\"$1\""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "printbot.ino",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3727,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Arduino-like IDE/Arduino.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/Users/alexey/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 869,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								866,
+								866
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Configuration.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1608,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "old.ino.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5711,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5146,
+								5146
+							]
+						],
+						"settings":
+						{
+							"open_with_edit": true,
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 3459.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 393,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								393,
+								393
+							]
+						],
+						"settings":
+						{
+							"auto_indent": false,
+							"default_dir": "C:\\Users\\alexey\\Dropbox\\PrintBot\\printbot",
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_width": 2,
+							"word_wrap": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/E/g-code/output_0003.ngc",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 893,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "gcode.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 28,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2,
+								2
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 64.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": false,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "printbot.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 230.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
