@@ -29,3 +29,4 @@
 
 #node
 node_modules
+*.sublime-workspace
