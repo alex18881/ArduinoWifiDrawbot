@@ -40,24 +40,26 @@ void Drawer::run(){
 	if (leftWheel.distanceToGo() != 0){
 		leftWheel.run();
 		isMoving = true;
-	}else
+	} else {
     	leftWheel.disableOutputs();
+	}
     
 	if (rightWheel.distanceToGo() != 0){
 		rightWheel.run();
 		isMoving = true;
-	}else
-    rightWheel.disableOutputs();
+	} else {
+    	rightWheel.disableOutputs();
+	}
 	comandComplete = !isMoving;
 }
 
 void Drawer::rotateTo( float _x, float _y ){
 	//Find the angle a0 value in radians relative to Y axis
 	double angle = atan2( (double)abs(_x), (double)abs(_y) );
-	
+
 	if( _y < 0 )
 		angle = M_PI - angle;
-	if(_x > 0 )
+	if(_x < 0 )
 		angle = -angle;
 	/*if( _x == 0 && _y == 0 ){
 		return;
@@ -95,8 +97,8 @@ void Drawer::rotateByRads( double dAngle ){
 
 		Serial.println("Rotating by " + (String)( dAngle * 180 / M_PI) + "deg("+dAngle+"rad) == " + (String)curve + " steps (fill circle "+ (String)c + "steps - "+(String)c0+")" );
 		
-		rightWheel.move(curve);
-		leftWheel.move(-curve);
+		rightWheel.move(-curve);
+		leftWheel.move(curve);
 		
 		while(!comandComplete)
 			run();
@@ -146,7 +148,7 @@ void Drawer::curveTo( float _x, float _y, float _dx, float _dy, float _feedRate,
 	rotateTo( _dx, _dy );
 	comandComplete = false;
 
-	rotateByRads( clockwise?M_HALF_PI:-M_HALF_PI );
+	rotateByRads( clockwise ? M_HALF_PI : -M_HALF_PI );
 
 	comandComplete = false;
 

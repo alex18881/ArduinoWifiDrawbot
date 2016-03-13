@@ -34,17 +34,17 @@
 #endif
 
 #if defined(LEFT_WHEEL)
-  #define LEFT_WHEEL_PIN1     8
-  #define LEFT_WHEEL_PIN2     9
-  #define LEFT_WHEEL_PIN3     10
-  #define LEFT_WHEEL_PIN4     11
+  #define LEFT_WHEEL_PIN1     2
+  #define LEFT_WHEEL_PIN2     3
+  #define LEFT_WHEEL_PIN3     4
+  #define LEFT_WHEEL_PIN4     5
 #endif
 
 #if defined(RIGHT_WHEEL)
-  #define RIGHT_WHEEL_PIN1     2
-  #define RIGHT_WHEEL_PIN2     3
-  #define RIGHT_WHEEL_PIN3     4
-  #define RIGHT_WHEEL_PIN4     5
+  #define RIGHT_WHEEL_PIN1     8
+  #define RIGHT_WHEEL_PIN2     9
+  #define RIGHT_WHEEL_PIN3     10
+  #define RIGHT_WHEEL_PIN4     11
 #endif
 
 #if defined(WIFI)
