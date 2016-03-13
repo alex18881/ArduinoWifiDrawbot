@@ -53,29 +53,35 @@ void Drawer::run(){
 
 void Drawer::rotateTo( float _x, float _y ){
 	//Find the angle a0 value in radians relative to Y axis
-	double angle;
-
-	if(_x == 0 )
+	double angle = atan2( (double)abs(_x), (double)abs(_y) );
+	
+	if( _y < 0 )
+		angle = M_PI - angle;
+	if(_x > 0 )
+		angle = -angle;
+	/*if( _x == 0 && _y == 0 ){
+		return;
+	} else if(_x == 0 ){
 		angle = ( _y > 0 ? 0 : M_PI );
-	else if( _y == 0 )
+	} else if( _y == 0 ){
 		angle = ( _x > 0 ? M_HALF_PI : -M_HALF_PI );
-	else
-		angle = atan( ( double ) -_x/_y );
+	} else {
+		angle = atan2( (double)abs(_x), (double)abs(_y) );
+		if( _y < 0 )
+			angle = M_PI - angle;
+		if(_x > 0 )
+			angle = -angle;
+	}
 
-	if( angle != 0 && angle != M_2PI ){
+	if( angle != 0 && angle != M_2PI ){*/
 
-		Serial.println( "Angle between (" + (String)x + "," + (String)y + ") and (" + (String)_x + "," + (String)_y + ") is " + (String)angle  );
-
-		if(angle > M_PI)
-			angle -= M_PI;
-		if( angle < 0 )
-			angle += M_PI;
+		Serial.println( "Angle is " + (String)angle  );
 
 		//Find the difference between the current rotation angle and the a0
 		double dAngle = angle - rotation;
 
 		rotateByRads( dAngle );
-	}
+	//}
 }
 
 void Drawer::rotateByRads( double dAngle ){
@@ -137,7 +143,7 @@ void Drawer::curveTo( float _x, float _y, float _dx, float _dy, float _feedRate,
 	x = _x;
 	y = _y;
 
-	rotateTo( _x0, _y0 );
+	rotateTo( _dx, _dy );
 	comandComplete = false;
 
 	rotateByRads( clockwise?M_HALF_PI:-M_HALF_PI );

@@ -5,37 +5,37 @@ Wifi::Wifi(){}
 void Wifi::init( void (*fn)(void) ){
 	onConnected = fn;
 	if( sendCommand( "AT", "OK" ) ){
-		Serial.println( "Wifi: OK" );
+		Serial.println( F("Wifi: OK") );
 	}else{
-		Serial.println( "Wifi: Error" );
+		Serial.println( F("Wifi: Error") );
 	}
 
 	_serial.begin( WIFI_DATASPEED );
 	if(!sendCommand( "AT+CWJAP?", WIFI_SSID ) ){
-		Serial.println( "Joining to Wifi" );
+		Serial.println( F("Joining to Wifi") );
 		if( sendCommand( (String)"AT+CWJAP=" + (String)WIFI_SSID + "," + (String)WIFI_PASSWORD, "OK" ) ){
-			Serial.println( "Joining to Wifi: OK" );
+			Serial.println( F("Joining to Wifi: OK") );
 		}else{
-			Serial.println( "Joining to Wifi: Error" );
+			Serial.println( F("Joining to Wifi: Error") );
 		}
 	}
 
 	if( sendCommand( "AT+CWMODE=1", "OK" ) ){
-		Serial.println( "Wifi mode set: OK" );
+		Serial.println( F("Wifi mode set: OK") );
 	}else{
-		Serial.println( "Wifi mode set: Error" );
+		Serial.println( F("Wifi mode set: Error") );
 	}
 	
 	if( sendCommand( "AT+CIPMUX=1", "OK" ) ){
-		Serial.println( "Wifi MUX set: OK" );
+		Serial.println( F("Wifi MUX set: OK") );
 	}else{
-		Serial.println( "Wifi MUX set: Error" );
+		Serial.println( F("Wifi MUX set: Error") );
 	}
 
 	if( sendCommand( "AT+CIPSERVER=1,1336", "OK" ) ){
-		Serial.println( "Wifi start server: OK" );
+		Serial.println( F("Wifi start server: OK") );
 	}else{
-		Serial.println( "Wifi start server: Error" );
+		Serial.println( F("Wifi start server: Error") );
 	}
 
 	delay(100);
@@ -100,11 +100,8 @@ bool Wifi::sendCommand( String cmd, char *strToFind ){
 
 	while( (millis() - _millis) < WIFI_COMMAND_TIMEOUT ){
 		if( _serial.available() ){
-			//String _str = _serial.readString();
-			//result = _str.indexOf( strToFind ) != -1;
 			result = _serial.find( strToFind );
-			//Serial.println( "Wifi exec command " + cmd + ": " + _str + ": " + (String)result);
-			Serial.println( "Wifi exec command " + cmd + ": " + (String)result);
+			//Serial.println( "Wifi exec command " + cmd + ": " + (String)result);
 			break;
 		}
 	}

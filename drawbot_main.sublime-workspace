@@ -519,6 +519,49 @@
 	},
 	"buffers":
 	[
+		{
+			"file": ".gitignore",
+			"settings":
+			{
+				"buffer_size": 261,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "README.md",
+			"settings":
+			{
+				"buffer_size": 4519,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/Users/alexey/.gitconfig",
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Package Control Messages\n========================\n\nMaterial Theme\n--------------\n\n  Material Theme for Sublime Text 3\n  https://github.com/equinusocio/material-theme\n  \n  👉 Version 2.0.9 👈\n  ********************************************************************************\n  \n  🏮 UI THEME\n  \n    ➼ Removed Langs folder with extensions overwrite (This should fix the issue with the less syntax)\n",
+			"settings":
+			{
+				"buffer_size": 393,
+				"line_ending": "Windows",
+				"name": "Package Control Messages",
+				"read_only": true,
+				"scratch": true
+			}
+		},
+		{
+			"file": "firmware/printbot.ino",
+			"settings":
+			{
+				"buffer_size": 4116,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -527,13 +570,33 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 354.0,
-		"last_filter": "comm",
+		"height": 272.0,
+		"last_filter": "push",
 		"selected_items":
 		[
 			[
+				"push",
+				"Git: Push"
+			],
+			[
 				"comm",
 				"Git: Commit"
+			],
+			[
+				"a",
+				"Git: Add..."
+			],
+			[
+				"Comm",
+				"Git: Commit"
+			],
+			[
+				"stat",
+				"Git: Status"
+			],
+			[
+				"git a",
+				"Git: Add..."
 			],
 			[
 				"add",
@@ -560,16 +623,8 @@
 				"Git: Commit"
 			],
 			[
-				"a",
-				"Git: Add..."
-			],
-			[
 				"Add",
 				"Git: Add..."
-			],
-			[
-				"push",
-				"Git: Push"
 			],
 			[
 				"amme",
@@ -608,10 +663,6 @@
 				"Git: Commit"
 			],
 			[
-				"stat",
-				"Git: Status"
-			],
-			[
 				"fet",
 				"Git: Fetch"
 			],
@@ -638,10 +689,6 @@
 			[
 				"add cu",
 				"Git: Add Current File"
-			],
-			[
-				"git a",
-				"Git: Add Selected Hunk"
 			],
 			[
 				"git stat",
@@ -876,7 +923,7 @@
 				"Preferences: Settings - User"
 			]
 		],
-		"width": 398.0
+		"width": 510.0
 	},
 	"console":
 	{
@@ -901,7 +948,8 @@
 	},
 	"expanded_folders":
 	[
-		"/D/Projects/ArduinoWifiDrawbot"
+		"/D/Projects/ArduinoWifiDrawbot",
+		"/D/Projects/ArduinoWifiDrawbot/firmware"
 	],
 	"file_history":
 	[
@@ -1251,8 +1299,154 @@
 	"groups":
 	[
 		{
+			"selected": 3,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": ".gitignore",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 261,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								248,
+								248
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Material Theme/langs/Git.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "README.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4519,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1079,
+								1079
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/Users/alexey/.gitconfig",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								144,
+								144
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Material Theme/langs/Git.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 393,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								393,
+								393
+							]
+						],
+						"settings":
+						{
+							"auto_indent": false,
+							"default_dir": "D:\\Projects\\ArduinoWifiDrawbot",
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_width": 2,
+							"word_wrap": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "firmware/printbot.ino",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 4116,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2802,
+								2802
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Arduino-like IDE/Arduino.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1935.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				}
 			]
 		}
 	],
