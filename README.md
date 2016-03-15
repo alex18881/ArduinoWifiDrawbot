@@ -38,12 +38,14 @@ Also here you can find a really useful instructions how to calibrate your 3d pri
 5. Ball caster with 15mm ball (like this one: [Link on Ali](http://ru.aliexpress.com/item/1pc-Swivel-Round-Ball-Caster-Silver-Metal-Bull-Wheel-Universal-Transfer-Ball-48-x-32-x/32566687062.html) )
 6. 1 ULN2803APG stepper driver ( like this one: [Link on Ali](http://ru.aliexpress.com/item/10pcs-ULN2803A-ULN2803APG-ULN2803-DIP-18/32375468380.html) )
 7. 1 ESP8266 Esp-01 Wifi module
-8. Several resistors
+8. AMS1117 ([Datasheet](http://www.advanced-monolithic.com/pdf/ds1117.pdf))
+8. Several 10K resistors
+9. 
 
 ##Wiring
-Most of the wiring is described in instructions the link on which is in the overview section but there is a mine one placed in the info directory of this project. It includes wifi module.
+Most of the wiring is described in instructions the link on which is in the overview section but there is a mine one placed in the __info__ directory of this project. It includes wifi module.
 
-Also I have to note that the scheme I use to wire the Wifi module is not a good one as wired this way Wifi can get damaged since it requires 3v logic and an Arduino provides a 5v one. But it hasn't fried yet :)
+
 
 ##Firmware
 First: I'm not a professional C++ or Arduino programmer and actually this is my first Arduino project and my C++ experience is limited to about 2 weeks of making small tools 15 years ago for my very first computer. So any help is welcome.
