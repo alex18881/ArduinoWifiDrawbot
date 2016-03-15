@@ -39,8 +39,8 @@ Also here you can find a really useful instructions how to calibrate your 3d pri
 6. 1 ULN2803APG stepper driver ( like this one: [Link on Ali](http://ru.aliexpress.com/item/10pcs-ULN2803A-ULN2803APG-ULN2803-DIP-18/32375468380.html) )
 7. 1 ESP8266 Esp-01 Wifi module
 8. AMS1117 ([Datasheet](http://www.advanced-monolithic.com/pdf/ds1117.pdf))
-8. Several 10K resistors
-9. 
+8. Several 10K resistors for TX and RX Wifi voltage lowering
+9. 2 22uF Tantalium and 2 100nF/Ceramic capacitors
 
 ##Wiring
 Most of the wiring is described in instructions the link on which is in the overview section but there is a mine one placed in the __info__ directory of this project. It includes wifi module.
