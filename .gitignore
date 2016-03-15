@@ -26,3 +26,7 @@
 *.exe
 *.out
 *.app
+
+#node
+node_modules
+*.sublime-workspace

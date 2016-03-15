@@ -56,14 +56,23 @@ First: I'm not a professional C++ or Arduino programmer and actually this is my 
 For now I decided to no to use any WIFI library. Previously I used a ITEADLIB_Arduino_WeeESP8266 but then I found useful to have a callback function when a TCP client connects to the bot.
 
 ####Supported g-codes:
-* G0;
+* G0 - move X### Y###
 * G1 X### Y###
-* G10; As pen deactivation code
-* G11; As pen activation code
+* G2 - Arc clockwise
+* G3 - Arc counter clockwise
+* G4 P### - pause, in milliseconds, G4 S### - pause, in seconds
+* G10 - As pen deactivation code
+* G11 - As pen activation code
+* G28 - move to (0,0)
+
+M-codes:
+
+* M3 - As pen activation code
+* M5 - As pen deactivation code
 
 ####Wifi
 I decided to not to update or reflash the ESP-01 AT firmware even though there are a lot of posts on forums about how bad is its stock firmware. The only thing I did is changing its baud rate to 9600 as it had 115200 and as I read on some forums SoftwareSerial is not really good with big speeds. The command I used for this is: 
-``AT+CIOBAUD=9600``
+`AT+CIOBAUD=9600`
 All other commands you can find in [AT Commands document](info/at-commands.md) in info folder.
 
 ##Client PC tool
