@@ -39,4 +39,5 @@ class Drawer {
 		AccelStepper initWheel( int pin1, int pin2, int pin3, int pin4 );
 
 		float calcDistance( float x0, float y0, float x1, float y1 );
+		double calcAngleToPoint(float _x, float _y);
 };

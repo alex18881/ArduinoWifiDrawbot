@@ -53,37 +53,31 @@ void Drawer::run(){
 	comandComplete = !isMoving;
 }
 
-void Drawer::rotateTo( float _x, float _y ){
-	//Find the angle a0 value in radians relative to Y axis
+double Drawer::calcAngleToPoint(float _x, float _y){
 	double angle = atan2( (double)abs(_x), (double)abs(_y) );
 
 	if( _y < 0 )
 		angle = M_PI - angle;
 	if(_x < 0 )
 		angle = -angle;
-	/*if( _x == 0 && _y == 0 ){
-		return;
-	} else if(_x == 0 ){
-		angle = ( _y > 0 ? 0 : M_PI );
-	} else if( _y == 0 ){
-		angle = ( _x > 0 ? M_HALF_PI : -M_HALF_PI );
-	} else {
-		angle = atan2( (double)abs(_x), (double)abs(_y) );
-		if( _y < 0 )
-			angle = M_PI - angle;
-		if(_x > 0 )
-			angle = -angle;
-	}
-
-	if( angle != 0 && angle != M_2PI ){*/
 
 		Serial.println( "Angle is " + (String)angle  );
 
-		//Find the difference between the current rotation angle and the a0
-		double dAngle = angle - rotation;
+	//Find the difference between the current rotation angle and the a0
+	double dAngle = angle - rotation;
 
-		rotateByRads( dAngle );
-	//}
+	if(dAngle > M_PI)
+		dAngle -= M_2PI;
+	if(dAngle < -M_PI)
+		dAngle += M_2PI;
+	return dAngle;
+}
+
+void Drawer::rotateTo( float _x, float _y ){
+	//Find the angle a0 value in radians relative to Y axis
+	double dAngle = calcAngleToPoint(_x, _y);
+
+	rotateByRads( dAngle );
 }
 
 void Drawer::rotateByRads( double dAngle ){
@@ -91,12 +85,15 @@ void Drawer::rotateByRads( double dAngle ){
 		comandComplete = false;
 		rotation += dAngle;
 
-		float c0 = WEEL_FULL_CIRCLE_STEPS;
-	    float c = TURN_STEPS_RATIO;
+		//float c0 = WEEL_FULL_CIRCLE_STEPS;
+	    //float c = TURN_STEPS_RATIO;
 		double curve = dAngle * TURN_STEPS_RATIO;
 
-		Serial.println("Rotating by " + (String)( dAngle * 180 / M_PI) + "deg("+dAngle+"rad) == " + (String)curve + " steps (fill circle "+ (String)c + "steps - "+(String)c0+")" );
+		//Serial.println("Rotating by " + (String)( dAngle * 180 / M_PI) + "deg("+dAngle+"rad) == " + (String)curve + " steps (fill circle "+ (String)c + "steps - "+(String)c0+")" );
 		
+		rightWheel.setSpeed(WHEELS_SPEED);
+		leftWheel.setSpeed(WHEELS_SPEED);
+
 		rightWheel.move(-curve);
 		leftWheel.move(curve);
 		
@@ -125,7 +122,9 @@ void Drawer::moveTo(float _x, float _y, float _feedRate){
   	
   	Serial.println("Moving by " + (String)l + " steps" );
 	
+	rightWheel.setSpeed(WHEELS_SPEED);
 	rightWheel.move(l);
+	leftWheel.setSpeed(WHEELS_SPEED);
 	leftWheel.move(l);
 	
 	while(!comandComplete)
@@ -137,27 +136,44 @@ void Drawer::curveTo( float _x, float _y, float _dx, float _dy, float _feedRate,
 	float _x0 = x + _dx;
 	float _y0 = y + _dy;
 
-	Serial.println("Curve" + (String)(clockwise?"":" counter") + " clockwise to [ X" + (String)_x + ", Y" +(String)_y + ", F" +(String)_feedRate +" ] with center at [ X" + (String)_x0 + ", Y" +(String)_y0 + "]" );
+	Serial.println("Curve" + (String)(clockwise?"":" counter") + " clockwise to [ X" + (String)_x + ", Y" +(String)_y + ", F" +(String)_feedRate +" ] with center at [ X" + (String)_dx + ", Y" +(String)_dy + "] from cur point" );
 	
-	float rout = WHEEL_STEPS_RATE * ( calcDistance( x, y, _x0, _y0 ) + WEEL_BASE_HALF_SIZE );
-	float rin  = WHEEL_STEPS_RATE * ( calcDistance( x, y, _x0, _y0 ) - WEEL_BASE_HALF_SIZE );
+	float r = calcDistance( x, y, _x0, _y0 );
+	float rout = r + WEEL_BASE_HALF_SIZE;
+	float rin  = r - WEEL_BASE_HALF_SIZE;
+
+	//Find arc length
+	double chord = calcDistance( x, y, _x, _y );
+	double sinA = chord/(2*r);
+	double angle = 2*asin( sinA );
+	double outWheelSteps = WHEEL_STEPS_RATE * angle * rout;
+	double inWheelSteps = WHEEL_STEPS_RATE * angle * rin;
+
+	double outWheelSpeed = abs(outWheelSteps*WHEELS_SPEED/inWheelSteps);
 	
+	//Find angle between current direction and direction towards the arc center
+	double dAngle = calcAngleToPoint(_dx, _dy);
+
+	//Rotate towards the tangent to the arc at current position
+	comandComplete = false;
+	rotateByRads( clockwise ? dAngle-M_HALF_PI : M_HALF_PI-dAngle );
+
+	comandComplete = false;
 	x = _x;
 	y = _y;
 
-	rotateTo( _dx, _dy );
-	comandComplete = false;
-
-	rotateByRads( clockwise ? M_HALF_PI : -M_HALF_PI );
-
-	comandComplete = false;
-
 	if( clockwise ){
-		rightWheel.move(rin);
-		leftWheel.move(rout);
+		leftWheel.setSpeed(outWheelSpeed);
+		rightWheel.setSpeed(WHEELS_SPEED);
+
+		rightWheel.move(inWheelSteps);
+		leftWheel.move(outWheelSteps);
 	}else{
-		rightWheel.move(rout);
-		leftWheel.move(rin);
+		rightWheel.setSpeed(outWheelSpeed);
+		leftWheel.setSpeed(WHEELS_SPEED);
+
+		rightWheel.move(outWheelSteps);
+		leftWheel.move(inWheelSteps);
 	}
 
 	while(!comandComplete)

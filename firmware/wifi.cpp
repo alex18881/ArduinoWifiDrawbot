@@ -101,7 +101,7 @@ bool Wifi::sendCommand( String cmd, char *strToFind ){
 	while( (millis() - _millis) < WIFI_COMMAND_TIMEOUT ){
 		if( _serial.available() ){
 			result = _serial.find( strToFind );
-			//Serial.println( "Wifi exec command " + cmd + ": " + (String)result);
+			Serial.println( "Wifi exec command " + cmd + ": " + (String)result);
 			break;
 		}
 	}

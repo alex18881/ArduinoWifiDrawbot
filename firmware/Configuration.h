@@ -19,7 +19,7 @@
   #define WHEEL_DISABLE       HIGH
   
   #define WHEELS_ACCELERATION 1000
-  #define WHEELS_SPEED        300
+  #define WHEELS_SPEED        200
   #define WHEELS_MAX_SPEED    1000
 
 // Stepper motors rate: steps per millimeter
