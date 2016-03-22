@@ -91,8 +91,8 @@ void Drawer::rotateByRads( double dAngle ){
 
 		//Serial.println("Rotating by " + (String)( dAngle * 180 / M_PI) + "deg("+dAngle+"rad) == " + (String)curve + " steps (fill circle "+ (String)c + "steps - "+(String)c0+")" );
 		
-		rightWheel.setSpeed(WHEELS_SPEED);
-		leftWheel.setSpeed(WHEELS_SPEED);
+		rightWheel.setMaxSpeed( WHEELS_MAX_SPEED );
+		leftWheel.setMaxSpeed( WHEELS_MAX_SPEED );
 
 		rightWheel.move(-curve);
 		leftWheel.move(curve);
@@ -122,9 +122,9 @@ void Drawer::moveTo(float _x, float _y, float _feedRate){
   	
   	Serial.println("Moving by " + (String)l + " steps" );
 	
-	rightWheel.setSpeed(WHEELS_SPEED);
+	rightWheel.setMaxSpeed( WHEELS_MAX_SPEED );
 	rightWheel.move(l);
-	leftWheel.setSpeed(WHEELS_SPEED);
+	leftWheel.setMaxSpeed( WHEELS_MAX_SPEED );
 	leftWheel.move(l);
 	
 	while(!comandComplete)
@@ -149,7 +149,7 @@ void Drawer::curveTo( float _x, float _y, float _dx, float _dy, float _feedRate,
 	double outWheelSteps = WHEEL_STEPS_RATE * angle * rout;
 	double inWheelSteps = WHEEL_STEPS_RATE * angle * rin;
 
-	double outWheelSpeed = abs(outWheelSteps*WHEELS_SPEED/inWheelSteps);
+	double innerWheelSpeed = abs(inWheelSteps*WHEELS_MAX_SPEED/outWheelSteps);
 	
 	//Find angle between current direction and direction towards the arc center
 	double dAngle = calcAngleToPoint(_dx, _dy);
@@ -163,14 +163,14 @@ void Drawer::curveTo( float _x, float _y, float _dx, float _dy, float _feedRate,
 	y = _y;
 
 	if( clockwise ){
-		leftWheel.setSpeed(outWheelSpeed);
-		rightWheel.setSpeed(WHEELS_SPEED);
+		leftWheel.setMaxSpeed( WHEELS_MAX_SPEED );
+		rightWheel.setMaxSpeed( innerWheelSpeed );
 
 		rightWheel.move(inWheelSteps);
 		leftWheel.move(outWheelSteps);
 	}else{
-		rightWheel.setSpeed(outWheelSpeed);
-		leftWheel.setSpeed(WHEELS_SPEED);
+		rightWheel.setMaxSpeed( WHEELS_MAX_SPEED );
+		leftWheel.setSpeed(innerWheelSpeed);
 
 		rightWheel.move(outWheelSteps);
 		leftWheel.move(inWheelSteps);
