@@ -6,6 +6,7 @@ Drawer::Drawer(){
 
 AccelStepper Drawer::initWheel( int pin1, int pin2, int pin3, int pin4 ){
 	AccelStepper _wheel( AccelStepper::HALF4WIRE, pin1, pin3, pin2, pin4 );
+	_wheel.setSpeed( WHEELS_SPEED );
 	_wheel.setMaxSpeed( WHEELS_MAX_SPEED );
     _wheel.setAcceleration( WHEELS_ACCELERATION );
 
@@ -53,15 +54,15 @@ void Drawer::run(){
 	comandComplete = !isMoving;
 }
 
-double Drawer::calcAngleToPoint(float _x, float _y){
-	double angle = atan2( (double)abs(_x), (double)abs(_y) );
+double Drawer::calcAngleToPoint(float _dx, float _dy){
+	double angle = atan2( (double)abs(_dx), (double)abs(_dy) );
 
-	if( _y < 0 )
+	if( _dy < 0 )
 		angle = M_PI - angle;
-	if(_x < 0 )
+	if(_dx < 0 )
 		angle = -angle;
 
-		Serial.println( "Angle is " + (String)angle  );
+	Serial.println( "Angle is " + (String)angle + " current rotation is " + (String)rotation );
 
 	//Find the difference between the current rotation angle and the a0
 	double dAngle = angle - rotation;
@@ -73,9 +74,9 @@ double Drawer::calcAngleToPoint(float _x, float _y){
 	return dAngle;
 }
 
-void Drawer::rotateTo( float _x, float _y ){
+void Drawer::rotateTo( float _dx, float _dy ){
 	//Find the angle a0 value in radians relative to Y axis
-	double dAngle = calcAngleToPoint(_x, _y);
+	double dAngle = calcAngleToPoint(_dx, _dy);
 
 	rotateByRads( dAngle );
 }
@@ -83,20 +84,20 @@ void Drawer::rotateTo( float _x, float _y ){
 void Drawer::rotateByRads( double dAngle ){
 	if( dAngle != 0 ){
 		comandComplete = false;
-		rotation += dAngle;
 
 		//float c0 = WEEL_FULL_CIRCLE_STEPS;
 	    //float c = TURN_STEPS_RATIO;
 		double curve = dAngle * TURN_STEPS_RATIO;
-
-		//Serial.println("Rotating by " + (String)( dAngle * 180 / M_PI) + "deg("+dAngle+"rad) == " + (String)curve + " steps (fill circle "+ (String)c + "steps - "+(String)c0+")" );
-		
-		rightWheel.setMaxSpeed( WHEELS_MAX_SPEED );
-		leftWheel.setMaxSpeed( WHEELS_MAX_SPEED );
+ 
+		Serial.println("Rotating by " + (String)( dAngle * 180 / M_PI) + "deg("+dAngle+"rad) " + (String)( M_HALF_PI * 180 / M_PI) );
 
 		rightWheel.move(-curve);
 		leftWheel.move(curve);
-		
+
+		rightWheel.setMaxSpeed( WHEELS_MAX_SPEED );
+		leftWheel.setMaxSpeed( WHEELS_MAX_SPEED );
+		rotation += dAngle;
+
 		while(!comandComplete)
 			run();
 	}
@@ -117,15 +118,17 @@ void Drawer::moveTo(float _x, float _y, float _feedRate){
   	comandComplete = false;
 	
 	float l = WHEEL_STEPS_RATE * calcDistance( x, y, _x, _y );
-	x = _x;
-	y = _y;
   	
   	Serial.println("Moving by " + (String)l + " steps" );
 	
-	rightWheel.setMaxSpeed( WHEELS_MAX_SPEED );
 	rightWheel.move(l);
-	leftWheel.setMaxSpeed( WHEELS_MAX_SPEED );
 	leftWheel.move(l);
+
+	rightWheel.setMaxSpeed( WHEELS_MAX_SPEED );
+	leftWheel.setMaxSpeed( WHEELS_MAX_SPEED );
+
+	x = _x;
+	y = _y;
 	
 	while(!comandComplete)
 		run();
@@ -133,50 +136,63 @@ void Drawer::moveTo(float _x, float _y, float _feedRate){
 
 void Drawer::curveTo( float _x, float _y, float _dx, float _dy, float _feedRate, bool clockwise ){
 	comandComplete = false;
-	float _x0 = x + _dx;
-	float _y0 = y + _dy;
 
 	Serial.println("Curve" + (String)(clockwise?"":" counter") + " clockwise to [ X" + (String)_x + ", Y" +(String)_y + ", F" +(String)_feedRate +" ] with center at [ X" + (String)_dx + ", Y" +(String)_dy + "] from cur point" );
 	
-	float r = calcDistance( x, y, _x0, _y0 );
+	// Calculating the radius lengths for pen and both wheels
+	float r = calcDistance( 0, 0, _dx, _dy );
 	float rout = r + WEEL_BASE_HALF_SIZE;
 	float rin  = r - WEEL_BASE_HALF_SIZE;
 
 	//Find arc length
 	double chord = calcDistance( x, y, _x, _y );
-	double sinA = chord/(2*r);
-	double angle = 2*asin( sinA );
+	double sinA = chord/(r*2.0);
+	double angle = asin( sinA )*2.0;
 	double outWheelSteps = WHEEL_STEPS_RATE * angle * rout;
 	double inWheelSteps = WHEEL_STEPS_RATE * angle * rin;
 
-	double innerWheelSpeed = abs(inWheelSteps*WHEELS_MAX_SPEED/outWheelSteps);
+	double innerWheelSpeed = abs(inWheelSteps*WHEELS_SPEED/outWheelSteps);
 	
 	//Find angle between current direction and direction towards the arc center
 	double dAngle = calcAngleToPoint(_dx, _dy);
 
-	//Rotate towards the tangent to the arc at current position
-	comandComplete = false;
-	rotateByRads( clockwise ? dAngle-M_HALF_PI : M_HALF_PI-dAngle );
+	//Rotate towards the tangent to the arc at start position point
+	double tanAngle;
+	if( clockwise ){
+		tanAngle = dAngle - M_HALF_PI;
+	} else {
+		tanAngle = dAngle + M_HALF_PI;
+	}
+
+	rotateByRads( tanAngle );
 
 	comandComplete = false;
-	x = _x;
-	y = _y;
+
+	float newAngle =  calcAngleToPoint( _x - x, _y - y );
 
 	if( clockwise ){
-		leftWheel.setMaxSpeed( WHEELS_MAX_SPEED );
-		rightWheel.setMaxSpeed( innerWheelSpeed );
-
 		rightWheel.move(inWheelSteps);
 		leftWheel.move(outWheelSteps);
+
+		leftWheel.setMaxSpeed( WHEELS_SPEED );
+		rightWheel.setMaxSpeed( innerWheelSpeed );
+
+		rotation += (2*newAngle);
 	}else{
-		rightWheel.setMaxSpeed( WHEELS_MAX_SPEED );
-		leftWheel.setSpeed(innerWheelSpeed);
 
 		rightWheel.move(outWheelSteps);
 		leftWheel.move(inWheelSteps);
+
+		rightWheel.setMaxSpeed( WHEELS_SPEED );
+		leftWheel.setMaxSpeed(innerWheelSpeed);
+
+		rotation -= (2*newAngle);
 	}
 
 	while(!comandComplete)
 		run();
+
+	x = _x;
+	y = _y;
 }
 

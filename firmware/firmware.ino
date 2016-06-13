@@ -118,9 +118,9 @@ void processCommand() {
 				if( hasValue('X') && hasValue('Y') && hasValue('I') && hasValue('J') ){
 					_x = parsenumber('X');
 					_y = parsenumber('Y');
-					_f = parsenumber('F');
 					_dx = parsenumber('I');
 					_dy = parsenumber('J');
+					_f = parsenumber('F');
 					drawer.curveTo( _x, _y, _dx, _dy, _f, true );
 				}
 				break;

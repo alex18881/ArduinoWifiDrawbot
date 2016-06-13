@@ -7,7 +7,7 @@
 
 #define WEEL_BASE_HALF_SIZE  WEEL_BASE_SIZE/2
 // The circle length formula is 2 * Pi * r where 2 * r is the weels base
-#define WEEL_FULL_CIRCLE_STEPS  M_PI * WEEL_BASE_SIZE * WHEEL_STEPS_RATE
+//#define WEEL_FULL_CIRCLE_STEPS  M_PI * WEEL_BASE_SIZE * WHEEL_STEPS_RATE
 #define M_2PI  M_PI * 2
 #define M_HALF_PI  M_PI / 2
 //Full turn is when the bot rotates by 360 deg on its place
