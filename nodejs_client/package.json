@@ -12,6 +12,8 @@
   "author": "alex18881",
   "license": "MIT",
   "dependencies": {
-    "telnet-client": "^0.7.0"
+    "telnet-client": "latest",
+    "body-parser": "latest",
+    "express": "latest"
   }
 }
