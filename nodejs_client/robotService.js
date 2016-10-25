@@ -23,7 +23,6 @@ connection.on('timeout', (err) => {
 	console.log("Connection timed out", err);
 	runStatus = { error: true, message: "Connection timed out" };
 	connection.end();
-	connection.destroy();	
 	isRunning = false;
 });
 
@@ -50,10 +49,20 @@ function exec( cmds ){
 	return connection.exec(cmd, params)
 		.then(
 			(pr) => {
-				console.log( "OK: " + pr );
+				console.log( "OK: ");
 				return exec(cmds);
 			}
 		);
+}
+
+function checkConnection(){
+	var result;
+	if( connection.telnetSocket ) {
+		result = connection.end();
+	} else {
+		result = Promise.resolve();
+	}
+	return result;
 }
 
 function execGCode(req, res, next) {
@@ -82,15 +91,19 @@ function execGCode(req, res, next) {
 			.filter( (a)=>{ return !!a.trim() && validCommands[a.charAt(0)]; } )
 
 		runStatus = { error: false, message: "Connecting"};
-		console.log( "Connecting to bot: %s:%d", params.host, params.port );
+		console.log( "Connecting to bot: %s:%d", params.host, params.port);
 
-		connection.connect({
-			host: params.host,
-			port: params.port,
-			shellPrompt: params.shellPrompt,
-			timeout: params.timeout
-		})
+		checkConnection()
 			.then(
+				() => {
+					return connection.connect({
+						host: params.host,
+						port: params.port,
+						shellPrompt: params.shellPrompt,
+						timeout: params.timeout
+					});
+				}
+			).then(
 				(prompt) => {
 					console.log( "Connected: " + prompt );
 					console.log( "Executing %s commands", commands.length );

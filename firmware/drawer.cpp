@@ -13,14 +13,15 @@ AccelStepper Drawer::initWheel( int pin1, int pin2, int pin3, int pin4 ){
 	return _wheel;
 }
 
-void Drawer::init(){
+void Drawer::init(void (*_logger)(String msg)){
+	logger = _logger;
 	leftWheel = initWheel( LEFT_WHEEL_PIN1, LEFT_WHEEL_PIN2, LEFT_WHEEL_PIN3, LEFT_WHEEL_PIN4 );
 	rightWheel = initWheel( RIGHT_WHEEL_PIN1, RIGHT_WHEEL_PIN2, RIGHT_WHEEL_PIN3, RIGHT_WHEEL_PIN4 );
 	pen.detach();
 }
 
 void Drawer::togglePen( bool on ){
-	Serial.println(on? "Turning pen on": "Turning pen off");
+	Serial.println(on? F("Turning pen on"): F("Turning pen off"));
 	pen.attach(PEN_SERVO_PIN);
 	while(!pen.attached()){
 		;
@@ -62,7 +63,10 @@ double Drawer::calcAngleToPoint(float _dx, float _dy){
 	if(_dx < 0 )
 		angle = -angle;
 
-	Serial.println( "Angle is " + (String)angle + " current rotation is " + (String)rotation );
+	Serial.print(F("Drawer::calcAngleToPoint: Angle is ")); 
+	Serial.print(angle, 2);
+	Serial.print(F(" current rotation is "));
+	Serial.println(rotation,2);
 
 	//Find the difference between the current rotation angle and the a0
 	double dAngle = angle - rotation;
@@ -76,6 +80,12 @@ double Drawer::calcAngleToPoint(float _dx, float _dy){
 
 void Drawer::rotateTo( float _dx, float _dy ){
 	//Find the angle a0 value in radians relative to Y axis
+	
+	Serial.print(F("Drawer::rotateTo: Rotating to dx="));
+	Serial.print(_dx, 2);
+	Serial.print(F(" and dy="));
+	Serial.println(_dy, 2);
+
 	double dAngle = calcAngleToPoint(_dx, _dy);
 
 	rotateByRads( dAngle );
@@ -89,17 +99,22 @@ void Drawer::rotateByRads( double dAngle ){
 	    //float c = TURN_STEPS_RATIO;
 		double curve = dAngle * TURN_STEPS_RATIO;
  
-		Serial.println("Rotating by " + (String)( dAngle * 180 / M_PI) + "deg("+dAngle+"rad) " + (String)( M_HALF_PI * 180 / M_PI) );
+		Serial.print(F("Drawer::rotateByRads: Rotating by "));
+		Serial.print(( dAngle * 180 / M_PI), 2);
+		Serial.print(F("deg (") );
+		Serial.print(dAngle, 2);
+		Serial.println(F("rad) "));
 
 		rightWheel.move(-curve);
 		leftWheel.move(curve);
 
 		rightWheel.setMaxSpeed( WHEELS_MAX_SPEED );
 		leftWheel.setMaxSpeed( WHEELS_MAX_SPEED );
-		rotation += dAngle;
 
 		while(!comandComplete)
 			run();
+
+		rotation += dAngle;
 	}
 }
 
@@ -111,7 +126,14 @@ float Drawer::calcDistance( float x0, float y0, float x1, float y1 ){
 }
 
 void Drawer::moveTo(float _x, float _y, float _feedRate){
-	Serial.println("Moving to [ X" + (String)_x + ", Y" +(String)_y + ", F" +(String)_feedRate +" ]" );
+	Serial.print(F("Drawer::moveTo: Moving to [ X"));
+	Serial.print(_x, 2);
+	Serial.print(F(", Y"));
+	Serial.print(_y, 2);
+	Serial.print(F(", F"));
+	Serial.print(_feedRate, 2);
+	Serial.println(F(" ]"));
+
 	comandComplete = false;
 	rotateTo( _x - x, _y - y );
   	
@@ -119,25 +141,39 @@ void Drawer::moveTo(float _x, float _y, float _feedRate){
 	
 	float l = WHEEL_STEPS_RATE * calcDistance( x, y, _x, _y );
   	
-  	Serial.println("Moving by " + (String)l + " steps" );
+  	Serial.print(F("Moving by "));
+  	Serial.print(l, 2);
+  	Serial.println(F(" steps"));
 	
 	rightWheel.move(l);
 	leftWheel.move(l);
 
 	rightWheel.setMaxSpeed( WHEELS_MAX_SPEED );
 	leftWheel.setMaxSpeed( WHEELS_MAX_SPEED );
-
-	x = _x;
-	y = _y;
 	
 	while(!comandComplete)
 		run();
+
+	x = _x;
+	y = _y;
 }
 
 void Drawer::curveTo( float _x, float _y, float _dx, float _dy, float _feedRate, bool clockwise ){
 	comandComplete = false;
 
-	Serial.println("Curve" + (String)(clockwise?"":" counter") + " clockwise to [ X" + (String)_x + ", Y" +(String)_y + ", F" +(String)_feedRate +" ] with center at [ X" + (String)_dx + ", Y" +(String)_dy + "] from cur point" );
+	Serial.print(F("Drawer::curveTo: Curve"));
+	Serial.print(clockwise ? F(""):F(" counter"));
+	Serial.print(F(" clockwise to [ X"));
+	Serial.print(_x, 2);
+	Serial.print(F(", Y"));
+	Serial.print(_y, 2);
+	Serial.print(F(", F"));
+	Serial.print(_feedRate, 2);
+	Serial.print(F(" ] with center at [ X"));
+	Serial.print(_dx, 2);
+	Serial.print(F(", Y"));
+	Serial.print(_dy, 2);
+	Serial.println(F("] from cur point"));
 	
 	// Calculating the radius lengths for pen and both wheels
 	float r = calcDistance( 0, 0, _dx, _dy );

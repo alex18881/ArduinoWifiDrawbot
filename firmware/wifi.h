@@ -10,6 +10,7 @@ class Wifi {
 		uint32_t read(char *buff);
 		void write(String msg);
 	private:
+		char *ok = "OK";
 		bool connected = false;
 		bool inited = false;
 		void (*onConnected)(void);

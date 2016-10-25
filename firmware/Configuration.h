@@ -4,7 +4,7 @@
 #define WIFI
 
 #define DATASPEED             9600
-#define DATA_BUF_SIZE         64
+#define DATA_BUF_SIZE         128
 
 #if defined(SERVO)
   #define PEN_SERVO_PIN       12

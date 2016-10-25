@@ -10,7 +10,19 @@ bool commandReady = false;
 int currBufLen = 0; // how much is in the buffer
 int yeldIndx = 0;
 
+char commandG = 'G';
+char commandM = 'M';
+
+char paramX = 'X';
+char paramY = 'Y';
+char paramJ = 'J';
+char paramI = 'I';
+char paramF = 'F';
+char paramS = 'S';
+char paramP = 'P';
+
 Drawer drawer;
+
 #if defined(WIFI)
 Wifi wifi;
 #endif
@@ -24,7 +36,7 @@ void setup() {
 	#if defined(WIFI)
 	wifi.init(notifyReady);
 	#endif
-	drawer.init();
+	drawer.init(logMessage);
 
 	drawer.togglePen(false);
   #if !defined(WIFI)
@@ -46,37 +58,42 @@ void loop() {
 #if defined(WIFI)
 void readSerial(){
 	buffer[0] = (char)0;
-  uint32_t len = wifi.read(buffer);
-  if( len > 0 ){
-    //Serial.println( "From WIFI[" + (String)len + "]: " + (String)buffer );
-    commandReady = (buffer[0] == 'G' || buffer[0] == 'M') && buffer[len-1] == '\n';
-    if(!commandReady)
-    	notifyReady();
-  }
+	uint32_t len = wifi.read(buffer);
+	if( len > 0 ){
+    	//Serial.println( "From WIFI[" + (String)len + "]: " + (String)buffer );
+		commandReady = (buffer[0] == commandG || buffer[0] == commandM) && buffer[len-1] == '\n';
+		if(!commandReady)
+			notifyReady();
+  	}
 }
 #else
 void readSerial(){
-  //  Serial.print( "Reading SERIAL" );
-  commandReady = false;
-  while( !commandReady && Serial.available() ) {
-      char c = Serial.read();
-      if(currBufLen < DATA_BUF_SIZE){
-          Serial.print( c );
-          buffer[currBufLen++]=c;
-      }
+	//  Serial.print( "Reading SERIAL" );
+	commandReady = false;
+	while( !commandReady && Serial.available() ) {
+		char c = Serial.read();
+		if(currBufLen < DATA_BUF_SIZE){
+			Serial.print( c );
+			buffer[currBufLen++]=c;
+		}
 
-      if(c==';')
-        commandReady = true;
-  }
+		if(c==';')
+			commandReady = true;
+	}
 }
 #endif
 
 void notifyReady(){
 	currBufLen = 0;
+ 	logMessage(">");
+}
+
+void logMessage(String msg) {
+	Serial.println( msg );
  #if defined(WIFI)
-  wifi.write( F(">") );
+	wifi.write( msg );
  #else
-	Serial.print( F(">") );
+	Serial.print( msg );
  #endif
 }
 
@@ -91,55 +108,58 @@ void processCommand() {
 	float _dx;
 	float _dy;
 
-	if( hasValue('G') ){
-		cmd = parsenumber('G');
+	if( hasValue(commandG) ){
+		cmd = parsenumber(commandG);
+		
+		Serial.print(F("processCommand: command "));
+		Serial.println( (String)buffer );
 
 		switch(cmd) {
 			//G0 Rapid linear Move
 			case 0:
-				if( hasValue('X') && hasValue('Y') ){
-					_x = parsenumber('X');
-					_y = parsenumber('Y');
-					_f = parsenumber('F');
+				if( hasValue(paramX) && hasValue(paramY) ){
+					_x = parsenumber(paramX);
+					_y = parsenumber(paramY);
+					_f = parsenumber(paramF);
 					drawer.moveTo( _x, _y, _f );
 				}
 				break;
 			//G1 Linear Move: G1 X### Y### F###
 			case 1:
-				if( hasValue('X') && hasValue('Y') ){
-					_x = parsenumber('X');
-					_y = parsenumber('Y');
-					_f = parsenumber('F');
+				if( hasValue(paramX) && hasValue(paramY) ){
+					_x = parsenumber(paramX);
+					_y = parsenumber(paramY);
+					_f = parsenumber(paramF);
 					drawer.moveTo( _x, _y, _f );
 				}
 				break;
 			//G2: Controlled Arc Move Clockwise 
 			case 2:
-				if( hasValue('X') && hasValue('Y') && hasValue('I') && hasValue('J') ){
-					_x = parsenumber('X');
-					_y = parsenumber('Y');
-					_dx = parsenumber('I');
-					_dy = parsenumber('J');
-					_f = parsenumber('F');
+				if( hasValue(paramX) && hasValue(paramY) && hasValue(paramI) && hasValue(paramJ) ){
+					_x = parsenumber(paramX);
+					_y = parsenumber(paramY);
+					_dx = parsenumber(paramI);
+					_dy = parsenumber(paramJ);
+					_f = parsenumber(paramF);
 					drawer.curveTo( _x, _y, _dx, _dy, _f, true );
 				}
 				break;
 			//G3: Controlled Arc Move Counter-Clockwise
 			case 3:
-				if( hasValue('X') && hasValue('Y') && hasValue('I') && hasValue('J') ){
-					_x = parsenumber('X');
-					_y = parsenumber('Y');
-					_f = parsenumber('F');
-					_dx = parsenumber('I');
-					_dy = parsenumber('J');
+				if( hasValue(paramX) && hasValue(paramY) && hasValue(paramI) && hasValue(paramJ) ){
+					_x = parsenumber(paramX);
+					_y = parsenumber(paramY);
+					_f = parsenumber(paramF);
+					_dx = parsenumber(paramI);
+					_dy = parsenumber(paramJ);
 					drawer.curveTo( _x, _y, _dx, _dy, _f, false );
 				}
 				break;
 			//G4: Dwell
 			case 4:
-				_x = parsenumber('P'); //in millis
+				_x = parsenumber(paramP); //in millis
 				if( _x == 0 )
-					_x = parsenumber('S') * 1000; //in seconds
+					_x = parsenumber(paramS) * 1000; //in seconds
 				if( _x > 0 )
 					delay(_x);
 				break;
@@ -161,10 +181,11 @@ void processCommand() {
 	}
 	// look for commands that start with 'M'
 	yeldIndx = 0;
-	if( hasValue('M') ){
-		cmd = parsenumber('M');
+	if( hasValue(commandM) ){
+		cmd = parsenumber(commandM);
 		switch(cmd) {
 			//M2: Program End
+			case 2: drawer.rotateTo(0.0, 1.0); break;
 			//M3: Spindle On, Clockwise = activate pen
 			case 3: drawer.togglePen(true); break;
 			//M5: Spindle Off = remove pen
@@ -192,6 +213,10 @@ bool hasValue( char search ){
 	return result;
 }
 
+bool isNumPart(char letter) {
+	return (isdigit(letter) || letter=='-' || letter == '+' || letter == '.');
+}
+
 float parsenumber( char codeType ){
 	String val = "";
 	bool yeld = true;
@@ -207,7 +232,12 @@ float parsenumber( char codeType ){
 			}
 		}
 	}
-	while( buffer[yeldIndx] != ';' && buffer[yeldIndx] != ' ' && yeldIndx < DATA_BUF_SIZE ){
+	//Skipping spaces after command char
+	while( !isNumPart(buffer[yeldIndx]) && yeldIndx < DATA_BUF_SIZE ){
+		yeldIndx++;
+	}
+
+	while( isNumPart(buffer[yeldIndx]) && yeldIndx < DATA_BUF_SIZE ){
 		val += (String)buffer[yeldIndx++];
 	}
 

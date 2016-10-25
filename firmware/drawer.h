@@ -22,7 +22,7 @@ class Drawer {
     	double rotation = 0.0;
 		bool comandComplete = true;
 		
-		void init();
+		void init( void (*_logger)(String msg) );
 		void togglePen( bool on );
     	void run();
 
@@ -35,6 +35,7 @@ class Drawer {
 		Servo pen;
 		AccelStepper leftWheel;
 		AccelStepper rightWheel;
+		void (*logger)(String msg);
 
 		AccelStepper initWheel( int pin1, int pin2, int pin3, int pin4 );
 
