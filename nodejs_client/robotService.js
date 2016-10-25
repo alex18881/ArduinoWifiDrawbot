@@ -8,8 +8,6 @@ var telnet = require('telnet-client'),
 	router = express.Router(),
 	gCodeRoot = "./g-code",
 
-	connection = new telnet(),
-
 	validCommands = { "G": 1, "M": 1 },
 	params = {
 		host: '192.168.1.9',
@@ -19,24 +17,7 @@ var telnet = require('telnet-client'),
 		//commandTimeout: 60000
 	};
 
-connection.on('timeout', (err) => {
-	console.log("Connection timed out", err);
-	runStatus = { error: true, message: "Connection timed out" };
-	connection.end();
-	isRunning = false;
-});
-
-connection.on('error', (err) => {
-	runStatus = { error: true, message: err };
-	console.log('ERR:', err);
-} );
-
-connection.on('close', function() {
-	console.log('connection closed');
-	isRunning = false;
-});
-
-function exec( cmds ){
+function exec( cmds, connection ){
 	if(!cmds.length){
 		return Promise.resolve(cmds);
 	}
@@ -50,19 +31,9 @@ function exec( cmds ){
 		.then(
 			(pr) => {
 				console.log( "OK: ");
-				return exec(cmds);
+				return exec(cmds, connection);
 			}
 		);
-}
-
-function checkConnection(){
-	var result;
-	if( connection.telnetSocket ) {
-		result = connection.end();
-	} else {
-		result = Promise.resolve();
-	}
-	return result;
 }
 
 function execGCode(req, res, next) {
@@ -88,40 +59,64 @@ function execGCode(req, res, next) {
 		}
 
 		var commands = data.replace("\r", "").split( "\n" )
-			.filter( (a)=>{ return !!a.trim() && validCommands[a.charAt(0)]; } )
+			.filter( (a)=>{ return !!a.trim() && validCommands[a.charAt(0)]; } ),
+			connection = new telnet();
 
 		runStatus = { error: false, message: "Connecting"};
 		console.log( "Connecting to bot: %s:%d", params.host, params.port);
 
-		checkConnection()
-			.then(
-				() => {
-					return connection.connect({
-						host: params.host,
-						port: params.port,
-						shellPrompt: params.shellPrompt,
-						timeout: params.timeout
-					});
-				}
-			).then(
+		
+		connection.on('timeout', (err) => {
+			console.log("Connection timed out", err);
+			runStatus = { error: true, message: "Connection timed out" };
+			if(connection)
+				connection.end();
+			connection = null;
+			isRunning = false;
+		});
+
+		connection.on('error', (err) => {
+			runStatus = { error: true, message: err };
+			console.log('ERR:', err);
+			if(connection)
+				connection.end();
+			connection = null;
+		} );
+
+		connection.on('close', function() {
+			console.log('connection closed');
+			connection = null;
+			isRunning = false;
+		});
+
+		connection.connect({
+			host: params.host,
+			port: params.port,
+			shellPrompt: params.shellPrompt,
+			timeout: params.timeout
+		}).then(
 				(prompt) => {
 					console.log( "Connected: " + prompt );
 					console.log( "Executing %s commands", commands.length );
-		  			return exec( commands );
+		  			return exec( commands, connection );
 				}
 			).then(
 				()=> {
 					console.log( "DONE!" );
 					runStatus = { error: false, message: "Done"};
 					isRunning = false;
-					connection.end();
-					return connection.destroy();
+					if(connection)
+						connection.end();
+					connection = null;
 				}
 			).catch(
 				(err) => {
 					console.log( "Error!", err );
 					runStatus = { error: true, message: err };
 					isRunning = false;
+					if(connection)
+						connection.end();
+					connection = null;
 				}
 			);
 

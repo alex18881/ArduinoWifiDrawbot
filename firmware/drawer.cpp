@@ -64,9 +64,9 @@ double Drawer::calcAngleToPoint(float _dx, float _dy){
 		angle = -angle;
 
 	Serial.print(F("Drawer::calcAngleToPoint: Angle is ")); 
-	Serial.print(angle, 2);
+	Serial.print(angle, 4);
 	Serial.print(F(" current rotation is "));
-	Serial.println(rotation,2);
+	Serial.println(rotation, 4);
 
 	//Find the difference between the current rotation angle and the a0
 	double dAngle = angle - rotation;
@@ -82,9 +82,9 @@ void Drawer::rotateTo( float _dx, float _dy ){
 	//Find the angle a0 value in radians relative to Y axis
 	
 	Serial.print(F("Drawer::rotateTo: Rotating to dx="));
-	Serial.print(_dx, 2);
+	Serial.print(_dx, 4);
 	Serial.print(F(" and dy="));
-	Serial.println(_dy, 2);
+	Serial.println(_dy, 4);
 
 	double dAngle = calcAngleToPoint(_dx, _dy);
 
@@ -100,9 +100,9 @@ void Drawer::rotateByRads( double dAngle ){
 		double curve = dAngle * TURN_STEPS_RATIO;
  
 		Serial.print(F("Drawer::rotateByRads: Rotating by "));
-		Serial.print(( dAngle * 180 / M_PI), 2);
+		Serial.print(( dAngle * 180 / M_PI), 4);
 		Serial.print(F("deg (") );
-		Serial.print(dAngle, 2);
+		Serial.print(dAngle, 4);
 		Serial.println(F("rad) "));
 
 		rightWheel.move(-curve);
@@ -127,11 +127,11 @@ float Drawer::calcDistance( float x0, float y0, float x1, float y1 ){
 
 void Drawer::moveTo(float _x, float _y, float _feedRate){
 	Serial.print(F("Drawer::moveTo: Moving to [ X"));
-	Serial.print(_x, 2);
+	Serial.print(_x, 4);
 	Serial.print(F(", Y"));
-	Serial.print(_y, 2);
+	Serial.print(_y, 4);
 	Serial.print(F(", F"));
-	Serial.print(_feedRate, 2);
+	Serial.print(_feedRate, 4);
 	Serial.println(F(" ]"));
 
 	comandComplete = false;
@@ -142,7 +142,7 @@ void Drawer::moveTo(float _x, float _y, float _feedRate){
 	float l = WHEEL_STEPS_RATE * calcDistance( x, y, _x, _y );
   	
   	Serial.print(F("Moving by "));
-  	Serial.print(l, 2);
+  	Serial.print(l, 4);
   	Serial.println(F(" steps"));
 	
 	rightWheel.move(l);
@@ -164,16 +164,16 @@ void Drawer::curveTo( float _x, float _y, float _dx, float _dy, float _feedRate,
 	Serial.print(F("Drawer::curveTo: Curve"));
 	Serial.print(clockwise ? F(""):F(" counter"));
 	Serial.print(F(" clockwise to [ X"));
-	Serial.print(_x, 2);
+	Serial.print(_x, 4);
 	Serial.print(F(", Y"));
-	Serial.print(_y, 2);
+	Serial.print(_y, 4);
 	Serial.print(F(", F"));
-	Serial.print(_feedRate, 2);
+	Serial.print(_feedRate, 4);
 	Serial.print(F(" ] with center at [ X"));
-	Serial.print(_dx, 2);
+	Serial.print(_dx, 4);
 	Serial.print(F(", Y"));
-	Serial.print(_dy, 2);
-	Serial.println(F("] from cur point"));
+	Serial.print(_dy, 4);
+	Serial.println(F(" ] from cur point"));
 	
 	// Calculating the radius lengths for pen and both wheels
 	float r = calcDistance( 0, 0, _dx, _dy );
