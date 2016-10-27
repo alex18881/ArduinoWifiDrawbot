@@ -18,19 +18,22 @@
   #define WHEEL_ENABLE        LOW
   #define WHEEL_DISABLE       HIGH
   
-  #define WHEELS_ACCELERATION 1000
-  #define WHEELS_SPEED        200
-  #define WHEELS_MAX_SPEED    1000
+  #define WHEELS_ACCELERATION 10000
+  #define WHEELS_SPEED        1000
+//  #define WHEELS_MAX_SPEED    1000
 
 // Stepper motors rate: steps per millimeter
-  #define WHEEL_STEPS_RATE    22.021
+  #define WHEEL_STEPS_RATE    20.2931
+// 18.8843 - 92.1358
+// 20.49616 - 101
+// 22.021 - 116.6190
 
 // Base width: the distance between wheels in millimeters.
-//  Ideally this distance is mesured between centers of weels contact
+// Ideally this distance is mesured between centers of weels contact
 // patches. Once the pen is located in themiddle of the bot base the
 // half of this value is the distance from the actual radiuce to
 // radiuces of each wheels paths.
-  #define WEEL_BASE_SIZE      111.8
+  #define WEEL_BASE_SIZE      113.3
 #endif
 
 #if defined(LEFT_WHEEL)

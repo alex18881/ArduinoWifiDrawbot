@@ -1,3 +1,6 @@
+G21 (All units in mm)
 M03
 G01 X100 Y0
 M05
+G00 X0.0000 Y0.0000
+M2

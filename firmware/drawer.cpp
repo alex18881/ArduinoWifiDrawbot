@@ -7,7 +7,8 @@ Drawer::Drawer(){
 AccelStepper Drawer::initWheel( int pin1, int pin2, int pin3, int pin4 ){
 	AccelStepper _wheel( AccelStepper::HALF4WIRE, pin1, pin3, pin2, pin4 );
 	_wheel.setSpeed( WHEELS_SPEED );
-	_wheel.setMaxSpeed( WHEELS_MAX_SPEED );
+	//_wheel.setMaxSpeed( WHEELS_MAX_SPEED );
+	_wheel.setMaxSpeed( WHEELS_SPEED );
     _wheel.setAcceleration( WHEELS_ACCELERATION );
 
 	return _wheel;
@@ -17,12 +18,23 @@ void Drawer::init(void (*_logger)(String msg)){
 	logger = _logger;
 	leftWheel = initWheel( LEFT_WHEEL_PIN1, LEFT_WHEEL_PIN2, LEFT_WHEEL_PIN3, LEFT_WHEEL_PIN4 );
 	rightWheel = initWheel( RIGHT_WHEEL_PIN1, RIGHT_WHEEL_PIN2, RIGHT_WHEEL_PIN3, RIGHT_WHEEL_PIN4 );
+	reset();
+}
+
+void Drawer::reset() {
+	x = 0.0;
+	y = 0.0;
+	rotation = 0.0;
+	comandComplete = true;
+	wheelsSpeed = WHEELS_SPEED;
 	pen.detach();
 }
 
 void Drawer::togglePen( bool on ){
 	Serial.println(on? F("Turning pen on"): F("Turning pen off"));
+	
 	pen.attach(PEN_SERVO_PIN);
+
 	while(!pen.attached()){
 		;
 	}
@@ -108,8 +120,10 @@ void Drawer::rotateByRads( double dAngle ){
 		rightWheel.move(-curve);
 		leftWheel.move(curve);
 
-		rightWheel.setMaxSpeed( WHEELS_MAX_SPEED );
-		leftWheel.setMaxSpeed( WHEELS_MAX_SPEED );
+		rightWheel.setMaxSpeed( wheelsSpeed );
+		leftWheel.setMaxSpeed( wheelsSpeed );
+		rightWheel.setAcceleration( WHEELS_ACCELERATION );
+		leftWheel.setAcceleration( WHEELS_ACCELERATION );
 
 		while(!comandComplete)
 			run();
@@ -126,6 +140,8 @@ float Drawer::calcDistance( float x0, float y0, float x1, float y1 ){
 }
 
 void Drawer::moveTo(float _x, float _y, float _feedRate){
+	//wheelsSpeed = _feedRate > 0 ? _feedRate : wheelsSpeed;
+
 	Serial.print(F("Drawer::moveTo: Moving to [ X"));
 	Serial.print(_x, 4);
 	Serial.print(F(", Y"));
@@ -148,8 +164,10 @@ void Drawer::moveTo(float _x, float _y, float _feedRate){
 	rightWheel.move(l);
 	leftWheel.move(l);
 
-	rightWheel.setMaxSpeed( WHEELS_MAX_SPEED );
-	leftWheel.setMaxSpeed( WHEELS_MAX_SPEED );
+	rightWheel.setMaxSpeed( wheelsSpeed );
+	leftWheel.setMaxSpeed( wheelsSpeed );
+	rightWheel.setAcceleration( WHEELS_ACCELERATION );
+	leftWheel.setAcceleration( WHEELS_ACCELERATION );
 	
 	while(!comandComplete)
 		run();
@@ -159,6 +177,8 @@ void Drawer::moveTo(float _x, float _y, float _feedRate){
 }
 
 void Drawer::curveTo( float _x, float _y, float _dx, float _dy, float _feedRate, bool clockwise ){
+	//wheelsSpeed = _feedRate > 0 ? _feedRate : wheelsSpeed;
+
 	comandComplete = false;
 
 	Serial.print(F("Drawer::curveTo: Curve"));
@@ -184,10 +204,12 @@ void Drawer::curveTo( float _x, float _y, float _dx, float _dy, float _feedRate,
 	double chord = calcDistance( x, y, _x, _y );
 	double sinA = chord/(r*2.0);
 	double angle = asin( sinA )*2.0;
+
 	double outWheelSteps = WHEEL_STEPS_RATE * angle * rout;
 	double inWheelSteps = WHEEL_STEPS_RATE * angle * rin;
-
-	double innerWheelSpeed = abs(inWheelSteps*WHEELS_SPEED/outWheelSteps);
+	
+	double innerWheelSpeed = abs(inWheelSteps * wheelsSpeed / outWheelSteps );
+	double innerWheelAcceleration = abs(innerWheelSpeed * WHEELS_ACCELERATION / wheelsSpeed );
 	
 	//Find angle between current direction and direction towards the arc center
 	double dAngle = calcAngleToPoint(_dx, _dy);
@@ -204,29 +226,44 @@ void Drawer::curveTo( float _x, float _y, float _dx, float _dy, float _feedRate,
 
 	comandComplete = false;
 
-	float newAngle =  calcAngleToPoint( _x - x, _y - y );
+	// The difference angle between current rotation and final rotation is
+	// doubled angle between tangent and line connecting current position
+	// and destination
+	double newAngle = calcAngleToPoint( _x - x, _y - y );
 
 	if( clockwise ){
 		rightWheel.move(inWheelSteps);
 		leftWheel.move(outWheelSteps);
 
-		leftWheel.setMaxSpeed( WHEELS_SPEED );
+		leftWheel.setMaxSpeed( wheelsSpeed );
 		rightWheel.setMaxSpeed( innerWheelSpeed );
 
-		rotation += (2*newAngle);
+		rightWheel.setAcceleration( innerWheelAcceleration );
+		leftWheel.setAcceleration( WHEELS_ACCELERATION );
+
+		rotation += (newAngle * 2);
 	}else{
 
 		rightWheel.move(outWheelSteps);
 		leftWheel.move(inWheelSteps);
 
-		rightWheel.setMaxSpeed( WHEELS_SPEED );
+		rightWheel.setMaxSpeed( wheelsSpeed );
 		leftWheel.setMaxSpeed(innerWheelSpeed);
 
-		rotation -= (2*newAngle);
+		rightWheel.setAcceleration( WHEELS_ACCELERATION );
+		leftWheel.setAcceleration( innerWheelAcceleration );
+
+		rotation -= (newAngle * 2);
 	}
 
 	while(!comandComplete)
 		run();
+
+	Serial.print(F("Drawer::curveTo: Done. Inner wheel "));
+	Serial.print(inWheelSteps, 4);
+	Serial.print(F(" steps. Outer wheel "));
+	Serial.print(outWheelSteps, 4);
+	Serial.println(F(" steps"));
 
 	x = _x;
 	y = _y;

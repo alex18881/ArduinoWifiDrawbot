@@ -17,8 +17,8 @@ class Drawer {
 	public:
 		Drawer();
 
-		float x=0.0;
-		float y=0.0;
+		float x = 0.0;
+		float y = 0.0;
     	double rotation = 0.0;
 		bool comandComplete = true;
 		
@@ -30,6 +30,7 @@ class Drawer {
     	void rotateByRads( double dAngle );
     	void moveTo(float _x, float _y, float _feedRate);
     	void curveTo( float _x, float _y, float _dx, float _dy, float _feedRate, bool clockwise );
+    	void reset();
 
 	private:
 		Servo pen;
@@ -41,4 +42,5 @@ class Drawer {
 
 		float calcDistance( float x0, float y0, float x1, float y1 );
 		double calcAngleToPoint(float _x, float _y);
+		double wheelsSpeed = WHEELS_SPEED;
 };

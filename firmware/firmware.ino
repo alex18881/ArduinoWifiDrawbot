@@ -185,7 +185,10 @@ void processCommand() {
 		cmd = parsenumber(commandM);
 		switch(cmd) {
 			//M2: Program End
-			case 2: drawer.rotateTo(0.0, 1.0); break;
+			case 2:
+				drawer.rotateTo(0.0, 1.0);
+				drawer.reset();
+				break;
 			//M3: Spindle On, Clockwise = activate pen
 			case 3: drawer.togglePen(true); break;
 			//M5: Spindle Off = remove pen
@@ -214,7 +217,7 @@ bool hasValue( char search ){
 }
 
 bool isNumPart(char letter) {
-	return (isdigit(letter) || letter=='-' || letter == '+' || letter == '.');
+	return (isDigit(letter) || letter=='-' || letter == '+' || letter == '.');
 }
 
 float parsenumber( char codeType ){
@@ -240,6 +243,11 @@ float parsenumber( char codeType ){
 	while( isNumPart(buffer[yeldIndx]) && yeldIndx < DATA_BUF_SIZE ){
 		val += (String)buffer[yeldIndx++];
 	}
+
+	Serial.print(F("Getting param "));
+	Serial.print(codeType);
+	Serial.print(F(" = "));
+	Serial.println(val);
 
 	if( val == "")
 		return 0.0;
