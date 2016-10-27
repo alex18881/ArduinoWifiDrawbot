@@ -164,18 +164,31 @@ void processCommand() {
 					delay(_x);
 				break;
 			//G10 Retract = remove pen
-			case 10: drawer.togglePen(false); break;
+			case 10:
+				drawer.togglePen(false);
+				break;
 			//G11 Retract = activate pen
-			case 11: drawer.togglePen(true); break;
+			case 11:
+				drawer.togglePen(true);
+				break;
 			//G28: Move to Origin (Home)
 			case 28:
-				//_x = parsenumber('X');
-				//_y = parsenumber('Y');
 				drawer.moveTo( 0, 0, 0 );
 				break;
 			//G90: Set to Absolute Positioning
+			case 90:
+				drawer.isRelative = false;
+				break;
 			//G91: Set to Relative Positioning
+			case 91:
+				drawer.isRelative = true;
+				break;
 			//G92: Set Position
+			case 92:
+				_x = parsenumber(paramX);
+				_y = parsenumber(paramY);
+				drawer.setPosition(_x, _y);
+				break;
 			default: break;
 		}
 	}

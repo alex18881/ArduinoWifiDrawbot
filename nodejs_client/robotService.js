@@ -36,6 +36,63 @@ function exec( cmds, connection ){
 		);
 }
 
+function execCommands(commands) {
+	var connection = new telnet();
+	connection.on('timeout', (err) => {
+		console.log("Connection timed out", err);
+		runStatus = { error: true, message: "Connection timed out" };
+		if(connection)
+			connection.end();
+		connection = null;
+		isRunning = false;
+	});
+
+	connection.on('error', (err) => {
+		runStatus = { error: true, message: err };
+		console.log('ERR:', err);
+		if(connection)
+			connection.end();
+		connection = null;
+	} );
+
+	connection.on('close', function() {
+		console.log('connection closed');
+		connection = null;
+		isRunning = false;
+	});
+
+	connection.connect({
+		host: params.host,
+		port: params.port,
+		shellPrompt: params.shellPrompt,
+		timeout: params.timeout
+	}).then(
+			(prompt) => {
+				console.log( "Connected: " + prompt );
+				console.log( "Executing %s commands", commands.length );
+				return exec( commands, connection );
+			}
+		).then(
+			()=> {
+				console.log( "DONE!" );
+				runStatus = { error: false, message: "Done"};
+				isRunning = false;
+				if(connection)
+					connection.end();
+				connection = null;
+			}
+		).catch(
+			(err) => {
+				console.log( "Error!", err );
+				runStatus = { error: true, message: err };
+				isRunning = false;
+				if(connection)
+					connection.end();
+				connection = null;
+			}
+		);
+}
+
 function execGCode(req, res, next) {
 	if(isRunning) {
 		res.code(409).json({ error: true, message: 'Already running' });
@@ -59,71 +116,26 @@ function execGCode(req, res, next) {
 		}
 
 		var commands = data.replace("\r", "").split( "\n" )
-			.filter( (a)=>{ return !!a.trim() && validCommands[a.charAt(0)]; } ),
-			connection = new telnet();
+			.filter( (a)=>{ return !!a.trim() && validCommands[a.charAt(0)]; } );
 
 		runStatus = { error: false, message: "Connecting"};
 		console.log( "Connecting to bot: %s:%d", params.host, params.port);
 
-		
-		connection.on('timeout', (err) => {
-			console.log("Connection timed out", err);
-			runStatus = { error: true, message: "Connection timed out" };
-			if(connection)
-				connection.end();
-			connection = null;
-			isRunning = false;
-		});
-
-		connection.on('error', (err) => {
-			runStatus = { error: true, message: err };
-			console.log('ERR:', err);
-			if(connection)
-				connection.end();
-			connection = null;
-		} );
-
-		connection.on('close', function() {
-			console.log('connection closed');
-			connection = null;
-			isRunning = false;
-		});
-
-		connection.connect({
-			host: params.host,
-			port: params.port,
-			shellPrompt: params.shellPrompt,
-			timeout: params.timeout
-		}).then(
-				(prompt) => {
-					console.log( "Connected: " + prompt );
-					console.log( "Executing %s commands", commands.length );
-		  			return exec( commands, connection );
-				}
-			).then(
-				()=> {
-					console.log( "DONE!" );
-					runStatus = { error: false, message: "Done"};
-					isRunning = false;
-					if(connection)
-						connection.end();
-					connection = null;
-				}
-			).catch(
-				(err) => {
-					console.log( "Error!", err );
-					runStatus = { error: true, message: err };
-					isRunning = false;
-					if(connection)
-						connection.end();
-					connection = null;
-				}
-			);
-
-		
+		execCommands(commands);
 		getRunStatus(req, res, next);
 	} );
 }
+
+function move(req, res, next) {
+	execCommands(['G90', 'G0 X' + (+req.params.distanceX) + ' Y' + (+req.params.distanceY || 0)]);
+	getRunStatus(req, res, next);
+}
+
+function togglePen(req, res, next) {
+	execCommands([req.params.val == 'on' ? 'M3' : 'M5']);
+	getRunStatus(req, res, next);
+}
+
 
 function getGCodes(req, res, next) {
 	fs.readdir(gCodeRoot, function(err, items){
@@ -158,5 +170,9 @@ router.post( "/settings", changeSettings);
 router.get( "/g-codes/list", getGCodes);
 router.get( "/g-codes/exec/:filename", execGCode);
 router.get( "/g-codes/status", getRunStatus);
+
+router.get( "/g-codes/command/move/:distanceX/:distanceY?", move);
+router.get( "/g-codes/command/togglepen/:val", togglePen);
+
 
 module.exports = router;

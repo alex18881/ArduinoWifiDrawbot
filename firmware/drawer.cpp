@@ -139,8 +139,22 @@ float Drawer::calcDistance( float x0, float y0, float x1, float y1 ){
   	return (float) sqrt( (double) ( (dx*dx) + (dy*dy) ) );
 }
 
+void Drawer::setPosition(float _x, float _y) {
+	if (isRelative) {
+		x += _x;
+		y += _y;
+	} else {
+		x = _x;
+		y = _y;
+	}
+}
+
 void Drawer::moveTo(float _x, float _y, float _feedRate){
 	//wheelsSpeed = _feedRate > 0 ? _feedRate : wheelsSpeed;
+	if (isRelative) {
+		_x += x;
+		_y += y;
+	}
 
 	Serial.print(F("Drawer::moveTo: Moving to [ X"));
 	Serial.print(_x, 4);
@@ -176,9 +190,12 @@ void Drawer::moveTo(float _x, float _y, float _feedRate){
 	y = _y;
 }
 
-void Drawer::curveTo( float _x, float _y, float _dx, float _dy, float _feedRate, bool clockwise ){
+void Drawer::curveTo( float _x, float _y, float _cdx, float _cdy, float _feedRate, bool clockwise ){
 	//wheelsSpeed = _feedRate > 0 ? _feedRate : wheelsSpeed;
-
+	if (isRelative) {
+		_x += x;
+		_y += y;
+	}
 	comandComplete = false;
 
 	Serial.print(F("Drawer::curveTo: Curve"));
@@ -190,13 +207,13 @@ void Drawer::curveTo( float _x, float _y, float _dx, float _dy, float _feedRate,
 	Serial.print(F(", F"));
 	Serial.print(_feedRate, 4);
 	Serial.print(F(" ] with center at [ X"));
-	Serial.print(_dx, 4);
+	Serial.print(_cdx, 4);
 	Serial.print(F(", Y"));
-	Serial.print(_dy, 4);
+	Serial.print(_cdy, 4);
 	Serial.println(F(" ] from cur point"));
 	
 	// Calculating the radius lengths for pen and both wheels
-	float r = calcDistance( 0, 0, _dx, _dy );
+	float r = calcDistance( 0, 0, _cdx, _cdy );
 	float rout = r + WEEL_BASE_HALF_SIZE;
 	float rin  = r - WEEL_BASE_HALF_SIZE;
 
@@ -212,7 +229,7 @@ void Drawer::curveTo( float _x, float _y, float _dx, float _dy, float _feedRate,
 	double innerWheelAcceleration = abs(innerWheelSpeed * WHEELS_ACCELERATION / wheelsSpeed );
 	
 	//Find angle between current direction and direction towards the arc center
-	double dAngle = calcAngleToPoint(_dx, _dy);
+	double dAngle = calcAngleToPoint(_cdx, _cdy);
 
 	//Rotate towards the tangent to the arc at start position point
 	double tanAngle;

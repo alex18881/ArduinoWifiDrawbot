@@ -19,6 +19,7 @@ class Drawer {
 
 		float x = 0.0;
 		float y = 0.0;
+		bool isRelative = false;
     	double rotation = 0.0;
 		bool comandComplete = true;
 		
@@ -29,7 +30,8 @@ class Drawer {
     	void rotateTo( float _x, float _y );
     	void rotateByRads( double dAngle );
     	void moveTo(float _x, float _y, float _feedRate);
-    	void curveTo( float _x, float _y, float _dx, float _dy, float _feedRate, bool clockwise );
+    	void curveTo( float _x, float _y, float _cdx, float _cdy, float _feedRate, bool clockwise );
+    	void setPosition(float _x, float _y);
     	void reset();
 
 	private:

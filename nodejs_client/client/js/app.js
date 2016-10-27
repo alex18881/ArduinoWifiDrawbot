@@ -72,5 +72,17 @@ angular.module('BotConsole').controller('GCodeListController', [
 				.success(setRunStatus)
 				.error(errHandler);
 		}
+
+		$scope.move = function ($evt, axis, distance) {
+			var url = '/api/g-codes/command/move/';
+			if( axis == 'x' ){
+				url += distance;
+			}else {
+				url += '0/' + distance;
+			}
+			$http.get(url)
+				.success(setRunStatus)
+				.error(errHandler);
+		}
 	}
 ]);
