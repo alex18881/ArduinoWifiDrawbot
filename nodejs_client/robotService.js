@@ -127,7 +127,7 @@ function execGCode(req, res, next) {
 }
 
 function move(req, res, next) {
-	execCommands(['G90', 'G0 X' + (+req.params.distanceX) + ' Y' + (+req.params.distanceY || 0)]);
+	execCommands(['G91', 'G0 X' + (+req.params.distanceX) + ' Y' + (+req.params.distanceY || 0)]);
 	getRunStatus(req, res, next);
 }
 

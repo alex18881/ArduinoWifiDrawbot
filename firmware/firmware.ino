@@ -1,4 +1,5 @@
 #include "Configuration.h";
+#include "ConfigManager.h";
 #include "drawer.h";
 
 #if defined(WIFI)
@@ -21,6 +22,7 @@ char paramF = 'F';
 char paramS = 'S';
 char paramP = 'P';
 
+ConfigManager cfgManager;
 Drawer drawer;
 
 #if defined(WIFI)
@@ -32,11 +34,12 @@ void setup() {
 	while (!Serial) {
     	; // wait for serial port to connect. Needed for native USB port only
 	}
+	cfgManager.read();
 
 	#if defined(WIFI)
-	wifi.init(notifyReady);
+	wifi.init(notifyReady, cfgManager);
 	#endif
-	drawer.init(logMessage);
+	drawer.init(logMessage, cfgManager);
 
 	drawer.togglePen(false);
   #if !defined(WIFI)
@@ -65,6 +68,7 @@ void readSerial(){
 		if(!commandReady)
 			notifyReady();
   	}
+
 }
 #else
 void readSerial(){
@@ -212,6 +216,18 @@ void processCommand() {
 			//M114: Get Current Position
 			//M115: Get Firmware Version and Capabilities
 			//M201: Set max printing acceleration
+			//M500: Store parameters in EEPROM
+			case 500: 
+				cfgManager.write();
+				break;
+			//M501: Read parameters from EEPROM
+			case 501: 
+				cfgManager.read();
+				wifi.connect();
+				drawer.reset();
+				break;
+			//M503: Print settings
+
 			default: break;
 		}
 	}
@@ -223,7 +239,7 @@ void processCommand() {
 bool hasValue( char search ){
 	int i = 0;
 	bool result = false;
-	while( !result && i<DATA_BUF_SIZE ){
+	while( !result && i < DATA_BUF_SIZE ){
 		result = buffer[i++] == search;
 	}
 	return result;

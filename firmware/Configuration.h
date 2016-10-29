@@ -54,7 +54,6 @@
   #define WIFI_DATASPEED      9600
   #define WIFI_SSID           "BoogymanHomeWifi"
   #define WIFI_PASSWORD       "alex18881"
-  #define HOST_PORT           8090
   #define WIFI_TX_PIN         7
   #define WIFI_RX_PIN         6
   #define WIFI_SERVER_PORT    1336

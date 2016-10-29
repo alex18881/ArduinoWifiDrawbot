@@ -1,19 +1,27 @@
 #include "wifi.h";
 
-Wifi::Wifi(){}
+Wifi::Wifi(){
+}
 
-void Wifi::init( void (*fn)(void) ){
+void Wifi::init( void (*fn)(void), ConfigManager& _cfgManager ){
 	onConnected = fn;
+	cfgManager = _cfgManager;
+
+	connect();
+	inited = true;
+}
+
+void Wifi::connect() {
 	if( sendCommand( "AT", ok ) ){
 		Serial.println( F("Wifi: OK") );
 	}else{
 		Serial.println( F("Wifi: Error") );
 	}
 
-	_serial.begin( WIFI_DATASPEED );
-	if(!sendCommand( "AT+CWJAP?", WIFI_SSID ) ){
+	_serial.begin( cfgManager.wifiBodRate );
+	if(!sendCommand( "AT+CWJAP?", cfgManager.SSID ) ){
 		Serial.println( F("Joining to Wifi") );
-		if( sendCommand( (String)"AT+CWJAP=" + (String)WIFI_SSID + "," + (String)WIFI_PASSWORD, ok ) ){
+		if( sendCommand( "AT+CWJAP=" + (String)cfgManager.SSID + "," + (String)cfgManager.passwd, ok ) ){
 			Serial.println( F("Joining to Wifi: OK") );
 		}else{
 			Serial.println( F("Joining to Wifi: Error") );
@@ -32,14 +40,13 @@ void Wifi::init( void (*fn)(void) ){
 		Serial.println( F("Wifi MUX set: Error") );
 	}
 
-	if( sendCommand( "AT+CIPSERVER=1,1336", ok ) ){
+	if( sendCommand( "AT+CIPSERVER=1," + cfgManager.wifiPort, ok ) ){
 		Serial.println( F("Wifi start server: OK") );
 	}else{
 		Serial.println( F("Wifi start server: Error") );
 	}
 
 	delay(100);
-	inited = true;
 }
 
 uint32_t Wifi::read(char *buff){
@@ -52,7 +59,7 @@ uint32_t Wifi::read(char *buff){
 			if( index_msg != -1 ){
 				//"+IPD,0"
 				int i = 0;
-				int lenIndx = wifidata.indexOf(',', index_msg+5 );
+				int lenIndx = wifidata.indexOf(',', index_msg + 5 );
 				int msgIndx = wifidata.indexOf(':', lenIndx );
 
 				len = wifidata.substring(lenIndx+1, msgIndx++).toInt();
@@ -107,16 +114,17 @@ void Wifi::write(String msg){
 
 bool Wifi::sendCommand( String cmd, char *strToFind ){
 	bool result = false;
+	Serial.println(cmd);
 	_serial.print(cmd + "\r\n");
 	unsigned long _millis = millis();
 
 	while( (millis() - _millis) < WIFI_COMMAND_TIMEOUT ){
 		if( _serial.available() ){
 			result = _serial.find( strToFind );
-			//Serial.print(F("Wifi exec command "));
-			//Serial.print(cmd);
-			//Serial.print(F(": ")); 
-			//Serial.println((String)result);
+			Serial.print(F("Wifi exec command "));
+			Serial.print(cmd);
+			Serial.print(F(": ")); 
+			Serial.println((String)result);
 			break;
 		}
 	}

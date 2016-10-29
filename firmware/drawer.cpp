@@ -1,21 +1,23 @@
-//
 #include "drawer.h";
 
 Drawer::Drawer(){
 }
 
 AccelStepper Drawer::initWheel( int pin1, int pin2, int pin3, int pin4 ){
-	AccelStepper _wheel( AccelStepper::HALF4WIRE, pin1, pin3, pin2, pin4 );
-	_wheel.setSpeed( WHEELS_SPEED );
-	//_wheel.setMaxSpeed( WHEELS_MAX_SPEED );
-	_wheel.setMaxSpeed( WHEELS_SPEED );
-    _wheel.setAcceleration( WHEELS_ACCELERATION );
-
+	AccelStepper _wheel = AccelStepper( AccelStepper::HALF4WIRE, pin1, pin3, pin2, pin4 );
 	return _wheel;
 }
 
-void Drawer::init(void (*_logger)(String msg)){
+void Drawer::resetWheel( AccelStepper& _wheel ) {
+	_wheel.setSpeed( cfgManager.wheelsSpeed );
+	//_wheel.setMaxSpeed( WHEELS_MAX_SPEED );
+	_wheel.setMaxSpeed( cfgManager.wheelsSpeed );
+    _wheel.setAcceleration( cfgManager.wheelsAcceleration );
+}
+
+void Drawer::init(void (*_logger)(String msg), ConfigManager& _cfgManager){
 	logger = _logger;
+	cfgManager = _cfgManager;
 	leftWheel = initWheel( LEFT_WHEEL_PIN1, LEFT_WHEEL_PIN2, LEFT_WHEEL_PIN3, LEFT_WHEEL_PIN4 );
 	rightWheel = initWheel( RIGHT_WHEEL_PIN1, RIGHT_WHEEL_PIN2, RIGHT_WHEEL_PIN3, RIGHT_WHEEL_PIN4 );
 	reset();
@@ -26,8 +28,13 @@ void Drawer::reset() {
 	y = 0.0;
 	rotation = 0.0;
 	comandComplete = true;
-	wheelsSpeed = WHEELS_SPEED;
-	pen.detach();
+	wheelsSpeed = cfgManager.wheelsSpeed;
+
+	resetWheel(leftWheel);
+	resetWheel(rightWheel);
+
+	if(pen.attached())
+		pen.detach();
 }
 
 void Drawer::togglePen( bool on ){
@@ -109,9 +116,11 @@ void Drawer::rotateByRads( double dAngle ){
 
 		//float c0 = WEEL_FULL_CIRCLE_STEPS;
 	    //float c = TURN_STEPS_RATIO;
-		double curve = dAngle * TURN_STEPS_RATIO;
+		double curve = dAngle * cfgManager.wheelsBaseHalfWidth * cfgManager.wheelsStepRate;
  
 		Serial.print(F("Drawer::rotateByRads: Rotating by "));
+		Serial.print(curve);
+		Serial.print(F(" steps, ") );
 		Serial.print(( dAngle * 180 / M_PI), 4);
 		Serial.print(F("deg (") );
 		Serial.print(dAngle, 4);
@@ -122,8 +131,8 @@ void Drawer::rotateByRads( double dAngle ){
 
 		rightWheel.setMaxSpeed( wheelsSpeed );
 		leftWheel.setMaxSpeed( wheelsSpeed );
-		rightWheel.setAcceleration( WHEELS_ACCELERATION );
-		leftWheel.setAcceleration( WHEELS_ACCELERATION );
+		rightWheel.setAcceleration( cfgManager.wheelsAcceleration );
+		leftWheel.setAcceleration( cfgManager.wheelsAcceleration );
 
 		while(!comandComplete)
 			run();
@@ -169,7 +178,7 @@ void Drawer::moveTo(float _x, float _y, float _feedRate){
   	
   	comandComplete = false;
 	
-	float l = WHEEL_STEPS_RATE * calcDistance( x, y, _x, _y );
+	float l = cfgManager.wheelsStepRate * calcDistance( x, y, _x, _y );
   	
   	Serial.print(F("Moving by "));
   	Serial.print(l, 4);
@@ -180,8 +189,8 @@ void Drawer::moveTo(float _x, float _y, float _feedRate){
 
 	rightWheel.setMaxSpeed( wheelsSpeed );
 	leftWheel.setMaxSpeed( wheelsSpeed );
-	rightWheel.setAcceleration( WHEELS_ACCELERATION );
-	leftWheel.setAcceleration( WHEELS_ACCELERATION );
+	rightWheel.setAcceleration( cfgManager.wheelsAcceleration );
+	leftWheel.setAcceleration( cfgManager.wheelsAcceleration );
 	
 	while(!comandComplete)
 		run();
@@ -214,19 +223,19 @@ void Drawer::curveTo( float _x, float _y, float _cdx, float _cdy, float _feedRat
 	
 	// Calculating the radius lengths for pen and both wheels
 	float r = calcDistance( 0, 0, _cdx, _cdy );
-	float rout = r + WEEL_BASE_HALF_SIZE;
-	float rin  = r - WEEL_BASE_HALF_SIZE;
+	float rout = r + cfgManager.wheelsBaseHalfWidth;
+	float rin  = r - cfgManager.wheelsBaseHalfWidth;
 
 	//Find arc length
 	double chord = calcDistance( x, y, _x, _y );
 	double sinA = chord/(r*2.0);
 	double angle = asin( sinA )*2.0;
 
-	double outWheelSteps = WHEEL_STEPS_RATE * angle * rout;
-	double inWheelSteps = WHEEL_STEPS_RATE * angle * rin;
+	double outWheelSteps = cfgManager.wheelsStepRate * angle * rout;
+	double inWheelSteps = cfgManager.wheelsStepRate * angle * rin;
 	
 	double innerWheelSpeed = abs(inWheelSteps * wheelsSpeed / outWheelSteps );
-	double innerWheelAcceleration = abs(innerWheelSpeed * WHEELS_ACCELERATION / wheelsSpeed );
+	double innerWheelAcceleration = abs(innerWheelSpeed * cfgManager.wheelsAcceleration / wheelsSpeed );
 	
 	//Find angle between current direction and direction towards the arc center
 	double dAngle = calcAngleToPoint(_cdx, _cdy);
@@ -256,7 +265,7 @@ void Drawer::curveTo( float _x, float _y, float _cdx, float _cdy, float _feedRat
 		rightWheel.setMaxSpeed( innerWheelSpeed );
 
 		rightWheel.setAcceleration( innerWheelAcceleration );
-		leftWheel.setAcceleration( WHEELS_ACCELERATION );
+		leftWheel.setAcceleration( cfgManager.wheelsAcceleration );
 
 		rotation += (newAngle * 2);
 	}else{
@@ -267,7 +276,7 @@ void Drawer::curveTo( float _x, float _y, float _cdx, float _cdy, float _feedRat
 		rightWheel.setMaxSpeed( wheelsSpeed );
 		leftWheel.setMaxSpeed(innerWheelSpeed);
 
-		rightWheel.setAcceleration( WHEELS_ACCELERATION );
+		rightWheel.setAcceleration( cfgManager.wheelsAcceleration );
 		leftWheel.setAcceleration( innerWheelAcceleration );
 
 		rotation -= (newAngle * 2);
@@ -285,4 +294,3 @@ void Drawer::curveTo( float _x, float _y, float _cdx, float _cdy, float _feedRat
 	x = _x;
 	y = _y;
 }
-
