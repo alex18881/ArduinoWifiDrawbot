@@ -1,88 +1,15 @@
-angular.module('BotConsole', []);
+angular.module('WifiDrawBotConsole', ['ngRoute', 'route-segment', 'view-segment'])
+.config(function($routeSegmentProvider){
 
-angular.module('BotConsole').controller('GCodeListController', [
-	'$scope', '$http',
-	function ($scope, $http) {
+	$routeSegmentProvider
+		.when('/', 'collection')
+		.when('/collection', 'collection')
+		.when('/manual', 'manual')
+		.when('/settings', 'settings')
 
-		function mapItems(item) {
-			return {
-				fileName: item,
-				status: ''
-			}
-		}
+	.segment('collection', { controller: 'GCodeListController', templateUrl: 'templates/collection/list.tpl.html' })
+	.segment('manual', { controller: 'ManualController', templateUrl: 'templates/manual/move.tpl.html' })
+	.segment('settings', { controller: 'SettingsController', templateUrl: 'templates/settings/connection.tpl.html' });
+	
 
-		function checkStatus(data) {
-			$scope.activeItem.status = data.status;
-
-			if( data.isRunning ) {
-				$http.get('/api/g-codes/status')
-					.success(checkStatus)
-					.error(errHandler);
-			}
-		}
-
-		function setRunStatus(data) {
-			if(data.error){
-				errHandler(data);
-			} else if($scope.activeItem) {
-				checkStatus(data);
-			} else {
-				$scope.error = { message: 'not selected' };
-			}
-		}
-
-		function errHandler(err){
-			$scope.error = err;
-			$scope.activeItem = null;
-		}
-		function renderList(data) {
-			$scope.items = data.map(mapItems);
-		}
-
-		$http.get('/api/g-codes/list')
-			.success(renderList)
-			.error(errHandler);
-
-		$scope.openSettings = function(evt){
-			evt.preventDefault();
-			$http.get('/api/settings')
-				.success(function(data){
-					$scope.settings = data;
-				})
-				.error(errHandler);
-		}
-
-		$scope.saveSettings = function(evt) {
-			evt.preventDefault();
-			$http.post('/api/settings', $scope.settings)
-				.success(function(data){
-					$scope.settings = null;
-				})
-				.error(errHandler);
-		}
-
-
-		$scope.runScript = function(evt, item) {
-			evt.preventDefault();
-
-			$scope.error = null;
-			$scope.activeItem = item;
-
-			$http.get('/api/g-codes/exec/' + item.fileName)
-				.success(setRunStatus)
-				.error(errHandler);
-		}
-
-		$scope.move = function ($evt, axis, distance) {
-			var url = '/api/g-codes/command/move/';
-			if( axis == 'x' ){
-				url += distance;
-			}else {
-				url += '0/' + distance;
-			}
-			$http.get(url)
-				.success(setRunStatus)
-				.error(errHandler);
-		}
-	}
-]);
+});

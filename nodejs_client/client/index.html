@@ -5,92 +5,32 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">		
 	<title></title>
-	<link rel="stylesheet" href="">
+	<!-- Bootstrap -->
+	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<!-- Material Design fonts -->
+	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+	<!-- Bootstrap Material Design -->
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-material-design.min.css">
+	
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-	<script src="/js/app.js"></script>
-
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.min.js"></script>
+	
+	<script src="//cdnjs.cloudflare.com/ajax/libs/angular-route-segment/1.4.0/angular-route-segment.min.js"></script>
+	
+	<script src="js/app.js"></script>
+	<script src="js/controllers/gcodelistcontroller.js"></script>
+	<script src="js/controllers/manualcontroller.js"></script>
+	<script src="js/controllers/settingscontroller.js"></script>
 </head>
-<body ng-app="BotConsole">
-	<div ng-controller="GCodeListController" class="container">
-		<div class="row">
-			<div class="col-xs-12">
-				<div class="panel panel-default">
-					<div class="panel-heading"><h5 class="panel-title"><a href="#" ng-click="openSettings($event)">Settings</a></h5></div>
-					<div class="panel-body" ng-show="!!settings">
-						<form ng-submit="saveSettings($event)" class="form-horizontal">
-							<div class="form-group">
-								<label for="inputHost" class="col-sm-2 control-label">Host</label>
-								<div class="col-sm-10">
-									<input type="text" ng-model="settings.host" class="form-control" id="inputHost" placeholder="Host">
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="inputHost" class="col-sm-2 control-label">Port</label>
-								<div class="col-sm-10">
-									<input type="number" ng-model="settings.port" class="form-control" id="inputPort" placeholder="Port">
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="inputHost" class="col-sm-2 control-label">Timeout</label>
-								<div class="col-sm-10">
-									<input type="number" ng-model="settings.timeout" class="form-control" id="inputTimeout" placeholder="Timeout">
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-sm-offset-2 col-sm-10">
-									<button type="submit" class="btn btn-success">Save</button>
-									<button type="button" ng-click="settings=false" class="btn btn-default">cancel</button>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<div class="row">
-			<div class="col-xs-12 col-md-4 col-md-push-6">
-				<div class="row">
-					<div class="col-xs-4 col-xs-offset-4 text-center">
-						<a class="btn btn-default" ng-click="move($event, 'y', 100)"><i class="glyphicon glyphicon-arrow-up"></i></a>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-4 text-center">
-						<a class="btn btn-default" ng-click="move($event, 'x', -100)"><i class="glyphicon glyphicon-arrow-left"></i></a>
-					</div>
-					<div class="col-xs-4 col-xs-offset-4 text-center">
-						<a class="btn btn-default" ng-click="move($event, 'x', 100)"><i class="glyphicon glyphicon-arrow-right"></i></a>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-4 col-xs-offset-4 text-center">
-						<a class="btn btn-default" ng-click="move($event, 'y', -100)"><i class="glyphicon glyphicon-arrow-down"></i></a>
-					</div>
-				</div>
-			</div>
+<body ng-app="WifiDrawBotConsole">
+	<ng-include src="'templates/header.tpl.html'"></ng-include>
 
-			<div class="col-xs-12 col-md-6 col-md-pull-4">
-
-				<div class="row">
-					<div class="col-xs-12 col-md-8">
-						<p class="text-error">{{error}}</p>
-						<div ng-repeat="item in items track by $index" class="row">
-							<div class="col-xs-4">
-								<a href="#" class="btn btn-default" ng-click="runScript($event, item)">{{item.fileName}}</a>
-							</div>
-							<div class="col-xs-8">
-								<p ng-if="item.status" ng-class="{'text-danger': item.status.error, 'text-success': !item.status.error}">{{item.status.message}}</p>
-							</div>
-							<div class="col-xs-12">&nbsp;</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-	</div>
+	<div class="container" app-view-segment="0"></div>
 </body>
 </html>
