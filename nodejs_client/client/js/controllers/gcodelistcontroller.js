@@ -37,7 +37,7 @@ angular.module('WifiDrawBotConsole').controller('GCodeListController', [
 			$scope.items = data.map(mapItems);
 		}
 
-		$http.get('/api/g-codes/list')
+		$http.get('/api/collection/list')
 			.success(renderList)
 			.error(errHandler);
 
