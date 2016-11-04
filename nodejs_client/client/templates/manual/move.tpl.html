@@ -4,6 +4,7 @@
 		<div class="row">
 			<button class="btn btn-default btn-block btn-lg btn-raised" ng-if="!status.connected" ng-click="connect()">Connect</button>
 			<button class="btn btn-default btn-block btn-lg btn-raised" ng-if="status.connected" ng-click="disconnect()">Disconnect</button>
+			{{status}}
 			<dl class="dl-horizontal" ng-if="status">
 				<dt>Status:</dt>
 				<dd>{{status.connected ? 'Connected' : 'Disconnected'}}</dd>

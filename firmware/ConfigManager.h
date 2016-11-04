@@ -13,7 +13,7 @@ class ConfigManager {
 		void read();
 		void write();
 
-		char *SSID = WIFI_SSID;
+		char *SSID = (char *)WIFI_SSID;
 		char *passwd = WIFI_PASSWORD;
 		int wifiPort = WIFI_SERVER_PORT;
 		int wifiBodRate = WIFI_DATASPEED;

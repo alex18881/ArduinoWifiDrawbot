@@ -87,6 +87,7 @@ function connect( req, res, next ) {
 			(prompt) => {
 				console.log( "BOT Connected: " + prompt );
 				status.connected = true;
+				status.error = null;
 				res.json('ok');
 				res.end();
 			},
@@ -110,11 +111,13 @@ function disconnect( req, res, next ) {
 		connection.end()
 			.then( () => {
 				status.connected = false;
+				status.error = null;
 				res.json('ok');
 				next();
 			})
 			.catch( (err) => {
 				status.connected = false;
+				status.error = err;
 				res.status(500).json(err);
 				next();
 			} );

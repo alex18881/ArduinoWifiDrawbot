@@ -21,7 +21,7 @@ angular.module('WifiDrawBotConsole').controller('ManualController', [
 
 		function setStatus(data) {
 			$scope.loading = false;
-			$scope.status = data;
+			$scope.status = data.data;
 		}
 
 		function load() {

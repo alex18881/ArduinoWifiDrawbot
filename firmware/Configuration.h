@@ -1,3 +1,4 @@
+#define VERSION "Arduino WIFI Drawbot v0.0.1"
 #define LEFT_WHEEL
 #define RIGHT_WHEEL
 #define SERVO

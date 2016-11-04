@@ -6,21 +6,33 @@ Wifi::Wifi(){
 void Wifi::init( void (*fn)(void), ConfigManager& _cfgManager ){
 	onConnected = fn;
 	cfgManager = _cfgManager;
+	_serial.begin( cfgManager.wifiBodRate );
 
 	connect();
 	inited = true;
 }
 
 void Wifi::connect() {
-	if( sendCommand( "AT", ok ) ){
+	bool connected = false;
+	unsigned long trys = 10;
+
+
+	while( !connected ){
+		connected = sendCommand( "AT+GMR", ok );
+		Serial.println( F("Waiting for Wifi module") );
+		delay(1000);
+	}
+
+	if( connected ) {
 		Serial.println( F("Wifi: OK") );
 	}else{
 		Serial.println( F("Wifi: Error") );
 	}
 
-	_serial.begin( cfgManager.wifiBodRate );
 	if(!sendCommand( "AT+CWJAP?", cfgManager.SSID ) ){
-		Serial.println( F("Joining to Wifi") );
+		Serial.print( F("Joining to Wifi: ") );
+		Serial.println( (String)cfgManager.SSID );
+
 		if( sendCommand( "AT+CWJAP=" + (String)cfgManager.SSID + "," + (String)cfgManager.passwd, ok ) ){
 			Serial.println( F("Joining to Wifi: OK") );
 		}else{
@@ -40,7 +52,7 @@ void Wifi::connect() {
 		Serial.println( F("Wifi MUX set: Error") );
 	}
 
-	if( sendCommand( "AT+CIPSERVER=1," + cfgManager.wifiPort, ok ) ){
+	if( sendCommand( "AT+CIPSERVER=1," + String(cfgManager.wifiPort), ok ) ){
 		Serial.println( F("Wifi start server: OK") );
 	}else{
 		Serial.println( F("Wifi start server: Error") );
@@ -52,7 +64,7 @@ void Wifi::connect() {
 uint32_t Wifi::read(char *buff){
 	uint32_t len = 0;
 	if( inited ){
-		String wifidata = _serial.available() ? _serial.readString() : "";
+		String wifidata = _serial.available() > 0 ? _serial.readString() : "";
 
 		if( connected ){
 			int index_msg = wifidata.indexOf( "+IPD," );
@@ -103,9 +115,9 @@ void Wifi::write(String msg){
 
 		unsigned long _millis = millis();
 		while( (millis() - _millis) < WIFI_COMMAND_TIMEOUT ){
-			if(_serial.available()){
-				//Serial.print(F("WIFI*"));
-				//Serial.println( (String)_serial.find(ok) );
+			if( _serial.available() > 0 ){
+				Serial.print(F("WIFI*"));
+				Serial.println( (String)_serial.find(ok) );
 				break;
 			}
 		}
@@ -114,19 +126,23 @@ void Wifi::write(String msg){
 
 bool Wifi::sendCommand( String cmd, char *strToFind ){
 	bool result = false;
-	Serial.println(cmd);
-	_serial.print(cmd + "\r\n");
 	unsigned long _millis = millis();
 
+	Serial.println(cmd);
+	_serial.print(cmd + String("\r\n"));
+
 	while( (millis() - _millis) < WIFI_COMMAND_TIMEOUT ){
-		if( _serial.available() ){
-			result = _serial.find( strToFind );
+		if( _serial.available() > 0 ){
+			String wifiData = _serial.readString();
+			result = wifiData.indexOf(strToFind, 0) >= 0;
 			Serial.print(F("Wifi exec command "));
 			Serial.print(cmd);
 			Serial.print(F(": ")); 
-			Serial.println((String)result);
+			Serial.println(wifiData);
 			break;
-		}
+		}// else {
+			//Serial.println(F("Serial not available"));
+		//}
 	}
 	return result;
 }

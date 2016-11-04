@@ -2,9 +2,9 @@
 	#define WIFI_H
 
 #include <Arduino.h>;
+#include <SoftwareSerial.h>;
 #include "Configuration.h";
 #include "ConfigManager.h";
-#include <SoftwareSerial.h>;
 
 class Wifi {
 	public:
