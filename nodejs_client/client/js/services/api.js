@@ -6,6 +6,10 @@ angular.module('WifiDrawBotConsole').service('api', [
 			return $http.get('/api/bot/status');
 		}
 
+		function move(x, y) {
+			return $http.get('/api/bot/move/' + x + '/' + y);	
+		}
+
 		function connect() {
 			return $http.post('/api/bot/connect', {});
 		}
@@ -15,6 +19,7 @@ angular.module('WifiDrawBotConsole').service('api', [
 		}
 
 		return {
+			move : move,
 			getStatus: getStatus,
 			connect: connect,
 			disconnect: disconnect

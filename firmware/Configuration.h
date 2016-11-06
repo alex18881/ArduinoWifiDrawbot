@@ -1,4 +1,7 @@
-#define VERSION "Arduino WIFI Drawbot v0.0.1"
+#define VERSION "0.0.1"
+#define FW_CODE_NAME "WallE"
+#define MACHINE_NAME "ArduinoWIFIDrawbot"
+
 #define LEFT_WHEEL
 #define RIGHT_WHEEL
 #define SERVO

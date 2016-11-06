@@ -1,8 +1,12 @@
 var express = require('express'),
 	telnet = require('telnet-client'),
+	utils = require('util'),
 	router = express.Router(),
 	connection,
 	params = null,
+	versionTimer,
+	pingPeriod = 3000,
+
 	status = {
 		version: '',
 		connected: false,
@@ -15,33 +19,59 @@ function getStatus( req, res, next ) {
 	next();
 }
 
-function exec( cmds ){
-	if(!cmds.length){
-		return Promise.resolve(cmds);
-	}
+function exec( cmd ){
+		
+	console.log( "BOT > %s", cmd );
 
-	var cmd = cmds.shift();
-	
-	console.log( "BOT %d > %s", cmds.length, cmd );
-	status.message = utils.format('Running. %d commands left', cmds.length);
-
-	return connection.exec(cmd, params)
-		.then(
-			(pr) => {
-				console.log( "BOT OK: ");
-				return exec(cmds, connection);
-			}
-		);
+	return connection.send(cmd, {
+		waitfor : '>'
+	});
 }
 
 function execCommands(cmds) {
-	connectToBot().then( () => {
-		return exec(cmds);
-	} )
-	.then( () => {} )
-	.catch( () => {} );
+	return connectToBot()
+		.then( () => {
+			status.message = utils.format('Running. %d commands left', cmds.length);
+			return exec(cmds.shift());
+		} )
+		.then( (result) => {
+			if(cmds.length)
+				return execCommands(cmds);
+			else
+				return result;
+		} )
+		.catch( (err) => {
+			console.log('Exec commands error:', err);
+		} );
 }
 
+function getVersion() {
+	return exec(['M115'])
+		.then( (resp) => {
+			var result = {};
+
+			([]).concat( resp.replace(/[\n\r>]/gm, '').split(/\s/) || [] )
+				.forEach( (a) => {
+					var item = (a||'').trim().split(':'),
+						res = null;
+					if( item.length && item[0] ) {
+						result[item[0].trim()] = (item[1] || "").trim();
+					}
+					return res;
+				});
+
+			console.log('BOT M115: ', JSON.stringify(result));
+			status.version = result.PROTOCOL_VERSION;
+			status.fwCodeName = result.FIRMWARE_NAME;
+			status.machineType = result.MACHINE_TYPE;
+
+			versionTimer = setTimeout( getVersion, pingPeriod );
+		})
+		.catch( (err) => {
+			console.log('BOT M115 Error: ', err);
+			status.error = err;
+		});
+}
 
 function connectToBot() {
 	return new Promise( (resolve, reject) => {
@@ -74,8 +104,14 @@ function connectToBot() {
 				host: params.host,
 				port: params.port,
 				shellPrompt: params.shellPrompt,
-				timeout: params.timeout
-			}).then( resolve, reject );
+				timeout: params.timeout,
+				echoLines: 0,
+				irs: '\n',
+				ors: '\n',
+				debug: true
+			})
+				.then( getVersion )
+				.then( resolve, reject );
 		} else {
 			resolve(connection);
 		}

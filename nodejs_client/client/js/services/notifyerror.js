@@ -3,5 +3,5 @@ angular.module('WifiDrawBotConsole').value('notifyError', function (err) {
 	toast.html(JSON.stringify(err));
 	window.setTimeout(function (){
 		toast.remove();
-	}, 2000);
+	}, 5000);
 });

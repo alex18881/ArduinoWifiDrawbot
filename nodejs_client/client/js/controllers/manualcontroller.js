@@ -1,17 +1,25 @@
 angular.module('WifiDrawBotConsole').controller('ManualController', [
 	'$scope', 'api', 'notifyError',
 	function($scope, api, notifyError) {
+		$scope.distance = 100;
 
-		$scope.move = function ($evt, axis, distance) {
-			var url = '/api/bot/move/';
+		$scope.moveHome = function () {
+			api.move(0, 0)
+				.then(load)
+				.catch(errHandler);
+		};
+
+		$scope.move = function (axis, distance) {
+			var x = 0,
+				y = 0;
 			if( axis == 'x' ){
-				url += distance;
+				x = distance;
 			}else {
-				url += '0/' + distance;
+				y = distance;
 			}
-			$http.get(url)
-				.success(setRunStatus)
-				.error(errHandler);
+			api.move(x, y)
+				.then(load)
+				.catch(errHandler);
 		}
 
 		function errHandler(err){

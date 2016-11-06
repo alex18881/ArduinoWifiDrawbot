@@ -2,6 +2,8 @@
 #include "ConfigManager.h";
 #include "drawer.h";
 
+#define FW_VERSION "PROTOCOL_VERSION:" VERSION " FIRMWARE_NAME:" FW_CODE_NAME " MACHINE_TYPE:" MACHINE_NAME
+
 #if defined(WIFI)
 #include "wifi.h";
 #endif
@@ -63,8 +65,13 @@ void readSerial(){
 	buffer[0] = (char)0;
 	uint32_t len = wifi.read(buffer);
 	if( len > 0 ){
-    	//Serial.println( "From WIFI[" + (String)len + "]: " + (String)buffer );
-		commandReady = (buffer[0] == commandG || buffer[0] == commandM) && buffer[len-1] == '\n';
+    	Serial.print( F("From WIFI[") );
+    	Serial.print( len );
+    	Serial.print( F( "]: " ) );
+    	Serial.print( (String)buffer );
+    	Serial.println( (int)buffer[len-1] );
+
+		commandReady = (buffer[0] == commandG || buffer[0] == commandM);// && buffer[len-1] == '\n';
 		if(!commandReady)
 			notifyReady();
   	}
@@ -89,13 +96,13 @@ void readSerial(){
 
 void notifyReady(){
 	currBufLen = 0;
- 	logMessage(">");
+ 	logMessage("\n\n>");
 }
 
 void logMessage(String msg) {
 	Serial.println( msg );
  #if defined(WIFI)
-	wifi.write( msg );
+	wifi.write( msg + '\n' );
  #else
 	Serial.print( msg );
  #endif
@@ -215,6 +222,9 @@ void processCommand() {
 			//M112: Emergency Stop
 			//M114: Get Current Position
 			//M115: Get Firmware Version and Capabilities
+			case 115:
+				logMessage( String(FW_VERSION) );
+				break;
 			//M201: Set max printing acceleration
 			//M500: Store parameters in EEPROM
 			case 500: 

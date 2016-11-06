@@ -1,50 +1,51 @@
 <div class="row">
-	<div class="loader" ng-if="loading">Loading</div>
 	<div class="col-xs-12 col-md-4">
+		<!-- <div class="loader" ng-if="loading">Loading</div> -->
 		<div class="row">
-			<button class="btn btn-default btn-block btn-lg btn-raised" ng-if="!status.connected" ng-click="connect()">Connect</button>
-			<button class="btn btn-default btn-block btn-lg btn-raised" ng-if="status.connected" ng-click="disconnect()">Disconnect</button>
-			{{status}}
+			<button class="btn btn-default btn-block btn-lg btn-raised" ng-if="!status.connected" ng-click="connect()"><i class="material-icons text-muted">power_settings_new</i></button>
+			<button class="btn btn-default btn-block btn-lg btn-raised" ng-if="status.connected" ng-click="disconnect()"><i class="material-icons text-danger">power_settings_new</i></button>
 			<dl class="dl-horizontal" ng-if="status">
 				<dt>Status:</dt>
 				<dd>{{status.connected ? 'Connected' : 'Disconnected'}}</dd>
+				<dt>Bot type:</dt>
+				<dd>{{status.machineType || '-'}}</dd>
 				<dt>Version:</dt>
-				<dd>{{status.version||'-'}}</dd>
+				<dd>{{status.version || '-'}} ({{status.fwCodeName || '-'}}) </dd>
 			</dl>
 		</div>
 	</div>
 	<div class="col-xs-12 col-md-4">
 		<div class="row">
 			<div class="col-xs-4 col-xs-offset-4 text-center">
-				<a class="btn btn-default btn-block btn-lg btn-raised" ng-click="move($event, 'y', 100)"><i class="glyphicon glyphicon-arrow-up"></i></a>
+				<a class="btn btn-default btn-block btn-lg btn-raised" ng-click="move('y', distance)"><i class="material-icons">arrow_upward</i></a>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-xs-4 text-center">
-				<a class="btn btn-default btn-block btn-lg btn-raised" ng-click="move($event, 'x', -100)"><i class="glyphicon glyphicon-arrow-left"></i></a>
+				<a class="btn btn-default btn-block btn-lg btn-raised" ng-click="move('x', -distance)"><i class="material-icons">arrow_back</i></a>
 			</div>
 			<div class="col-xs-4 text-center">
-				<a class="btn btn-default btn-block btn-lg btn-raised" ng-click="move($event, 'x', -100)"><i class="glyphicon glyphicon-home"></i></a>
+				<a class="btn btn-default btn-block btn-lg btn-raised" ng-click="moveHome()"><i class="material-icons">home</i></a>
 			</div>
 			<div class="col-xs-4 text-center">
-				<a class="btn btn-default btn-block btn-lg btn-raised" ng-click="move($event, 'x', 100)"><i class="glyphicon glyphicon-arrow-right"></i></a>
+				<a class="btn btn-default btn-block btn-lg btn-raised" ng-click="move('x', distance)"><i class="material-icons">arrow_forward</i></a>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-xs-4 col-xs-offset-4 text-center">
-				<a class="btn btn-default btn-block btn-lg btn-raised" ng-click="move($event, 'y', -100)"><i class="glyphicon glyphicon-arrow-down"></i></a>
+				<a class="btn btn-default btn-block btn-lg btn-raised" ng-click="move('y', -distance)"><i class="material-icons">arrow_downward</i></a>
 			</div>
 		</div>
-
+{{distance}}
 		<div class="row">
 			<div class="col-xs-4 text-center">
-				<a class="btn btn-default btn-block btn-lg btn-raised" ng-click="move($event, 'x', 100)">1</a>
+				<a class="btn btn-default btn-block btn-lg btn-raised" ng-class="{'active': distance==1}" ng-click="distance=1">1</a>
 			</div>
 			<div class="col-xs-4 text-center">
-				<a class="btn btn-default btn-block btn-lg btn-raised" ng-click="move($event, 'x', 100)">10</a>
+				<a class="btn btn-default btn-block btn-lg btn-raised" ng-class="{'active': distance==10}" ng-click="distance=10">10</a>
 			</div>
 			<div class="col-xs-4 text-center">
-				<a class="btn btn-default btn-block btn-lg btn-raised" ng-click="move($event, 'x', 100)">100</a>
+				<a class="btn btn-default btn-block btn-lg btn-raised" ng-class="{'active': distance==100}" ng-click="distance=100">100</a>
 			</div>
 		</div>
 	</div>
