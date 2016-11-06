@@ -1,6 +1,6 @@
 angular.module('WifiDrawBotConsole').controller('GCodeListController', [
-	'$scope', '$http',
-	function ($scope, $http) {
+	'$scope', 'api',
+	function ($scope, api) {
 
 		function mapItems(item) {
 			return {
@@ -13,7 +13,7 @@ angular.module('WifiDrawBotConsole').controller('GCodeListController', [
 			$scope.activeItem.status = data.status;
 
 			if( data.isRunning ) {
-				$http.get('/api/g-codes/status')
+				api.getExecStatus()
 					.success(checkStatus)
 					.error(errHandler);
 			}
@@ -37,7 +37,7 @@ angular.module('WifiDrawBotConsole').controller('GCodeListController', [
 			$scope.items = data.map(mapItems);
 		}
 
-		$http.get('/api/collection/list')
+		api.getCollection()
 			.success(renderList)
 			.error(errHandler);
 
@@ -48,7 +48,7 @@ angular.module('WifiDrawBotConsole').controller('GCodeListController', [
 			$scope.error = null;
 			$scope.activeItem = item;
 
-			$http.get('/api/g-codes/exec/' + item.fileName)
+			api.execFile(item.fileName)
 				.success(setRunStatus)
 				.error(errHandler);
 		}

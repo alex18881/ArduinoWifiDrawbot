@@ -1,4 +1,5 @@
 var express = require('express'),
+	path = require('path'),
 	router = express.Router(),
 	fs = require("fs"),
 	validCommands = { "G": 1, "M": 1 },
@@ -16,9 +17,8 @@ function getGCodes(req, res, next) {
 }
 
 function loadFile(fileName) {
+	console.log( "Reading file: %s", fileName );
 	return new Promise( (resolve, reject) => {
-
-
 		var filename = path.join( gCodeRoot, fileName);
 		console.log( "Reading file: %s", filename );
 

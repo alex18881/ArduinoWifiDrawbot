@@ -3,6 +3,7 @@ var express = require('express'),
 	utils = require('util'),
 	router = express.Router(),
 	connection,
+	collection,
 	params = null,
 	versionTimer,
 	pingPeriod = 3000,
@@ -173,11 +174,13 @@ function togglePen(req, res, next) {
 function execFile( req, res, next ) {
 	collection.loadFile(req.body.filename)
 		.then( (arrCmds) => {
+			console.log('loading file %s commands %d', req.body.filename, arrCmds.length );
 			execCommands(arrCmds);
 			res.json('ok');
 			next();
 		} )
 		.catch( (err) => {
+			console.log('BOT: Error loading file %s', req.body.filename, err);
 			res.status(500).json(err);
 			next();
 		} );
@@ -192,7 +195,8 @@ router.post( "/exec", execFile);
 
 router.get("/status", getStatus);
 
-module.exports = function( settings, collection ){
+module.exports = function( settings, collectionInst ){
+	collection = collectionInst;
 	params = settings;
 	return {
 		api: router

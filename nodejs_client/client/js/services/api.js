@@ -7,7 +7,7 @@ angular.module('WifiDrawBotConsole').service('api', [
 		}
 
 		function move(x, y) {
-			return $http.get('/api/bot/move/' + x + '/' + y);	
+			return $http.get('/api/bot/move/' + x + '/' + y);
 		}
 
 		function connect() {
@@ -18,7 +18,17 @@ angular.module('WifiDrawBotConsole').service('api', [
 			return $http.post('/api/bot/disconnect', {});
 		}
 
+		function execFile(fileName) {
+			return $http.post('/api/bot/exec', {filename: fileName});
+		}
+
+		function getCollection() {
+			return $http.get('/api/collection/list');
+		}
+
 		return {
+			getCollection: getCollection,
+			execFile: execFile,
 			move : move,
 			getStatus: getStatus,
 			connect: connect,
