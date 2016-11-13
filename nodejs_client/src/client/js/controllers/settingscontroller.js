@@ -1,3 +1,7 @@
+Vue.component('app-settings',  {
+	
+});
+/*
 angular.module('WifiDrawBotConsole').controller('SettingsController', [
 	'$scope',
 	function($scope) {
@@ -21,3 +25,4 @@ angular.module('WifiDrawBotConsole').controller('SettingsController', [
 	}
 
 ]);
+*/

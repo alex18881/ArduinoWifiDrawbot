@@ -1,4 +1,7 @@
-angular.module('WifiDrawBotConsole').controller('GCodeListController', [
+Vue.component('modelsCollection',  {
+	
+});
+/*angular.module('WifiDrawBotConsole').controller('GCodeListController', [
 	'$scope', 'api',
 	function ($scope, api) {
 
@@ -53,4 +56,4 @@ angular.module('WifiDrawBotConsole').controller('GCodeListController', [
 				.error(errHandler);
 		}
 	}
-]);
+]);*/

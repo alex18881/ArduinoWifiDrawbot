@@ -7,7 +7,7 @@ app.use(function(req, res, next) {
 	console.log( new Date(), req.method, req.url );
 	next();
 });
-app.use(express.static('client'));
+app.use(express.static('./client'));
 app.use(bodyParser.json({strict: false}));
 app.use('/api', api);
 

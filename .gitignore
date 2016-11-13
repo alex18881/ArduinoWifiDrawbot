@@ -29,4 +29,5 @@
 
 #node
 node_modules
+.tmp
 *.sublime-workspace

@@ -1,3 +1,7 @@
+Vue.component('manualControl',  {
+	
+});
+/*
 angular.module('WifiDrawBotConsole').controller('ManualController', [
 	'$scope', 'api', 'notifyError',
 	function($scope, api, notifyError) {
@@ -56,3 +60,4 @@ angular.module('WifiDrawBotConsole').controller('ManualController', [
 		load();
 	}
 ]);
+*/
