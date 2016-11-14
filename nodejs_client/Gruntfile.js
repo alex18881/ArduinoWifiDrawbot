@@ -5,7 +5,7 @@ module.exports = function(grunt) {
 		console.log( 'Processing template file:', filePath );
 
 		return '<script type="text/x-template" id="' +
-			filePath.replace( './src/client', '' ) +
+			filePath.replace( './src/client/', '' ).replace(/[\./\\]+/g, "-") +
 			'">' +
 			src +
 			'</script>';
@@ -39,6 +39,11 @@ module.exports = function(grunt) {
 				files: [
 					{ src: 'css/{*,**/*}.*', dest: '<%=vars.dist.client%>/', cwd: '<%=vars.src.client%>/', expand: true }	
 				]
+			},
+			gcodes: {
+				files: [
+					{ src: 'library/{*,**/*}.*', dest: '<%=vars.dist.root%>/', cwd: '<%=vars.src.root%>/', expand: true }
+				]
 			}
 		},
 
@@ -54,7 +59,13 @@ module.exports = function(grunt) {
 
 		concat: {
 			js: {
-				src: ['<%=vars.src.client%>/{*,**/*}.js'],
+				options: {
+					separator: ';\n',
+				},
+				src: [
+					['<%=vars.src.client%>/js/**/*.js','!<%=vars.src.client%>/js/app.js'],
+					'<%=vars.src.client%>/js/app.js'
+				],
 				dest: '<%=vars.dist.client%>/js/app.js'
 			},
 

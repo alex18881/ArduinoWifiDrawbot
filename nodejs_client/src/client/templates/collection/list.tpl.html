@@ -1,16 +1,18 @@
-<div class="row">
-	<div ng-repeat="item in items track by $index" class="col-xs-4">
+<div class="container">
+	<div class="row">
+		<div v-for="item in items" class="col-xs-4">
 
-		<div class="panel"  ng-class="{'text-danger': item.status.error, 'text-success': !item.status.error, 'panel-primary': !item.status}">
-			<div class="panel-heading">
-				<h3 class="panel-title">{{item.fileName}}</h3>
+			<div class="panel"  ng-class="{'text-danger': item.status.error, 'text-success': !item.status.error, 'panel-primary': !item.status}">
+				<div class="panel-heading">
+					<h3 class="panel-title">{{item.fileName}}</h3>
+				</div>
+				<div class="panel-body">
+					{{item.status.message}}
+					<a href="#" class="btn btn-success btn-raised btn-block" ng-click="runScript($event, item)">{{item.fileName}}</a>
+				</div>
 			</div>
-			<div class="panel-body">
-				{{item.status.message}}
-				<a href="#" class="btn btn-success btn-raised btn-block" ng-click="runScript($event, item)">{{item.fileName}}</a>
-			</div>
+
 		</div>
-
+		<p class="text-error">{{error}}</p>
 	</div>
-	<p class="text-error">{{error}}</p>
 </div>

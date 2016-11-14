@@ -1,16 +1,47 @@
-Vue.component('modelsCollection',  {
+Vue.component('models-collection', function(resolve, reject){
 	
+	var model = {
+			error: null,
+			activeItem: null,
+			items: []
+		},
+
+		component = {
+			template: '#templates-collection-list-tpl-html',
+			data: function () {
+				return model;
+			}
+		};
+
+	function mapItems(item) {
+		return {
+			fileName: item,
+			status: ''
+		}
+	}
+
+	function errHandler(err){
+		model.error = err;
+		model.activeItem = null;
+		reject();
+	}
+	
+	function renderList(data) {
+		model.items = data.data.map(mapItems);
+		resolve(component);
+	}
+
+	api.getCollection()
+		.then(renderList)
+		.catch(errHandler);
 });
+
+
 /*angular.module('WifiDrawBotConsole').controller('GCodeListController', [
 	'$scope', 'api',
 	function ($scope, api) {
 
-		function mapItems(item) {
-			return {
-				fileName: item,
-				status: ''
-			}
-		}
+		
 
 		function checkStatus(data) {
 			$scope.activeItem.status = data.status;
@@ -32,17 +63,7 @@ Vue.component('modelsCollection',  {
 			}
 		}
 
-		function errHandler(err){
-			$scope.error = err;
-			$scope.activeItem = null;
-		}
-		function renderList(data) {
-			$scope.items = data.map(mapItems);
-		}
 
-		api.getCollection()
-			.success(renderList)
-			.error(errHandler);
 
 
 		$scope.runScript = function(evt, item) {

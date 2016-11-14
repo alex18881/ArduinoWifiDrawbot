@@ -14,7 +14,9 @@
 	"dependencies": {
 		"telnet-client": "latest",
 		"body-parser": "latest",
-		"express": "latest"
+		"express": "latest",
+		"gcanvas": "latest",
+		"canvg": "latest"
 	},
 	"devDependencies": {
 		"grunt": "latest",

@@ -1,5 +1,5 @@
-Vue.component('app-settings',  {
-	
+Vue.component('app-settings', {
+	template: '#templates-settings-connection-tpl-html'
 });
 /*
 angular.module('WifiDrawBotConsole').controller('SettingsController', [
