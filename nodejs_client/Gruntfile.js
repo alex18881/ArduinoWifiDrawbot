@@ -37,7 +37,7 @@ module.exports = function(grunt) {
 			},
 			css: {
 				files: [
-					{ src: 'css/{*,**/*}.*', dest: '<%=vars.dist.client%>/', cwd: '<%=vars.src.client%>/', expand: true }	
+					{ src: 'css/{*,**/*}.*', dest: '<%=vars.dist.client%>/', cwd: '<%=vars.src.client%>/', expand: true }
 				]
 			},
 			gcodes: {
@@ -49,11 +49,13 @@ module.exports = function(grunt) {
 
 		
 		less: {
-			options: {
-				//paths: ['assets/css']
-			},
-			files: {
-				'<%=vars.dist.client%>/css/main.css': '<%=vars.src.client%>/less/main.less'
+			dev: {
+				options: {
+					paths: ['<%=vars.src.client%>/less']
+				},
+				files: {
+					'<%=vars.dist.client%>/css/site.css': '<%=vars.src.client%>/less/site.less'
+				}
 			}
 		},
 
@@ -119,6 +121,13 @@ module.exports = function(grunt) {
 			scripts: {
 				files: ['<%=vars.src.client%>/{*,**/*}.js'],
 				tasks: ['concat:js'],
+				options: {
+					spawn: false,
+				}
+			},
+			less: {
+				files: ['<%=vars.src.client%>/{*,**/*}.{less,css}'],
+				tasks: ['less', 'copy:css'],
 				options: {
 					spawn: false,
 				}

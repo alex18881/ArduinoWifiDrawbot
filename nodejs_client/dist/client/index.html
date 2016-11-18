@@ -14,25 +14,34 @@
 	<!-- Bootstrap Material Design -->
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-material-design.min.css">
 
-	<script type="text/x-template" id="templates-collection-list-tpl-html"><div class="container">
-	<div class="row">
-		<div v-for="item in items" class="col-xs-4">
+	<link rel="stylesheet" type="text/css" href="css/site.css">
 
-			<div class="panel"  ng-class="{'text-danger': item.status.error, 'text-success': !item.status.error, 'panel-primary': !item.status}">
-				<div class="panel-heading">
-					<h3 class="panel-title">{{item.fileName}}</h3>
+	<script type="text/x-template" id="templates-collection-list-tpl-html"><div class="container card-list">
+	<h2>Models collection</h2>
+	<div class="row">
+		<div v-for="item in items" class="col-xs-6 col-sm-4 col-md-3">
+			<div class="card">
+				<div class="cover">
+					<a href="#" @click.prevent="printModel(item)">
+						<span class="cover-image"><model-thumbnail :svg="item.svg"></model-thumbnail></span>
+						<span class="btn btn-success btn-fab" ng-click="runScript($event, item)">
+							<i class="material-icons">print</i>
+						</span>
+					</a>
 				</div>
-				<div class="panel-body">
-					{{item.status.message}}
-					<a href="#" class="btn btn-success btn-raised btn-block" ng-click="runScript($event, item)">{{item.fileName}}</a>
+				<div class="details">
+					{{item.fileName}}
 				</div>
 			</div>
-
+			<!-- <p class="text-error">{{error}}</p> -->
 		</div>
-		<p class="text-error">{{error}}</p>
 	</div>
+	<file-upload :is-multiple="false" filter=".svg" css-class="btn btn-success btn-fab btn-lg page-float-btn" @file-selected="addSvg">
+		<i class="material-icons">add</i>
+	</file-upload>
+	<modal-progress :files="uploads"></modal-progress>
 </div></script>
-<script type="text/x-template" id="templates-common-header-tpl-html"><nav class="navbar navbar-default">
+<script type="text/x-template" id="templates-common-header-tpl-html"><nav class="navbar navbar-warning">
 	<div class="container">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -44,7 +53,7 @@
 			<a class="navbar-brand" href="#">Wifi Drawbot</a>
 		</div>
 
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		<div class="collapse navbar-warning-collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 				<router-link tag="li" :to="{name: 'manual'}" active-class="active"><a>Manual control</a></router-link>
 				<router-link tag="li" :to="{name: 'collection'}" active-class="active"><a>Collection</a></router-link>
@@ -53,6 +62,14 @@
 		</div>
 	</div>
 </nav></script>
+<script type="text/x-template" id="templates-common-modalprogress-tpl-html"><div class="snackbar-container">
+	<div class="snackbar snackbar-opened upload-progress" v-for="item in files">
+		<h4>{{item.fileName}}</h4>
+		<div class="progress">
+			<div class="progress-bar progress-bar-info" :style="{'width': (item.progress * 100) + '%'}"></div>
+		</div>
+	</div>
+</div></script>
 <script type="text/x-template" id="templates-manual-move-tpl-html"><div class="container">
 	<div class="row">
 		<div class="col-xs-12 col-md-4">
@@ -105,54 +122,47 @@
 		</div>
 	</div>
 </div></script>
-<script type="text/x-template" id="templates-settings-connection-tpl-html"><div class="container">
-<div class="row">
-	<div class="col-xs-12">
-		<div class="panel panel-default">
-			<div class="panel-heading"><h5 class="panel-title"><a href="#">Connection</a></h5></div>
-			<div class="panel-body">
-				<form ng-submit="saveSettings($event)" class="form-horizontal">
-					<div class="form-group">
-						<label for="inputHost" class="col-sm-2 control-label">Host</label>
-						<div class="col-sm-10">
-							<input type="text" ng-model="settings.host" class="form-control" id="inputHost" placeholder="Host">
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="inputHost" class="col-sm-2 control-label">Port</label>
-						<div class="col-sm-10">
-							<input type="number" ng-model="settings.port" class="form-control" id="inputPort" placeholder="Port">
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="inputHost" class="col-sm-2 control-label">Timeout</label>
-						<div class="col-sm-10">
-							<input type="number" ng-model="settings.timeout" class="form-control" id="inputTimeout" placeholder="Timeout">
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-sm-offset-2 col-sm-10">
-							<button type="submit" class="btn btn-success">Save</button>
-							<button type="button" ng-click="settings=false" class="btn btn-default">cancel</button>
-						</div>
-					</div>
-				</form>
-			</div>
+<script type="text/x-template" id="templates-settings-connection-tpl-html"><div class="well page active">
+	<h1 class="header">Connection</h1>
+	<form ng-submit="saveSettings($event)">
+		<div class="form-group">
+			<input type="text" ng-model="settings.host" class="form-control" id="inputHost" placeholder="Host">
 		</div>
-
-		<div class="panel panel-default">
-			<div class="panel-heading"><h5 class="panel-title"><a href="#">EEPROM</a></h5></div>
-			<div class="panel-body">
-			EEPROM
-			</div>
+		<div class="form-group">
+			<input type="number" ng-model="settings.port" class="form-control" id="inputPort" placeholder="Port">
+		</div>
+		<div class="form-group">
+			<input type="number" ng-model="settings.timeout" class="form-control" id="inputTimeout" placeholder="Timeout">
+		</div>
+		<div class="form-group text-right">
+			<button type="submit" class="btn btn-success">Save</button>
+			<button type="button" ng-click="settings=false" class="btn btn-default">cancel</button>
+		</div>
+	</form>
+</div></script>
+<script type="text/x-template" id="templates-settings-eeprom-tpl-html"><div class="well page">
+	<h1 class="header"><a href="#">EEPROM</a></h1>
+	EEPROM
+</div></script>
+<script type="text/x-template" id="templates-settings-index-tpl-html"><div class="container">
+	<div class="row">
+		<div class="col-xs-3">
+			<nav class="menu">
+				<ul class="nav nav-pills nav-stacked">
+					<router-link tag="li" :to="{name: 'connection'}" active-class="active"><a>Connection</a></router-link>
+					<router-link tag="li" :to="{name: 'eeprom'}" active-class="active"><a>EEPROM</a></router-link>
+				</ul>
+			</nav>
+		</div>
+		<div class="col-xs-9">
+			<router-view></router-view>
 		</div>
 	</div>
-</div>
 </div></script>
 </head>
 <body>
 	<div class="app-container">
-		<main-header></main-header>
+		<router-view name="header"></router-view>
 		<router-view></router-view>
 	</div>
 

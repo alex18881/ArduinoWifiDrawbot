@@ -24,12 +24,36 @@ var api = function ($http) {
 		return $http.get('/api/collection/list');
 	}
 
+	function uploadModel(fileInfo) {
+		var uploadId = fileInfo.id,
+			fileName = fileInfo.file.name,
+			data = new FormData();
+
+		data.append('file', fileInfo.file);
+
+		return $http.post(
+			'/api/collection/add',
+			data,
+			{
+				onUploadProgress: function(evt) {
+					fileInfo.onProgress(uploadId, evt.loaded / evt.total);
+				}
+			}
+		).then(function(){
+			return {
+				id: uploadId,
+				fileName: fileName
+			};
+		});
+	}
+
 	return {
 		getCollection: getCollection,
 		execFile: execFile,
 		move : move,
 		getStatus: getStatus,
 		connect: connect,
-		disconnect: disconnect
+		disconnect: disconnect,
+		uploadModel: uploadModel
 	}
 } (axios);

@@ -1,5 +1,11 @@
 Vue.component('app-settings', {
-	template: '#templates-settings-connection-tpl-html'
+	template: '#templates-settings-index-tpl-html',
+	computed: {
+		test: function(){
+			console.log('App settings');
+			return 'TEST';
+		}
+	}
 });
 /*
 angular.module('WifiDrawBotConsole').controller('SettingsController', [

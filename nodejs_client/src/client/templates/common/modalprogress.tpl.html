@@ -1,0 +1,8 @@
+<div class="snackbar-container">
+	<div class="snackbar snackbar-opened upload-progress" v-for="item in files">
+		<h4>{{item.fileName}}</h4>
+		<div class="progress">
+			<div class="progress-bar progress-bar-info" :style="{'width': (item.progress * 100) + '%'}"></div>
+		</div>
+	</div>
+</div>

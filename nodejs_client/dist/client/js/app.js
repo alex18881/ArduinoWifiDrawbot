@@ -1,31 +1,3 @@
-Vue.component('app-settings', {
-	template: '#templates-settings-connection-tpl-html'
-});
-/*
-angular.module('WifiDrawBotConsole').controller('SettingsController', [
-	'$scope',
-	function($scope) {
-		$scope.openSettings = function(evt){
-			evt.preventDefault();
-			$http.get('/api/settings')
-				.success(function(data){
-					$scope.settings = data;
-				})
-				.error(errHandler);
-		}
-
-		$scope.saveSettings = function(evt) {
-			evt.preventDefault();
-			$http.post('/api/settings', $scope.settings)
-				.success(function(data){
-					$scope.settings = null;
-				})
-				.error(errHandler);
-		}
-	}
-
-]);
-*/;
 Vue.component('main-header', {
 	template: '#templates-common-header-tpl-html'
 });;
@@ -124,19 +96,99 @@ Vue.component('models-collection', function(resolve, reject){
 	var model = {
 			error: null,
 			activeItem: null,
-			items: []
+			items: [],
+			uploads: {}
 		},
+		count = 0,
 
 		component = {
 			template: '#templates-collection-list-tpl-html',
 			data: function () {
 				return model;
+			},
+			methods: {
+				printModel: printModel,
+				addSvg: addSvg
 			}
 		};
 
+
+	function updateProgress(id, value) {
+		if(model.uploads[id]){
+			Vue.set(model.uploads[id], 'progress', value);
+		}
+	}
+
+	function showProgress(file){
+		var uploadId = 'modelUpload' + count++;
+
+		Vue.set(model.uploads, uploadId, {
+			fileName: file.name,
+			progress: 0
+		});
+
+		return {
+			id: uploadId,
+			file: file,
+			onProgress: updateProgress
+		};
+	}
+
+	function uploadDone(uploadInfo){
+		if(uploadInfo.id && model.uploads[uploadInfo.id]) {
+			Vue.delete(model.uploads, uploadInfo.id);
+			uploadInfo.content = '<svg></svg>';
+			Vue.set(model.items, model.items.length, mapItems(uploadInfo));
+		}
+	}
+
+	function uploadFile(file) {
+		return Promise.resolve(file)
+			.then(showProgress)
+			.then(api.uploadModel)
+			.then(uploadDone);
+	}
+
+	function addSvg(files) {
+		Promise.all(files.map(uploadFile))
+			.then(api.getCollection)
+			.then(renderList)
+			.catch(errHandler);
+	}
+
+	function checkStatus(data) {
+		model.activeItem.status = data.status;
+
+		if( data.isRunning ) {
+			api.getExecStatus()
+				.then(checkStatus)
+				.catch(errHandler);
+		}
+	}
+
+	function setRunStatus(data) {
+		if(data.error){
+			errHandler(data);
+		} else if(model.activeItem) {
+			checkStatus(data);
+		} else {
+			model.error = 'not selected';
+		}
+	}
+
+	function printModel(item){
+		model.error = null;
+		model.activeItem = item;
+
+		api.execFile(item.fileName)
+			.then(setRunStatus)
+			.catch(errHandler);
+	}
+
 	function mapItems(item) {
 		return {
-			fileName: item,
+			svg: item.content,
+			fileName: item.fileName,
 			status: ''
 		}
 	}
@@ -144,61 +196,108 @@ Vue.component('models-collection', function(resolve, reject){
 	function errHandler(err){
 		model.error = err;
 		model.activeItem = null;
-		reject();
 	}
 	
 	function renderList(data) {
-		model.items = data.data.map(mapItems);
-		resolve(component);
+		Vue.set(model, 'items', data.data.map(mapItems));
+	}
+
+	function resolveComponent() {
+		resolve(component)
 	}
 
 	api.getCollection()
 		.then(renderList)
+		.then(resolveComponent)
 		.catch(errHandler);
+});;
+Vue.component('model-thumbnail', {
+	props: ['svg'],
+
+	template: '<img :src="dataUrl" />',
+
+	computed: {
+		dataUrl: function() {
+			return this.svg ? 'data:image/svg+xml;base64,' + btoa( unescape( encodeURIComponent((this.svg + '').trim().replace(/[\s\n\r]+/g, ' ')) ) ) : '';
+		}
+	}
+});;
+Vue.component('page-control', {
+	template: '<router-view></router-view>'
+});;
+Vue.component('app-settings', {
+	template: '#templates-settings-index-tpl-html',
+	computed: {
+		test: function(){
+			console.log('App settings');
+			return 'TEST';
+		}
+	}
 });
-
-
-/*angular.module('WifiDrawBotConsole').controller('GCodeListController', [
-	'$scope', 'api',
-	function ($scope, api) {
-
-		
-
-		function checkStatus(data) {
-			$scope.activeItem.status = data.status;
-
-			if( data.isRunning ) {
-				api.getExecStatus()
-					.success(checkStatus)
-					.error(errHandler);
-			}
-		}
-
-		function setRunStatus(data) {
-			if(data.error){
-				errHandler(data);
-			} else if($scope.activeItem) {
-				checkStatus(data);
-			} else {
-				$scope.error = { message: 'not selected' };
-			}
-		}
-
-
-
-
-		$scope.runScript = function(evt, item) {
+/*
+angular.module('WifiDrawBotConsole').controller('SettingsController', [
+	'$scope',
+	function($scope) {
+		$scope.openSettings = function(evt){
 			evt.preventDefault();
+			$http.get('/api/settings')
+				.success(function(data){
+					$scope.settings = data;
+				})
+				.error(errHandler);
+		}
 
-			$scope.error = null;
-			$scope.activeItem = item;
-
-			api.execFile(item.fileName)
-				.success(setRunStatus)
+		$scope.saveSettings = function(evt) {
+			evt.preventDefault();
+			$http.post('/api/settings', $scope.settings)
+				.success(function(data){
+					$scope.settings = null;
+				})
 				.error(errHandler);
 		}
 	}
-]);*/;
+
+]);
+*/;
+Vue.component('connection-settings', {
+	template: '#templates-settings-connection-tpl-html'
+});;
+Vue.component('eeprom-settings', {
+	template: '#templates-settings-eeprom-tpl-html'
+});;
+Vue.component('file-upload', {
+	template: '<span>\
+		<input type="file" :accept="filter" @change="selectFile" :multiple="isMultiple" style="display: none;">\
+		<a href="#upload-file" :class="cssClass" @click.prevent="openFileDialog"><slot></slot></a>\
+	</span>',
+	props: {
+		cssClass: String,
+		filter: String,
+		isMultiple: {
+			type: Boolean,
+			default: false,
+			required: true
+		}
+	},
+	methods: {
+		openFileDialog: function(){
+			this.fileInput.click();
+		},
+		selectFile: function() {
+			var files = this.fileInput.files;
+			this.$emit('file-selected', ([]).slice.call(files));
+		}
+	},
+	computed: {
+		fileInput: function(){
+			return this.$el.querySelector('input[type=file]');
+		}
+	}
+});;
+Vue.component('modal-progress', {
+	template: '#templates-common-modalprogress-tpl-html',
+	props: ['files']
+});;
 var api = function ($http) {
 
 	function getStatus() {
@@ -225,13 +324,37 @@ var api = function ($http) {
 		return $http.get('/api/collection/list');
 	}
 
+	function uploadModel(fileInfo) {
+		var uploadId = fileInfo.id,
+			fileName = fileInfo.file.name,
+			data = new FormData();
+
+		data.append('file', fileInfo.file);
+
+		return $http.post(
+			'/api/collection/add',
+			data,
+			{
+				onUploadProgress: function(evt) {
+					fileInfo.onProgress(uploadId, evt.loaded / evt.total);
+				}
+			}
+		).then(function(){
+			return {
+				id: uploadId,
+				fileName: fileName
+			};
+		});
+	}
+
 	return {
 		getCollection: getCollection,
 		execFile: execFile,
 		move : move,
 		getStatus: getStatus,
 		connect: connect,
-		disconnect: disconnect
+		disconnect: disconnect,
+		uploadModel: uploadModel
 	}
 } (axios);;
 /*
@@ -244,19 +367,6 @@ angular.module('WifiDrawBotConsole').value('notifyError', function (err) {
 });
 
 */;
-/*angular.module('WifiDrawBotConsole', ['ngRoute', 'route-segment', 'view-segment'])
-.config(function($routeSegmentProvider){
-
-	$routeSegmentProvider
-		.when('/', 'manual')
-		.when('/manual', 'manual')
-		.when('/collection', 'collection')
-		.when('/settings', 'settings')
-
-	.segment('manual', { controller: 'ManualController', templateUrl: 'templates/manual/move.tpl.html' })
-	.segment('collection', { controller: 'GCodeListController', templateUrl: 'templates/collection/list.tpl.html' })
-	.segment('settings', { controller: 'SettingsController', templateUrl: 'templates/settings/connection.tpl.html' });
-});*/
 (function (){
 	new Vue({
 		el: '.app-container',
@@ -264,22 +374,41 @@ angular.module('WifiDrawBotConsole').value('notifyError', function (err) {
 			routes: [
 				{
 					path: '/',
-					redirect: '/manual'
-				},
-				{ 
-					name: 'manual',
-					path: '/manual',
-					component: 'manual-control'
-				},
-				{
-					name: 'collection',
-					path: '/collection',
-					component: 'models-collection'
-				},
-				{
-					name: 'settings',
-					path: '/settings',
-					component: 'app-settings'
+					redirect: 'manual',
+					components: {
+						header: Vue.component('main-header'),
+						default: Vue.component('page-control')
+					},
+					children: [
+						{ 
+							name: 'manual',
+							path: 'manual',
+							component: Vue.component('manual-control')
+						},
+						{
+							name: 'collection',
+							path: 'collection',
+							component: Vue.component('models-collection')
+						},
+						{
+							name: 'settings',
+							path: 'settings',
+							component: Vue.component('app-settings'),
+							redirect: {name:'connection'},
+							children: [
+								{
+									name: 'eeprom',
+									path: 'eeprom',
+									component: Vue.component('eeprom-settings')
+								},
+								{
+									name: 'connection',
+									path: 'connection',
+									component: Vue.component('connection-settings')
+								}
+							]
+						}
+					]
 				}
 			]
 		})

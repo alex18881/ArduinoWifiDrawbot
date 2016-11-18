@@ -1,16 +1,3 @@
-/*angular.module('WifiDrawBotConsole', ['ngRoute', 'route-segment', 'view-segment'])
-.config(function($routeSegmentProvider){
-
-	$routeSegmentProvider
-		.when('/', 'manual')
-		.when('/manual', 'manual')
-		.when('/collection', 'collection')
-		.when('/settings', 'settings')
-
-	.segment('manual', { controller: 'ManualController', templateUrl: 'templates/manual/move.tpl.html' })
-	.segment('collection', { controller: 'GCodeListController', templateUrl: 'templates/collection/list.tpl.html' })
-	.segment('settings', { controller: 'SettingsController', templateUrl: 'templates/settings/connection.tpl.html' });
-});*/
 (function (){
 	new Vue({
 		el: '.app-container',
@@ -18,22 +5,41 @@
 			routes: [
 				{
 					path: '/',
-					redirect: '/manual'
-				},
-				{ 
-					name: 'manual',
-					path: '/manual',
-					component: 'manual-control'
-				},
-				{
-					name: 'collection',
-					path: '/collection',
-					component: 'models-collection'
-				},
-				{
-					name: 'settings',
-					path: '/settings',
-					component: 'app-settings'
+					redirect: 'manual',
+					components: {
+						header: Vue.component('main-header'),
+						default: Vue.component('page-control')
+					},
+					children: [
+						{ 
+							name: 'manual',
+							path: 'manual',
+							component: Vue.component('manual-control')
+						},
+						{
+							name: 'collection',
+							path: 'collection',
+							component: Vue.component('models-collection')
+						},
+						{
+							name: 'settings',
+							path: 'settings',
+							component: Vue.component('app-settings'),
+							redirect: {name:'connection'},
+							children: [
+								{
+									name: 'eeprom',
+									path: 'eeprom',
+									component: Vue.component('eeprom-settings')
+								},
+								{
+									name: 'connection',
+									path: 'connection',
+									component: Vue.component('connection-settings')
+								}
+							]
+						}
+					]
 				}
 			]
 		})

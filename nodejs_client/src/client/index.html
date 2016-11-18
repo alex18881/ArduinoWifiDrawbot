@@ -14,11 +14,13 @@
 	<!-- Bootstrap Material Design -->
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-material-design.min.css">
 
+	<link rel="stylesheet" type="text/css" href="css/site.css">
+
 	@@include('templates/index.html')
 </head>
 <body>
 	<div class="app-container">
-		<main-header></main-header>
+		<router-view name="header"></router-view>
 		<router-view></router-view>
 	</div>
 

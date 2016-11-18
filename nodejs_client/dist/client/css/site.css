@@ -1,0 +1,83 @@
+html,
+body {
+  height: 100%;
+  display: block;
+}
+.page-float-btn {
+  position: fixed!important;
+  bottom: 2rem;
+  right: 2rem;
+}
+.cover-image {
+  display: block;
+  text-align: center;
+  background: #f2f2f2;
+}
+.cover-image img {
+  background-color: #fff;
+  height: 20em;
+}
+.cover a {
+  display: block;
+  position: relative;
+}
+.cover a .btn {
+  display: none;
+}
+.cover a:hover:before {
+  display: block;
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.cover a:hover .btn {
+  display: block;
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 2;
+}
+.card {
+  margin-bottom: 2rem;
+}
+.card .details {
+  display: block;
+  overflow: hidden;
+  padding: .7rem 1rem;
+  position: relative;
+}
+.card .title {
+  display: block;
+  font-size: 1.6rem;
+  line-height: 1.1;
+  overflow: hidden;
+  text-decoration: none;
+  position: relative;
+  white-space: nowrap;
+}
+/*form*/
+.file-upload {
+  position: relative;
+  overflow: hidden;
+}
+.file-upload input[type=file] {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 1000%;
+  opacity: 0;
+  z-index: 1;
+}
+.snackbar-container {
+  position: fixed;
+  bottom: 0;
+}
+.upload-progress {
+  width: 20em;
+}
