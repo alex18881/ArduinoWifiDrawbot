@@ -44,7 +44,7 @@ Vue.component('models-collection', function(resolve, reject){
 	function uploadDone(uploadInfo){
 		if(uploadInfo.id && model.uploads[uploadInfo.id]) {
 			Vue.delete(model.uploads, uploadInfo.id);
-			uploadInfo.content = '<svg></svg>';
+			uploadInfo.svg = '<svg></svg>';
 			Vue.set(model.items, model.items.length, mapItems(uploadInfo));
 		}
 	}
@@ -94,8 +94,8 @@ Vue.component('models-collection', function(resolve, reject){
 
 	function mapItems(item) {
 		return {
-			svg: item.content,
-			fileName: item.fileName,
+			svg: item.svg,
+			name: item.name,
 			status: ''
 		}
 	}

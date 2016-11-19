@@ -1,6 +1,9 @@
 module.exports = function(grunt) {
 	require("matchdep").filterAll("grunt-*").forEach(grunt.loadNpmTasks);
 
+	var path = require('path'),
+		fs = require('fs');
+
 	function processTemplate(src, filePath) {
 		console.log( 'Processing template file:', filePath );
 
@@ -39,11 +42,6 @@ module.exports = function(grunt) {
 				files: [
 					{ src: 'css/{*,**/*}.*', dest: '<%=vars.dist.client%>/', cwd: '<%=vars.src.client%>/', expand: true }
 				]
-			},
-			gcodes: {
-				files: [
-					{ src: 'library/{*,**/*}.*', dest: '<%=vars.dist.root%>/', cwd: '<%=vars.src.root%>/', expand: true }
-				]
 			}
 		},
 
@@ -77,6 +75,27 @@ module.exports = function(grunt) {
 				},
 				src: ['<%=vars.src.client%>/templates/{*,**/*}.*'],
 				dest: '<%=vars.tmp%>/templates/index.html'
+			},
+
+			gcodes: {
+				options: {
+					banner: '[',
+					separator: ',\n',
+					footer: ']',
+					process: function (content, srcpath) {
+						var fileName = path.parse(srcpath).name;
+							libJSON = {
+								'name': fileName,
+								'svg': content,
+								'gcode': ''
+							};
+						console.log('Adding file to library: ', fileName);
+						return JSON.stringify(libJSON);
+					},
+				},
+
+				src: ['<%=vars.src.root%>/library/{*,**/*}.*'],
+				dest: '<%=vars.dist.root%>/library/db.json'
 			}
 		},
 

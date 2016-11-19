@@ -9,6 +9,7 @@ var express = require('express'),
 	fsSaveFile = promisify(fs.writeFile),
 	validCommands = { "G": 1, "M": 1 },
 	libraryRoot = "./library",
+	libIndex = path.join(libraryRoot, 'db.json'),
 	multer  = require('multer');
 
 function readFile( fileName ) {
@@ -22,25 +23,14 @@ function readFile( fileName ) {
 }
 
 function getGCodes(req, res, next) {
-	fsAaccess(libraryRoot, fs.constants.R_OK | fs.constants.W_OK)
-		.then(function(){
-			return fsReaddir(libraryRoot);
+	fsReadFile( libIndex )
+		.then((content) => {
+			res.json(JSON.parse(content));
 		})
-		.then( function (items) {
-			var promises = [];
-			items.forEach(function(item){
-				promises.push(readFile(item));
-			});
-			return Promise.all(promises);
-		} )
-		.then( function (items) {
-			res.json(items);
-			next();
-		})
-		.catch(function(err){
+		.catch( (err) => {
 			console.warn(err);
 			res.json([]);
-		});
+		} );
 }
 
 function loadFile(fileName) {
@@ -65,8 +55,19 @@ function loadFile(fileName) {
 
 function saveFile(req, res, next) {
 	//console.log( req.file );
-	var filename = path.join( libraryRoot, req.file.originalname);
-	fsSaveFile(filename, req.file.buffer)
+	fsReadFile( libIndex, 'utf8' )
+		.then((indexContent) => {
+			var res = JSON.parse(indexContent),
+				filename = path.parse( libraryRoot, req.file.originalname).name,
+				content = req.file.buffer.toString('utf8');
+
+			res.push({
+				'name': filename,
+				'svg': content,
+				'gcode': ''
+			});
+			return fsSaveFile(libIndex, JSON.stringify(res), 'utf8' );
+		})
 		.then( () => {res.json('Ok');} )
 		.catch( (e) => {res.code(500).json('Ok');} );
 }
