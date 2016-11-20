@@ -1,5 +1,16 @@
 Vue.component('main-header', {
-	template: '#templates-common-header-tpl-html'
+	template: '#templates-common-header-tpl-html',
+	data: function(){
+		return {
+			menuOpen: false
+		}
+	},
+
+	methods: {
+		toggleMenu: function() {
+			this.menuOpen = !this.menuOpen;
+		}
+	}
 });;
 Vue.component('manual-control', function (resolve, reject) {
 
@@ -108,7 +119,8 @@ Vue.component('models-collection', function(resolve, reject){
 			},
 			methods: {
 				printModel: printModel,
-				addSvg: addSvg
+				addSvg: addSvg,
+				removeModel: removeModel
 			}
 		};
 
@@ -151,6 +163,16 @@ Vue.component('models-collection', function(resolve, reject){
 
 	function addSvg(files) {
 		Promise.all(files.map(uploadFile))
+			.then(api.getCollection)
+			.then(renderList)
+			.catch(errHandler);
+	}
+
+	function removeModel(item) {
+		Vue.set(model, 'items', model.items.filter( (a) => { return a !== item; } ));
+		
+		Promise.resolve(item)
+			.then(api.removeModel)
 			.then(api.getCollection)
 			.then(renderList)
 			.catch(errHandler);
@@ -211,14 +233,40 @@ Vue.component('models-collection', function(resolve, reject){
 		.then(resolveComponent)
 		.catch(errHandler);
 });;
-Vue.component('model-thumbnail', {
-	props: ['svg'],
+Vue.component('model-card', {
+	template: '#templates-collection-item-tpl-html',
 
-	template: '<img :src="dataUrl" />',
+	props: ['model'],
+
+	data: function() {
+		return {
+			menuOpen: false
+		}
+	},
+
+	methods: {
+		openMenu: function () {
+			this.menuOpen = true;
+		},
+
+		closeMenu: function () {
+			this.menuOpen = false;
+		},
+
+		printModel: function(){
+			this.closeMenu();
+			this.$emit('model-print');
+		},
+
+		deleteModel: function () {
+			this.closeMenu();
+			this.$emit('model-remove');
+		}
+	},
 
 	computed: {
 		dataUrl: function() {
-			return this.svg ? 'data:image/svg+xml;base64,' + btoa( unescape( encodeURIComponent((this.svg + '').trim().replace(/[\s\n\r]+/g, ' ')) ) ) : '';
+			return this.model.svg ? 'data:image/svg+xml;base64,' + btoa( unescape( encodeURIComponent((this.model.svg + '').trim().replace(/[\s\n\r]+/g, ' ')) ) ) : '';
 		}
 	}
 });;
@@ -347,6 +395,10 @@ var api = function ($http) {
 		});
 	}
 
+	function removeModel(model) {
+		return $http.post('/api/collection/remove', {model: model.name});
+	}
+
 	return {
 		getCollection: getCollection,
 		execFile: execFile,
@@ -354,7 +406,8 @@ var api = function ($http) {
 		getStatus: getStatus,
 		connect: connect,
 		disconnect: disconnect,
-		uploadModel: uploadModel
+		uploadModel: uploadModel,
+		removeModel: removeModel
 	}
 } (axios);;
 /*

@@ -15,7 +15,8 @@ Vue.component('models-collection', function(resolve, reject){
 			},
 			methods: {
 				printModel: printModel,
-				addSvg: addSvg
+				addSvg: addSvg,
+				removeModel: removeModel
 			}
 		};
 
@@ -58,6 +59,16 @@ Vue.component('models-collection', function(resolve, reject){
 
 	function addSvg(files) {
 		Promise.all(files.map(uploadFile))
+			.then(api.getCollection)
+			.then(renderList)
+			.catch(errHandler);
+	}
+
+	function removeModel(item) {
+		Vue.set(model, 'items', model.items.filter( (a) => { return a !== item; } ));
+		
+		Promise.resolve(item)
+			.then(api.removeModel)
 			.then(api.getCollection)
 			.then(renderList)
 			.catch(errHandler);

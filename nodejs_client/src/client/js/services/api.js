@@ -47,6 +47,10 @@ var api = function ($http) {
 		});
 	}
 
+	function removeModel(model) {
+		return $http.post('/api/collection/remove', {model: model.name});
+	}
+
 	return {
 		getCollection: getCollection,
 		execFile: execFile,
@@ -54,6 +58,7 @@ var api = function ($http) {
 		getStatus: getStatus,
 		connect: connect,
 		disconnect: disconnect,
-		uploadModel: uploadModel
+		uploadModel: uploadModel,
+		removeModel: removeModel
 	}
 } (axios);

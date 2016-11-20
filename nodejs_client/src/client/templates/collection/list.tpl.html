@@ -2,20 +2,11 @@
 	<h2>Models collection</h2>
 	<div class="row">
 		<div v-for="item in items" class="col-xs-6 col-sm-4 col-md-3">
-			<div class="card">
-				<div class="cover">
-					<a href="#" @click.prevent="printModel(item)">
-						<span class="cover-image"><model-thumbnail :svg="item.svg"></model-thumbnail></span>
-						<span class="btn btn-success btn-fab" ng-click="runScript($event, item)">
-							<i class="material-icons">print</i>
-						</span>
-					</a>
-				</div>
-				<div class="details">
-					{{item.name}}
-				</div>
-			</div>
-			<!-- <p class="text-error">{{error}}</p> -->
+			<model-card
+				:model="item"
+				@model-print="printModel(item)"
+				@model-remove="removeModel(item)"
+			></model-card>
 		</div>
 	</div>
 	<file-upload :is-multiple="false" filter=".svg" css-class="btn btn-success btn-fab btn-lg page-float-btn" @file-selected="addSvg">

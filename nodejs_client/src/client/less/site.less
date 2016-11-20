@@ -18,38 +18,37 @@ html, body {
 	img {
 		background-color: #fff;
 		height: 20em;
+		margin: 0 auto;
 	}
 }
 
 .cover {
-	a {
-		display: block;
-		position: relative;
+	position: relative;
+	z-index: 1;
 
-		.btn {
-			display: none;
+	.btn {
+		display: none;
+	}
+
+	&:hover{
+		&:before {
+			display: block;
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 0;
+			bottom: 0;
+			right: 0;
+			z-index: 1;
+			background-color: rgba(0,0,0,.4);
 		}
 
-		&:hover{
-			&:before {
-				display: block;
-				content: '';
-				position: absolute;
-				left: 0;
-				top: 0;
-				bottom: 0;
-				right: 0;
-				z-index: 1;
-				background-color: rgba(0,0,0,.4);
-			}
-
-			 .btn {
-				display: block;
-				position: absolute;
-				left: 1rem;
-				bottom: 1rem;
-				z-index: 2;
-			}
+		 .btn {
+			display: block;
+			position: absolute;
+			left: 1rem;
+			bottom: 1rem;
+			z-index: 2;
 		}
 	}
 }
@@ -71,6 +70,49 @@ html, body {
 		text-decoration: none;
 		position: relative;
 		white-space: nowrap;
+	}
+}
+
+.card-menu {
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 2;
+
+	.btn-open {
+		padding: 1em;
+		display: block;
+	}
+	
+	.menu-content {
+		display: none;
+		background-color: #fff;
+		position: absolute;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		margin: 0;
+		min-width: 50%;
+
+		li a {
+			display: block;
+			padding: .5em 1em;
+		}
+	}
+
+	&.menu-open {
+	
+		background-color: rgba(0, 0, 0, .6);
+		left: 0;
+		bottom: 0;
+
+		.btn-open {
+			display: none;
+		}
+
+		.menu-content {
+			display: block;
+		}
 	}
 }
 

@@ -22,10 +22,17 @@ function readFile( fileName ) {
 		} );
 }
 
-function getGCodes(req, res, next) {
-	fsReadFile( libIndex )
+function readIndex() {
+	return fsReadFile( libIndex, 'utf8' )
 		.then((content) => {
-			res.json(JSON.parse(content));
+			return JSON.parse(content);
+		})
+}
+
+function getGCodes(req, res, next) {
+	readIndex()
+		.then((indexJson) => {
+			res.json(indexJson);
 		})
 		.catch( (err) => {
 			console.warn(err);
@@ -55,18 +62,28 @@ function loadFile(fileName) {
 
 function saveFile(req, res, next) {
 	//console.log( req.file );
-	fsReadFile( libIndex, 'utf8' )
-		.then((indexContent) => {
-			var res = JSON.parse(indexContent),
-				filename = path.parse( libraryRoot, req.file.originalname).name,
+	readIndex()
+		.then((indexJson) => {
+			var filename = path.parse( libraryRoot, req.file.originalname).name,
 				content = req.file.buffer.toString('utf8');
 
-			res.push({
+			indexJson.push({
 				'name': filename,
 				'svg': content,
 				'gcode': ''
 			});
-			return fsSaveFile(libIndex, JSON.stringify(res), 'utf8' );
+			return fsSaveFile(libIndex, JSON.stringify(indexJson), 'utf8' );
+		})
+		.then( () => {res.json('Ok');} )
+		.catch( (e) => {res.code(500).json('Ok');} );
+}
+
+function removeItem(req, res, next) {
+	readIndex()
+		.then((indexJson) => {
+			var modelName = req.body.model;
+			indexJson = indexJson.filter( (a) => { return a.name != modelName; } );
+			return fsSaveFile(libIndex, JSON.stringify(indexJson), 'utf8' );
 		})
 		.then( () => {res.json('Ok');} )
 		.catch( (e) => {res.code(500).json('Ok');} );
@@ -74,6 +91,8 @@ function saveFile(req, res, next) {
 
 router.get( "/list", getGCodes);
 router.post( "/add", multer().single('file'), saveFile);
+router.post( "/remove", removeItem);
+
 
 module.exports = {
 	api: router,

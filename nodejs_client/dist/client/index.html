@@ -16,24 +16,37 @@
 
 	<link rel="stylesheet" type="text/css" href="css/site.css">
 
-	<script type="text/x-template" id="templates-collection-list-tpl-html"><div class="container card-list">
+	<script type="text/x-template" id="templates-collection-item-tpl-html"><div class="card">
+	<div class="card-menu" :class="{'menu-open': menuOpen}">
+		<a href="#" @click.prevent="openMenu" class="btn-open">
+			<i class="material-icons">more_vert</i>
+		</a>
+		<ul class="list-unstyled menu-content">
+			<li><a href="#" @click.prevent="closeMenu" class="text-right"><i class="material-icons">close</i></a>
+			<li><a href="#" @click.prevent="deleteModel">Delete</a></li>
+			<li><a href="#" >Slice</a></li>
+			<li><a href="#" >Rename</a></li>
+		</ul>
+	</div>
+	<div class="cover">
+		<span class="cover-image text-center"><img :src="dataUrl" class="img-responsive"></span>
+		<button class="btn btn-success btn-fab" @click="printModel">
+			<i class="material-icons">print</i>
+		</span>
+	</div>
+	<div class="details">
+		{{model.name}}
+	</div>
+</div></script>
+<script type="text/x-template" id="templates-collection-list-tpl-html"><div class="container card-list">
 	<h2>Models collection</h2>
 	<div class="row">
 		<div v-for="item in items" class="col-xs-6 col-sm-4 col-md-3">
-			<div class="card">
-				<div class="cover">
-					<a href="#" @click.prevent="printModel(item)">
-						<span class="cover-image"><model-thumbnail :svg="item.svg"></model-thumbnail></span>
-						<span class="btn btn-success btn-fab" ng-click="runScript($event, item)">
-							<i class="material-icons">print</i>
-						</span>
-					</a>
-				</div>
-				<div class="details">
-					{{item.name}}
-				</div>
-			</div>
-			<!-- <p class="text-error">{{error}}</p> -->
+			<model-card
+				:model="item"
+				@model-print="printModel(item)"
+				@model-remove="removeModel(item)"
+			></model-card>
 		</div>
 	</div>
 	<file-upload :is-multiple="false" filter=".svg" css-class="btn btn-success btn-fab btn-lg page-float-btn" @file-selected="addSvg">
@@ -44,7 +57,7 @@
 <script type="text/x-template" id="templates-common-header-tpl-html"><nav class="navbar navbar-warning">
 	<div class="container">
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" @click="toggleMenu" aria-expanded="false">
 				<span class="sr-only">Toggle navigation</span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
@@ -53,7 +66,7 @@
 			<a class="navbar-brand" href="#">Wifi Drawbot</a>
 		</div>
 
-		<div class="collapse navbar-warning-collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		<div class="collapse navbar-warning-collapse navbar-collapse" :class="{'in': menuOpen}">
 			<ul class="nav navbar-nav">
 				<router-link tag="li" :to="{name: 'manual'}" active-class="active"><a>Manual control</a></router-link>
 				<router-link tag="li" :to="{name: 'collection'}" active-class="active"><a>Collection</a></router-link>

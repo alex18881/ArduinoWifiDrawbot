@@ -1,0 +1,22 @@
+<div class="card">
+	<div class="card-menu" :class="{'menu-open': menuOpen}">
+		<a href="#" @click.prevent="openMenu" class="btn-open">
+			<i class="material-icons">more_vert</i>
+		</a>
+		<ul class="list-unstyled menu-content">
+			<li><a href="#" @click.prevent="closeMenu" class="text-right"><i class="material-icons">close</i></a>
+			<li><a href="#" @click.prevent="deleteModel">Delete</a></li>
+			<li><a href="#" >Slice</a></li>
+			<li><a href="#" >Rename</a></li>
+		</ul>
+	</div>
+	<div class="cover">
+		<span class="cover-image text-center"><img :src="dataUrl" class="img-responsive"></span>
+		<button class="btn btn-success btn-fab" @click="printModel">
+			<i class="material-icons">print</i>
+		</span>
+	</div>
+	<div class="details">
+		{{model.name}}
+	</div>
+</div>
