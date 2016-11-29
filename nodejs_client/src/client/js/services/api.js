@@ -8,6 +8,10 @@ var api = function ($http) {
 		return $http.get('/api/bot/move/' + x + '/' + y);
 	}
 
+	function togglePen(penOn) {
+		return $http.get('/api/bot/togglepen/' + (penOn ? 'on' : 'off'));
+	}
+
 	function connect() {
 		return $http.post('/api/bot/connect', {});
 	}
@@ -55,6 +59,7 @@ var api = function ($http) {
 		getCollection: getCollection,
 		execFile: execFile,
 		move : move,
+		togglePen: togglePen,
 		getStatus: getStatus,
 		connect: connect,
 		disconnect: disconnect,

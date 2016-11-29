@@ -1,7 +1,9 @@
 html,
 body {
-  height: 100%;
   display: block;
+}
+body {
+  overflow-y: scroll;
 }
 .page-float-btn {
   position: fixed!important;

@@ -47,7 +47,10 @@ function execCommands(cmds) {
 }
 
 function getVersion() {
-	return exec(['M115'])
+	return stopGetVerion()
+		.then(()=>{
+			return exec(['M115']);
+		})
 		.then( (resp) => {
 			var result = {};
 
@@ -72,6 +75,13 @@ function getVersion() {
 			console.log('BOT M115 Error: ', err);
 			status.error = err;
 		});
+}
+
+function stopGetVerion() {
+	return Promise.resolve(versionTimer).then( (a)=> {
+		clearTimeout(a);
+		return true;
+	});
 }
 
 function connectToBot() {
@@ -162,23 +172,35 @@ function disconnect( req, res, next ) {
 }
 
 function move(req, res, next) {
-	execCommands(['G91', 'G0 X' + (+req.params.distanceX) + ' Y' + (+req.params.distanceY || 0)]);
-	res.json('ok');
+	stopGetVerion()
+		.then(()=>{
+			res.json('ok');
+			return execCommands(['G91', 'G0 X' + (+req.params.distanceX) + ' Y' + (+req.params.distanceY || 0)]);
+		})
+		.then(getVersion);
 }
 
 function togglePen(req, res, next) {
-	execCommands([req.params.val == 'on' ? 'M3' : 'M5']);
-	res.json('ok');
+	stopGetVerion()
+		.then( ()=> {
+			res.json('ok');
+			return execCommands([req.params.val == 'on' ? 'M3' : 'M5']);
+		})
+		.then(getVersion);
 }
 
 function execFile( req, res, next ) {
-	collection.loadFile(req.body.filename)
+	stopGetVerion()
+		.then( ()=> {
+			return collection.loadFile(req.body.filename)
+		})
 		.then( (arrCmds) => {
 			console.log('loading file %s commands %d', req.body.filename, arrCmds.length );
-			execCommands(arrCmds);
 			res.json('ok');
 			next();
+			return execCommands(arrCmds);
 		} )
+		.then(getVersion)
 		.catch( (err) => {
 			console.log('BOT: Error loading file %s', req.body.filename, err);
 			res.status(500).json(err);

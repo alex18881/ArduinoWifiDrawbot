@@ -2,12 +2,14 @@ Vue.component('manual-control', function (resolve, reject) {
 
 	function errHandler(err){
 		model.loading = false;
+		model.connecting = false;
 		return err;
 		//notifyError(err);
 	}
 
 	function setStatus(data) {
 		model.loading = false;
+		model.connecting = false;
 		model.status = data.data;
 		return data.data;
 	}
@@ -21,6 +23,7 @@ Vue.component('manual-control', function (resolve, reject) {
 
 	var model = {
 			loading: false,
+			connecting: false,
 			status: {
 				connected: false,
 				machineType: '',
@@ -67,7 +70,14 @@ Vue.component('manual-control', function (resolve, reject) {
 						.then(load)
 						.catch(errHandler);
 				},
+
+				togglePen: function(penOn) {
+					api.togglePen(penOn)
+						.catch(errHandler);
+				},
+
 				connect: function() {
+					this.connecting = true;
 					this.loading = true;
 					api.connect()
 						.then(load)

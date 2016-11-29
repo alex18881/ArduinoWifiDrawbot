@@ -9,6 +9,9 @@ var express = require('express'),
 	fsSaveFile = promisify(fs.writeFile),
 	validCommands = { "G": 1, "M": 1 },
 	libraryRoot = "./library",
+	//gcanvas = require('gcanvas'),
+	//canvg = require('canvg'),
+
 	libIndex = path.join(libraryRoot, 'db.json'),
 	multer  = require('multer');
 
@@ -89,9 +92,26 @@ function removeItem(req, res, next) {
 		.catch( (e) => {res.code(500).json('Ok');} );
 }
 
+function sliceItem( req, res, next ) {
+	readIndex()
+		.then((indexJson) => {
+			var modelName = req.body.model;
+			indexJson = indexJson.find( (a) => { return a.name != modelName; } );
+
+			if (indexJson) {
+				var canvas = new Canvas();
+ 				indexJson.gcode = canvg(canvas, indexJson.svg);
+ 			}
+ 			return fsSaveFile(libIndex, JSON.stringify(indexJson), 'utf8' );
+		})
+		.then( () => {res.json('Ok');} )
+		.catch( (e) => {res.code(500).json('Ok');} );
+}
+
 router.get( "/list", getGCodes);
 router.post( "/add", multer().single('file'), saveFile);
 router.post( "/remove", removeItem);
+router.post( "/slice", sliceItem );
 
 
 module.exports = {

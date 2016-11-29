@@ -1,52 +1,68 @@
 <div class="container">
-	<div class="row">
-		<div class="col-xs-12 col-md-4">
-			<div class="row">
-				<button class="btn btn-default btn-block btn-lg btn-raised" v-if="!status.connected" @click="connect()"><i class="material-icons text-muted">power_settings_new</i></button>
-				<button class="btn btn-default btn-block btn-lg btn-raised" v-if="status.connected" @click="disconnect()"><i class="material-icons text-danger">power_settings_new</i></button>
-				<dl class="dl-horizontal" ng-if="status">
-					<dt>Status:</dt>
-					<dd>{{connectedText}}</dd>
-					<dt>Bot type:</dt>
-					<dd>{{machineType}}</dd>
-					<dt>Version:</dt>
-					<dd>{{version}} ({{fwCodeName}}) </dd>
-				</dl>
+	<div class="well page active">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-12 col-md-3">
+					<p :class="{ 'connecting': connecting }">
+						<button class="btn btn-default btn-block btn-lg btn-raised" v-if="!status.connected" :disabled="connecting" @click="connect()"><i class="material-icons text-muted">power_settings_new</i></button>
+						<button class="btn btn-default btn-block btn-lg btn-raised" v-if="status.connected" :disabled="connecting" @click="disconnect()"><i class="material-icons text-danger">power_settings_new</i></button>
+					</p>
+					<p>
+						<b>Status:</b>
+						{{connectedText}}
+					</p>
+					<p>
+						<b>Bot type:</b>
+						{{machineType}}
+					</p>
+					<p>
+						<b>Version:</b>
+						{{version}} ({{fwCodeName}})
+					</p>
+			</div>
+			<div class="hidden-xs hidden-sm col-md-1">&nbsp;</div>
+			<div class="col-xs-12 col-md-4">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-4 text-center">
+						<a class="btn btn-default btn-block btn-lg btn-raised" @click="move('y', distance)"><i class="material-icons">arrow_upward</i></a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4 text-center">
+						<a class="btn btn-default btn-block btn-lg btn-raised" @click="move('x', -distance)"><i class="material-icons">arrow_back</i></a>
+					</div>
+					<div class="col-xs-4 text-center">
+						<a class="btn btn-default btn-block btn-lg btn-raised" @click="moveHome()"><i class="material-icons">home</i></a>
+					</div>
+					<div class="col-xs-4 text-center">
+						<a class="btn btn-default btn-block btn-lg btn-raised" @click="move('x', distance)"><i class="material-icons">arrow_forward</i></a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-4 text-center">
+						<a class="btn btn-default btn-block btn-lg btn-raised" @click="move('y', -distance)"><i class="material-icons">arrow_downward</i></a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4 text-center">
+						<a class="btn btn-default btn-block btn-lg btn-raised" :class="{'active': distance==1}" @click="distance=1">1</a>
+					</div>
+					<div class="col-xs-4 text-center">
+						<a class="btn btn-default btn-block btn-lg btn-raised" :class="{'active': distance==10}" @click="distance=10">10</a>
+					</div>
+					<div class="col-xs-4 text-center">
+						<a class="btn btn-default btn-block btn-lg btn-raised" :class="{'active': distance==100}" @click="distance=100">100</a>
+					</div>
+				</div>
+			</div>
+			<div class="hidden-xs hidden-sm col-md-1">&nbsp;</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="text-center"><i class="material-icons">create</i></div>
+				<a class="btn btn-default btn-block btn-lg btn-raised" @click="togglePen(false)"><i class="material-icons">vertical_align_top</i></a>
+
+				<a class="btn btn-default btn-block btn-lg btn-raised" @click="togglePen(true)"><i class="material-icons">vertical_align_bottom</i></a>
 			</div>
 		</div>
-		<div class="col-xs-12 col-md-4">
-			<div class="row">
-				<div class="col-xs-4 col-xs-offset-4 text-center">
-					<a class="btn btn-default btn-block btn-lg btn-raised" @click="move('y', distance)"><i class="material-icons">arrow_upward</i></a>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-4 text-center">
-					<a class="btn btn-default btn-block btn-lg btn-raised" @click="move('x', -distance)"><i class="material-icons">arrow_back</i></a>
-				</div>
-				<div class="col-xs-4 text-center">
-					<a class="btn btn-default btn-block btn-lg btn-raised" @click="moveHome()"><i class="material-icons">home</i></a>
-				</div>
-				<div class="col-xs-4 text-center">
-					<a class="btn btn-default btn-block btn-lg btn-raised" @click="move('x', distance)"><i class="material-icons">arrow_forward</i></a>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-4 col-xs-offset-4 text-center">
-					<a class="btn btn-default btn-block btn-lg btn-raised" @click="move('y', -distance)"><i class="material-icons">arrow_downward</i></a>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-4 text-center">
-					<a class="btn btn-default btn-block btn-lg btn-raised" :class="{'active': distance==1}" @click="distance=1">1</a>
-				</div>
-				<div class="col-xs-4 text-center">
-					<a class="btn btn-default btn-block btn-lg btn-raised" :class="{'active': distance==10}" @click="distance=10">10</a>
-				</div>
-				<div class="col-xs-4 text-center">
-					<a class="btn btn-default btn-block btn-lg btn-raised" :class="{'active': distance==100}" @click="distance=100">100</a>
-				</div>
-			</div>
-		</div>
+	</div>
 	</div>
 </div>

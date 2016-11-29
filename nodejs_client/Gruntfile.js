@@ -83,13 +83,14 @@ module.exports = function(grunt) {
 					separator: ',\n',
 					footer: ']',
 					process: function (content, srcpath) {
-						var fileName = path.parse(srcpath).name;
+						var pathParts = path.parse(srcpath),
 							libJSON = {
-								'name': fileName,
+								'name': pathParts.name,
+								'fileName': pathParts.base,
 								'svg': content,
 								'gcode': ''
 							};
-						console.log('Adding file to library: ', fileName);
+						console.log('Adding file to library: ', pathParts.name);
 						return JSON.stringify(libJSON);
 					},
 				},
