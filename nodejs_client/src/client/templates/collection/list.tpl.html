@@ -9,7 +9,7 @@
 			></model-card>
 		</div>
 	</div>
-	<file-upload :is-multiple="false" filter=".svg" css-class="btn btn-success btn-fab btn-lg page-float-btn" @file-selected="addSvg">
+	<file-upload :is-multiple="false" filter=".ngc,.dgc" css-class="btn btn-success btn-fab btn-lg page-float-btn" @file-selected="addSvg">
 		<i class="material-icons">add</i>
 	</file-upload>
 	<modal-progress :files="uploads"></modal-progress>

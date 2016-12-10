@@ -1,5 +1,6 @@
 var express = require('express'),
 	promisify = require("es6-promisify"),
+	gcode2svg = require("gcode2svg"),
 	path = require('path'),
 	router = express.Router(),
 	fs = require("fs"),
@@ -45,35 +46,28 @@ function getGCodes(req, res, next) {
 
 function loadFile(fileName) {
 	console.log( "Reading file: %s", fileName );
-	return new Promise( (resolve, reject) => {
-		var filename = path.join( libraryRoot, fileName);
-		console.log( "Reading file: %s", filename );
 
-		fs.readFile( filename, "utf8", (fileErr, data)=>{
-			if (fileErr) {
-				reject(fileErr);
-			} else {
-				var commands = data.replace("\r", "").split( "\n" )
-					.filter( (a)=>{ return !!a.trim() && validCommands[a.charAt(0)]; } );
-					
-				resolve(commands);
-			}
-		});
-
-	} );
+	return readIndex()
+		.then((indexJson) => {
+			return (indexJson.filter( (a) => {return a.fileName == fileName;} )[0] || {}).gcode || '';
+		})
+		.then( commands => {
+			return commands.replace("\r", "").split( "\n" )
+				.filter( (a)=>{ return !!a.trim() && validCommands[a.charAt(0)]; } );
+		} );
 }
 
 function saveFile(req, res, next) {
 	//console.log( req.file );
 	readIndex()
 		.then((indexJson) => {
-			var filename = path.parse( libraryRoot, req.file.originalname).name,
+			var filename = path.parse(req.file.originalname).name,
 				content = req.file.buffer.toString('utf8');
 
 			indexJson.push({
 				'name': filename,
-				'svg': content,
-				'gcode': ''
+				'svg': gcode2svg(content),
+				'gcode': content
 			});
 			return fsSaveFile(libIndex, JSON.stringify(indexJson), 'utf8' );
 		})

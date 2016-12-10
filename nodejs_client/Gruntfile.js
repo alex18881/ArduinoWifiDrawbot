@@ -2,7 +2,12 @@ module.exports = function(grunt) {
 	require("matchdep").filterAll("grunt-*").forEach(grunt.loadNpmTasks);
 
 	var path = require('path'),
-		fs = require('fs');
+		fs = require('fs'),
+		createSvg = require('gcode2svg'),
+		validCodes = {
+			'G': 1,
+			'M': 1
+		};
 
 	function processTemplate(src, filePath) {
 		console.log( 'Processing template file:', filePath );
@@ -16,7 +21,8 @@ module.exports = function(grunt) {
 
 	grunt.initConfig({
 		vars: {
-			tmp: './.tmp',
+			tmp: '.tmp',
+			bower_root: 'bower_components',
 			src: {
 				root: './src',
 				client: "<%=vars.src.root%>/client",
@@ -49,7 +55,10 @@ module.exports = function(grunt) {
 		less: {
 			dev: {
 				options: {
-					paths: ['<%=vars.src.client%>/less']
+					paths: [
+						'<%=vars.src.client%>/less',
+						'<%=vars.bower_root%>'
+					]
 				},
 				files: {
 					'<%=vars.dist.client%>/css/site.css': '<%=vars.src.client%>/less/site.less'
@@ -63,6 +72,10 @@ module.exports = function(grunt) {
 					separator: ';\n',
 				},
 				src: [
+					'<%=vars.bower_root%>/axios/dist/axios.js',
+					'<%=vars.bower_root%>/vue/dist/vue.js',
+					'<%=vars.bower_root%>/vue-router/dist/vue-router.js',
+					
 					['<%=vars.src.client%>/js/**/*.js','!<%=vars.src.client%>/js/app.js'],
 					'<%=vars.src.client%>/js/app.js'
 				],
@@ -84,11 +97,14 @@ module.exports = function(grunt) {
 					footer: ']',
 					process: function (content, srcpath) {
 						var pathParts = path.parse(srcpath),
+							gcode = pathParts.ext.slice(-2) == 'gc' ? content : '',
+							svg = pathParts.ext.slice(-3) == 'svg' ? content : 
+								gcode ? createSvg(gcode) : '',
 							libJSON = {
 								'name': pathParts.name,
 								'fileName': pathParts.base,
-								'svg': content,
-								'gcode': ''
+								'svg': svg,
+								'gcode': gcode
 							};
 						console.log('Adding file to library: ', pathParts.name);
 						return JSON.stringify(libJSON);

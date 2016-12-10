@@ -1,7 +1,8 @@
 {
   "name": "client",
   "version": "1.0.0",
-  "description": "",
+  "description": "An arduino WiFi drawing bot web client",
+  "repository": "https://github.com/alex18881/ArduinoWifiDrawbot.git",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,8 +16,9 @@
     "body-parser": "latest",
     "es6-promisify": "latest",
     "express": "latest",
-    "telnet-client": "latest",
-    "multer": "latest"
+    "gcode2svg": "latest",
+    "multer": "latest",
+    "telnet-client": "latest"
   },
   "devDependencies": {
     "grunt": "latest",

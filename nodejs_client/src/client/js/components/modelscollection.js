@@ -107,6 +107,7 @@ Vue.component('models-collection', function(resolve, reject){
 		return {
 			svg: item.svg,
 			name: item.name,
+			fileName: item.fileName,
 			status: ''
 		}
 	}
