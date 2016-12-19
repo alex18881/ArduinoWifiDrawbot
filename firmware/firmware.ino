@@ -90,6 +90,8 @@ void readSerial(){
 
 		if(c==';')
 			commandReady = true;
+		if(c=='\n')
+			commandReady = true;
 	}
 }
 #endif
@@ -202,6 +204,7 @@ void processCommand() {
 				break;
 			default: break;
 		}
+		Serial.println("ok");
 	}
 	// look for commands that start with 'M'
 	yeldIndx = 0;
@@ -240,6 +243,7 @@ void processCommand() {
 
 			default: break;
 		}
+		Serial.println("ok");
 	}
 	commandReady = false;
 	yeldIndx = 0;
