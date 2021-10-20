@@ -1,5 +1,4 @@
 var express = require('express');
-var bodyParser = require('body-parser');
 var api = require('./server/api.js');
 var app = express();
 
@@ -8,7 +7,7 @@ app.use(function(req, res, next) {
 	next();
 });
 app.use(express.static('./client'));
-app.use(bodyParser.json({strict: false}));
+app.use(express.json({strict: false}));
 app.use('/api', api);
 
 app.listen(3000);

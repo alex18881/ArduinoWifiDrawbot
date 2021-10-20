@@ -22,7 +22,7 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		vars: {
 			tmp: '.tmp',
-			bower_root: 'bower_components',
+			npm_root: 'node_modules',
 			src: {
 				root: './src',
 				client: "<%=vars.src.root%>/client",
@@ -57,7 +57,7 @@ module.exports = function(grunt) {
 				options: {
 					paths: [
 						'<%=vars.src.client%>/less',
-						'<%=vars.bower_root%>'
+						'<%=vars.npm_root%>'
 					]
 				},
 				files: {
@@ -72,9 +72,9 @@ module.exports = function(grunt) {
 					separator: ';\n',
 				},
 				src: [
-					'<%=vars.bower_root%>/axios/dist/axios.js',
-					'<%=vars.bower_root%>/vue/dist/vue.js',
-					'<%=vars.bower_root%>/vue-router/dist/vue-router.js',
+					'<%=vars.npm_root%>/axios/dist/axios.js',
+					'<%=vars.npm_root%>/vue/dist/vue.js',
+					'<%=vars.npm_root%>/vue-router/dist/vue-router.js',
 					
 					['<%=vars.src.client%>/js/**/*.js','!<%=vars.src.client%>/js/app.js'],
 					'<%=vars.src.client%>/js/app.js'
